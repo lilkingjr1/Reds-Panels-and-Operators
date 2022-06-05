@@ -1,0 +1,67 @@
+// Panel View NL2 Script
+// David Wolfe (Red-Thirten)
+// 11/29/2020
+// Extends Block Display. Handles additional harness and gate indicator functionality.
+// Licensed under GNU GPLv3 - See LICENSE for more details.
+
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.Block;
+import com.nolimitscoaster.Section;
+import nlvm.lang.String;
+import nlvm.math3d.Vector4f;
+
+public class PanelView extends BlockDisplay{
+    private static final String HARNESS_ELEMENT_NAME = "harness_indicator";						// Name of the harness indicator element in the SCO/model
+    private static final String GATES_ELEMENT_NAME = "gates_indicator";							// Name of the gates indicator element in the SCO/model
+	private static final Vector4f COLOR_HARNESS_GATES = new Vector4f(0.0f, 1.0f, 0.0f, 1.0f);	// Color of the harness and gates indicators
+	
+	private SceneObjectElement harnessIndicatorElement;
+	private SceneObjectElement gatesIndicatorElement;
+	
+	private float stationGateState;
+	private float harnessState;
+    private Section section;
+
+    public bool onInit(){ // On initialization of Play simulation
+		super.SCRIPT_NAME = "PanelView"; // Script name for debugging
+		
+		if (super.onInit()){ // If the base block display initializes successfully
+			harnessIndicatorElement = super.getElementOnScoForName(super.sco, HARNESS_ELEMENT_NAME); // Get and assign harness and gates indicators' elements
+			gatesIndicatorElement = super.getElementOnScoForName(super.sco, GATES_ELEMENT_NAME);
+			harnessIndicatorElement.setEntityColor(super.INDICATOR_COLOR_SLOT, COLOR_HARNESS_GATES);
+			gatesIndicatorElement.setEntityColor(super.INDICATOR_COLOR_SLOT, COLOR_HARNESS_GATES);
+			section = super.blocks[0].getSection(); // Get the station section
+			return true;
+		}
+		else return false;
+    }
+
+    public void onNextFrame(float tick){
+		if (super.blocks[0].getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_IN_STATION){ // Handle harness indicator animation
+			harnessState = section.getTrainOnSection().getHarnessState();
+			if (harnessState <= 0){
+				harnessIndicatorElement.setTextureAnimationIndex(1);
+			}
+			else if (harnessState < 1){
+				harnessIndicatorElement.setTextureAnimationIndex(-1);
+			}
+			else{
+				harnessIndicatorElement.setTextureAnimationIndex(0);
+			}
+		}
+		else harnessIndicatorElement.setTextureAnimationIndex(0);
+		
+		stationGateState = section.getStationGateState(); // Handle gates indicator animation
+		if (stationGateState <= 0){
+			gatesIndicatorElement.setTextureAnimationIndex(1);
+		}
+		else if (stationGateState < 1){
+			gatesIndicatorElement.setTextureAnimationIndex(-1);
+		}
+		else{
+			gatesIndicatorElement.setTextureAnimationIndex(0);
+		}
+		
+		super.onNextFrame(tick); // Run the rest of the base animations
+    }
+}

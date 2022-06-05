@@ -1,0 +1,18 @@
+// Push Button NL2 Script
+// David Wolfe (Red-Thirten)
+// 11/7/2020
+// Extends Push Button.
+// Licensed under GNU GPLv3 - See LICENSE for more details.
+
+public class PushButtonFlat extends PushButton{
+	public final bool onInit(){
+		super.SCRIPT_NAME = "PushButtonFlat";		// Script name for debugging
+		super.BUTTON_ELEMENT_NAME = "button";		// Name of the button element in the SCO/model
+		super.PLACARD_ELEMENT_NAME = "placard";		// Name of the placard element in the SCO/model
+		super.BUTTON_TRAVEL_DIST = 0.0016f;			// Distance, in meters, the button will travel to be fully "pressed"
+		super.BUTTON_TRAVEL_TIME = 1.f;				// Time, in seconds, for the button to travel in and out ("speed")
+		super.BUTTON_HAS_LIGHT = false;				// True if the button has a pilot light
+		
+		return super.onInit();						// Run the rest of the init code in PushButton
+	}
+}

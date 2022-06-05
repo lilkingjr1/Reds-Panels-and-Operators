@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>Metal with color of user slot 3 and weld height map.</description>
+    <preview>materials/weld_bead_height.png</preview>
+    <renderpass>
+      <shadercore>tmp0 = Mul(2, entity3);
+tmp0 = saturate(tmp0);
+tmp0 = lerp(0.3, 1, tmp0);
+Specular = Mul(tex2, tmp0);
+Result = Mul(tex0, entity3);</shadercore>
+      <transparency mode="opaque"/>
+      <custommaterial>
+        <diffuse r="1" g="1" b="1"/>
+        <ambient r="1" g="1" b="1"/>
+        <specular r="0.0941177" g="0.0941177" b="0.0941177"/>
+        <shininess exponent="72.597"/>
+      </custommaterial>
+      <reflection fresnelconst="-0.1" fresnelvar="0.4"/>
+      <rgbgen mode="bumplighting"/>
+      <texunit>
+        <map>base:data/materials/metal/Metal_A.png</map>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <map>materials/weld_bead_height.png</map>
+        <bump mode="heightgloss" heightscale="25"/>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <map>base:data/materials/metal/Metal_A_Spec.jpg</map>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+  </material>
+</root>

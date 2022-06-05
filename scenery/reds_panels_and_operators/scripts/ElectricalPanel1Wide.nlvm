@@ -1,0 +1,16 @@
+// Electrical Panel (1 Wide) NL2 Script
+// David Wolfe (Red-Thirten)
+// 12/6/2020
+// Extends Electrical Panel
+// Licensed under GNU GPLv3 - See LICENSE for more details.
+
+public class ElectricalPanel1Wide extends ElectricalPanel{
+	public final bool onInit(){
+		super.SCRIPT_NAME = "ElectricalPanel1Wide";	// Script name for debugging
+		super.PANEL_ELEMENT_NAME = "panel";			// Name of the panel element in the SCO/model
+		super.MOUNT_ELEMENT_NAME = "mount";			// Name of the mount element in the SCO/model
+		super.CONDUIT_ELEMENT_NAME = "wire";		// Name of the conduit element in the SCO/model
+		
+		return super.onInit();						// Run the rest of the init code in ElectricalPanel
+	}
+}

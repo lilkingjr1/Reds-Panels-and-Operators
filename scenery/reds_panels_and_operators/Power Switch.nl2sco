@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/power_switch.dae">
+      <clip distance="35"/>
+      <clip mesh="placard" distance="20"/>
+    </model>
+    <description>A static large power cut off switch. Commonly seen on the side of main panels.</description>
+    <preview>textures/previews/power_switch.png</preview>
+    <param basescalex="1.75"/>
+    <param basescaley="1.75"/>
+    <param basescalez="1.75"/>
+    <usercolor>
+      <label>Placard Background</label>
+      <index>0</index>
+      <defaultcolor r="1" g="1" b="0.94902"/>
+    </usercolor>
+    <usercolor>
+      <label>Placard Text</label>
+      <index>1</index>
+      <defaultcolor r="0" g="0" b="0"/>
+    </usercolor>
+    <script>
+      <classpath>scripts</classpath>
+      <class>PowerSwitch</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+    </script>
+    <scriptparameter>
+      <type>string</type>
+      <defaultvalue>Only select ONE of the options below.</defaultvalue>
+      <id>placard_instructions</id>
+      <description>Selections for placard text. Changing this text does nothing.</description>
+      <label>========== Placard Options ==========</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>placard0</id>
+      <label>No Placard (Invisible)</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>true</defaultvalue>
+      <id>placard1</id>
+      <label>Power Lockout</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>placard2</id>
+      <label>Control Lockout</label>
+    </scriptparameter>
+    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
+    <materialpath name="housing">textures/plastic_golden_yellow.nl2mat</materialpath>
+    <materialpath name="placard">textures/placard_power_switch.nl2mat</materialpath>
+    <materialpath name="rivet">textures/rivet.nl2mat</materialpath>
+    <materialpath name="switch">textures/plastic_red.nl2mat</materialpath>
+  </sceneobject>
+</root>

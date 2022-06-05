@@ -1,0 +1,108 @@
+// Pilot Light 4Way NL2 Script
+// David Wolfe (Red-Thirten)
+// 11/23/2020
+// Extends Pilot Light. Handles additional lights' functionality.
+// Licensed under GNU GPLv3 - See LICENSE for more details.
+
+import com.nolimitscoaster.SceneObject;
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.Block;
+
+public class PilotLight4Way extends PilotLight{
+	private static final String LIGHT2_ELEMENT_NAME = "light2";		// Name of the right pilot light element in the SCO/model
+	private static final String LIGHT3_ELEMENT_NAME = "light3";		// Name of the bottom pilot light element in the SCO/model
+	private static final String LIGHT4_ELEMENT_NAME = "light4";		// Name of the left pilot light element in the SCO/model
+	
+	private SceneObjectElement light2;
+	private SceneObjectElement light3;
+	private SceneObjectElement light4;
+	
+	private PilotLight4Way(){ // Idk why I had to do this, or why it works. Was the only way to overload an array.
+		super();
+		MODES = new String[]{"static", "four_way"}; // Possible mode parameters
+	}
+	
+	public bool onInit(){
+		super.SCRIPT_NAME = "PilotLight4Way";		// Script name for debugging
+		super.LIGHT_ELEMENT_NAME = "light1";		// Name of the top pilot light element in the SCO/model
+		super.PLACARD_ELEMENT_NAME = "placard";		// Name of the placard element in the SCO/model
+		
+		if(super.onInit()){ // If PilotLight initialization succeeds, continue with self-initialization
+			light2 = super.getElementOnScoForName(super.sco, LIGHT2_ELEMENT_NAME);
+			light3 = super.getElementOnScoForName(super.sco, LIGHT3_ELEMENT_NAME); // Get/assign other light elements
+			light4 = super.getElementOnScoForName(super.sco, LIGHT4_ELEMENT_NAME);
+			if (light2 == null || light3 == null || light4 == null) return false; // Missing element check
+			
+			if (mode == 0){ // Static mode
+				handleStaticMode(super.sco, light2, "light2");
+				handleStaticMode(super.sco, light3, "light3");
+				handleStaticMode(super.sco, light4, "light4");
+			}
+			
+			return true; // Everything's just dandy
+		}
+		else return false; // Oh noes! Everything's not dandy!
+	}
+	
+	private void handleStaticMode(SceneObject sco, SceneObjectElement element, String paramName){
+		switch (sco.getIntegerParameter(paramName).intValue()){ // Sets the light's state, based on static parameters
+			case 1:
+				element.setTextureAnimationIndex(1);
+				break;
+			case 2:
+				element.setTextureAnimationIndex(-1);
+				break;
+			default:
+				element.setTextureAnimationIndex(0);
+		}
+	}
+	
+	private final void handle4WayMode(){
+		if (coaster.isEmergencyStop()){
+			light.setTextureAnimationIndex(0);
+			light2.setTextureAnimationIndex(1);
+			light3.setTextureAnimationIndex(0);
+			light4.setTextureAnimationIndex(0);
+		}
+		else{
+			switch (block.getNormalModeState(Block.PROTOCOL_V1)){
+				case Block.STATE_OCCUPIED:
+				case Block.STATE_IN_STATION:
+					light.setTextureAnimationIndex(1);
+					light2.setTextureAnimationIndex(0);
+					light3.setTextureAnimationIndex(0);
+					light4.setTextureAnimationIndex(0);
+					break;
+				case Block.STATE_APPROACHING_FWD:
+				case Block.STATE_APPROACHING_BWD:
+					light.setTextureAnimationIndex(0);
+					light2.setTextureAnimationIndex(0);
+					light3.setTextureAnimationIndex(-1);
+					light4.setTextureAnimationIndex(0);
+					break;
+				case Block.STATE_IDLE:
+					light.setTextureAnimationIndex(0);
+					light2.setTextureAnimationIndex(0);
+					light3.setTextureAnimationIndex(0);
+					light4.setTextureAnimationIndex(1);
+					break;
+				default:
+					light.setTextureAnimationIndex(0);
+					light2.setTextureAnimationIndex(-1);
+					light3.setTextureAnimationIndex(0);
+					light4.setTextureAnimationIndex(0);
+			}
+		}
+	}
+	
+	public void onNextFrame(float tick){
+		switch (mode){
+			case 0:
+				break;
+			case 1:
+				handle4WayMode();
+				break;
+			default:
+		}
+	}
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/anemometer.dae">
+      <clip mesh="wire" distance="25"/>
+      <clip distance="100"/>
+    </model>
+    <description>An animated wind anemometer that will spin based on the current wind speed of the simulator.</description>
+    <preview>textures/previews/anemometer.png</preview>
+    <usercolor>
+      <label>Mount</label>
+      <index>0</index>
+      <defaultcolor r="0.709804" g="0.709804" b="0.709804"/>
+    </usercolor>
+    <usercolor>
+      <label>Anemometer</label>
+      <index>1</index>
+      <defaultcolor r="0.301961" g="0.333333" b="1"/>
+    </usercolor>
+    <script>
+      <classpath>scripts</classpath>
+      <class>Anemometer</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+    </script>
+    <materialpath name="anemometer">intern:data/materials/metal/Metal A User1.nl2mat</materialpath>
+    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
+    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
+    <materialpath name="mount">intern:data/materials/metal/Metal A User0.nl2mat</materialpath>
+  </sceneobject>
+</root>

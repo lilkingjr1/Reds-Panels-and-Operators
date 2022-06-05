@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/cable_runner_8m.dae">
+      <clip mesh="wires" distance="20"/>
+      <clip distance="70"/>
+    </model>
+    <description>A 8 meter, recolorable cable runner. Best used in tandem with the Electrical Box; set coords. equal to Elec. Box to auto-align.</description>
+    <preview>textures/previews/cable_runner.png</preview>
+    <usercolor>
+      <label>Runner</label>
+      <index>0</index>
+      <defaultcolor r="0.701961" g="0.701961" b="0.701961"/>
+    </usercolor>
+    <usercolor>
+      <label>Cable 1</label>
+      <index>1</index>
+      <defaultcolor r="0.929412" g="0.929412" b="0.929412"/>
+    </usercolor>
+    <usercolor>
+      <label>Cable 2</label>
+      <index>2</index>
+      <defaultcolor r="0.25098" g="0.25098" b="0.25098"/>
+    </usercolor>
+    <script>
+      <classpath>scripts</classpath>
+      <class>CableRunner</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+    </script>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>special_track_attach</id>
+      <description>Set the name of this object to the name of the Special Track you want this to attach to. Requires block to be set as well.</description>
+      <label>Attach to Transfer Track? (Hover for instructions)</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block</id>
+      <description>This is only used when the &quot;Attach to Transfer Track&quot; option above is selected. Block can be any block on the coaster.</description>
+      <label>Transfer Block (Only for Attachment)</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>string</type>
+      <defaultvalue>Only select ONE of the options below.</defaultvalue>
+      <id>texture_instructions</id>
+      <description>Selections for panel texture. Changing this text does nothing.</description>
+      <label>========== Texture Options ==========</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>true</defaultvalue>
+      <id>brushed_metal</id>
+      <description>Looks best when Panel Color is pure white, or can be colored.</description>
+      <label>Brushed Metal</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>bumpy_metal</id>
+      <description>Looks best when Panel Color is changed to any color, other than white.</description>
+      <label>Bumpy Painted Metal</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>rusty</id>
+      <description>Looks best when Panel Color is pure white.</description>
+      <label>Rusty</label>
+    </scriptparameter>
+    <materialpath name="metal">textures/panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="wire1">textures/plastic_user1.nl2mat</materialpath>
+    <materialpath name="wire2">textures/plastic_user2.nl2mat</materialpath>
+  </sceneobject>
+</root>

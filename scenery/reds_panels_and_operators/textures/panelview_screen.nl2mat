@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>Screen for the PanelView, with LCD overlay texture and illumination.</description>
+    <preview>panelview/panel_screen.png</preview>
+    <renderpass>
+      <shadercore>tmp0 = Mul(tex0, tex1);
+Emission = tmp0;
+Result = tmp0;</shadercore>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <rgbgen mode="lighting"/>
+      <texunit>
+        <map>panelview/panel_screen.png</map>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <map>panelview/lcd_pixel.png</map>
+        <bump mode="normalgloss"/>
+        <tcgen mode="base"/>
+        <tcmod mode="scale" scales="300" scalet="150"/>
+      </texunit>
+    </renderpass>
+  </material>
+</root>

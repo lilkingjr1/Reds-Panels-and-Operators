@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>Mic opening texture (black plastic + custom normal map).</description>
+    <preview>materials/factory_wall_nor_1k.jpg</preview>
+    <renderpass>
+      <shadercore>Roughness = 1;
+Specular = 0;
+Result = tex0;</shadercore>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <rgbgen mode="bumplighting"/>
+      <texunit>
+        <map>materials/Metal_Galvanized_001_roughness.jpg</map>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <map>materials/factory_wall_nor_1k.jpg</map>
+        <bump mode="normalgloss"/>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+  </material>
+</root>

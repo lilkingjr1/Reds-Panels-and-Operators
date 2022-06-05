@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/estop_button_shielded.dae">
+      <clip distance="30"/>
+      <clip mesh="housing_nut" distance="5"/>
+      <clip mesh="shield" distance="10"/>
+      <clip mesh="estop_button" distance="15"/>
+    </model>
+    <description>A recolorable E-Stop button, with shield, animations, &amp; customizable placard.</description>
+    <preview>textures/previews/estop_button_shielded.png</preview>
+    <param basescalex="2"/>
+    <param basescaley="2"/>
+    <param basescalez="2"/>
+    <usercolor>
+      <label>Placard Background</label>
+      <index>0</index>
+      <defaultcolor r="1" g="0" b="0"/>
+    </usercolor>
+    <usercolor>
+      <label>Placard Text</label>
+      <index>1</index>
+      <defaultcolor r="1" g="1" b="1"/>
+    </usercolor>
+    <usercolor>
+      <label>Button</label>
+      <index>2</index>
+      <defaultcolor r="1" g="0" b="0"/>
+    </usercolor>
+    <script>
+      <classpath>scripts</classpath>
+      <class>EStopButton</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+    </script>
+    <scriptparameter>
+      <type>int</type>
+      <defaultvalue>2</defaultvalue>
+      <id>light</id>
+      <description>This setting is ONLY used in Static Mode -- 0 = Light Off, 1 = Light On, 2 = Light Blinking</description>
+      <label>Pilot Light (Hover cursor to see options):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block</id>
+      <description>This is the block that this operator will be assigned to for all Non-Static Modes.</description>
+      <label>Block Location (for all Non-Static Modes):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>special_track_attach</id>
+      <description>Set the name of this object to the name of the Special Track you want this to attach to. Requires block to be set as well.</description>
+      <label>Attach to Transfer Track? (Hover for instructions)</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>string</type>
+      <defaultvalue>Only select ONE of the options below.</defaultvalue>
+      <id>mode_instructions</id>
+      <description>How this button will behave during Play Mode. Changing this text does nothing.</description>
+      <label>=========== Operator Mode ===========</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>true</defaultvalue>
+      <id>static</id>
+      <description>Will remain static with no animation or light changes.</description>
+      <label>Static</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>advance</id>
+      <description>Good for location at block break sections. Will light accordingly.</description>
+      <label>Advance</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>dispatch</id>
+      <description>Only for use in stations. Will light and animate accordingly.</description>
+      <label>Dispatch</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>e_stop</id>
+      <description>Set block to any block on coaster. Will light accordingly to e-stop status.</description>
+      <label>E-Stop (Light)</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>e_stop_anim</id>
+      <description>Set block to any block on coaster. Will light and animate accordingly to e-stop status.</description>
+      <label>E-Stop (Light + Animate)</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>string</type>
+      <defaultvalue>Only select ONE of the options below.</defaultvalue>
+      <id>placard_instructions</id>
+      <description>Selections for placard text. Changing this text does nothing.</description>
+      <label>========== Placard Options ==========</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>placard0</id>
+      <label>No Placard (Invisible)</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>placard1</id>
+      <label>Advance</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>placard2</id>
+      <label>Dispatch / Advance</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>true</defaultvalue>
+      <id>placard3</id>
+      <label>Emergency Stop</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>placard4</id>
+      <label>Ride Stop</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>placard5</id>
+      <label>Trouble</label>
+    </scriptparameter>
+    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
+    <materialpath name="button_color">textures/button_user2.nl2mat</materialpath>
+    <materialpath name="estop_side_on_color">textures/estop_side_user2.nl2mat</materialpath>
+    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
+    <materialpath name="placard">textures/placard_estop.nl2mat</materialpath>
+  </sceneobject>
+</root>

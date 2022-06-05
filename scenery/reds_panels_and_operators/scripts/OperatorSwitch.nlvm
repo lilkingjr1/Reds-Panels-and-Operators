@@ -1,0 +1,106 @@
+// Operator Switch Object NL2 Script
+// David Wolfe (Red-Thirten)
+// 11/14/2020
+// A Java object representing a switch, with optional key component, that can animate to any given state position.
+// Licensed under GNU GPLv3 - See LICENSE for more details.
+
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.Tools;
+
+public class OperatorSwitch{
+	private SceneObjectElement switchElement, keyElement;
+	private bool animate, hasKey, keyIn, keyStaysIn = false;
+	private int currentState = 0;
+	private int TOTAL_STATES = 2; // Semi-static (set only once during init)
+	private float t, theta, thetaCurrent, thetaTarget, delta, deltaCurrent;
+	private float DELTA_T, DELTA_Ta, SLOPE, KEY_DIST; // Semi-static (set only once during init)
+	private float START_ANGLE = -45.f; // Semi-static (set only once during init)
+	private float END_ANGLE = 45.f; // Semi-static (set only once during init)
+
+	public OperatorSwitch(SceneObjectElement switchElement, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime){ // Default object constructor
+		this.switchElement = switchElement; // Assign element
+		TOTAL_STATES = totalStates; // Assign static number of states
+		START_ANGLE = (float) Math.toRadians(startAngleDeg); // Assign static start and end angles
+		END_ANGLE = (float) Math.toRadians(endAngleDeg);
+		SLOPE = (END_ANGLE - START_ANGLE) / (TOTAL_STATES - 1); // "Slope" that represents the solution space of possible angles the switch can be at for any given state
+		DELTA_T = travelTime;
+		DELTA_Ta = DELTA_T/2.f; // (De)Acceleration window is the first and last half of the animation (whole animation)
+		theta = START_ANGLE;
+		thetaCurrent = START_ANGLE;
+		switchElement.setRotation(0.f, 0.f, -START_ANGLE); // Set switch to start angle (and negate because angles are backwards in NL2?)
+	}
+	
+	public OperatorSwitch(SceneObjectElement switchElement, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime,
+			SceneObjectElement keyElement, float keyTravelDistance, bool keyStaysIn){ // Alternate object constructor, to support a key switch
+		hasKey = true;
+		this.switchElement = switchElement;
+		this.keyElement = keyElement;
+		this.keyStaysIn = keyStaysIn;
+		KEY_DIST = keyTravelDistance;
+		TOTAL_STATES = totalStates;
+		START_ANGLE = (float) Math.toRadians(startAngleDeg);
+		END_ANGLE = (float) Math.toRadians(endAngleDeg);
+		SLOPE = (END_ANGLE - START_ANGLE) / (TOTAL_STATES - 1);
+		DELTA_T = travelTime;
+		DELTA_Ta = DELTA_T/2.f;
+		theta = START_ANGLE;
+		thetaCurrent = START_ANGLE;
+		this.switchElement.setRotation(0.f, 0.f, -START_ANGLE);
+		this.keyElement.setRotation(0.f, 0.f, -START_ANGLE);
+		this.keyElement.setVisible(false);
+	}
+	
+	public void setSwitchState(int newState){ // Primes the switch to animate to a new state position (newState values start from 0; not 1)
+		if (newState != currentState && newState >= 0 && newState < TOTAL_STATES){ // Sanitize passed state
+			t = 0.f;
+			thetaTarget = SLOPE * newState + START_ANGLE - theta; // Equation to calculate the angle target, based on the pre-calculated slope and current angle position
+			thetaCurrent = theta;
+			currentState = newState;
+			animate = true;
+		}
+	}
+	
+	public void setKeyVisible(){
+		keyElement.setVisible(true);
+	}
+	
+	public void onNextFrame(float tick)
+	{
+		if (animate){
+			if (hasKey && !keyIn){ // If switch has a key, animate it into the key hole first
+				if (t == 0) keyElement.setVisible(true);
+				delta = -KEY_DIST + (float)Tools.switchRampC1(DELTA_T, KEY_DIST, DELTA_Ta, t);
+				keyElement.setTranslation(0.f, delta, 0.f);
+				
+				if (t >= DELTA_T){
+					keyIn = true;
+					t = 0;
+				}
+				else t += tick;
+			}
+			else{ // Then, animate the switch rotation
+				theta = thetaCurrent + (float)Tools.switchRampC1(DELTA_T, thetaTarget, DELTA_Ta, t);
+				switchElement.setRotation(0.f, 0.f, -theta);
+				if (hasKey) keyElement.setRotation(0.f, 0.f, -theta);
+				
+				if (t >= DELTA_T){
+					animate = false;
+					t = 0;
+				}
+				else t += tick;
+			}
+		}
+		// If switch has a key, and it's currently in, and it's not meant to stay in or the switch is in the default position, animate it out of the key hole
+		else if ( hasKey && keyIn && (!keyStaysIn || ((TOTAL_STATES == 2 && currentState == 0) || (TOTAL_STATES == 3 && currentState == 1)) ) ){
+			delta = 0 + (float)Tools.switchRampC1(DELTA_T, -KEY_DIST, DELTA_Ta, t);
+			keyElement.setTranslation(0.f, delta, 0.f);
+			
+			if (t >= DELTA_T){
+				keyIn = false;
+				keyElement.setVisible(false);
+				t = 0;
+			}
+			else t += tick;
+		}
+	}
+}

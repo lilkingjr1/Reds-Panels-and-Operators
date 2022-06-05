@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/panel_4x1_35deg.dae">
+      <clip mesh="pipe" distance="25"/>
+      <clip distance="50"/>
+      <clip mesh="mount" distance="30"/>
+    </model>
+    <description>A 4 operator wide, by 1 operator high, empty operator panel, with a 35 deg. angled face, and optional mounting bracket and wire conduit.</description>
+    <preview>textures/previews/panel_4x1_35deg.png</preview>
+    <param basescalex="2"/>
+    <param basescaley="2"/>
+    <param basescalez="2"/>
+    <usercolor>
+      <label>Panel Color</label>
+      <index>0</index>
+      <defaultcolor r="1" g="1" b="1"/>
+    </usercolor>
+    <usercolor>
+      <label>Mount Color</label>
+      <index>1</index>
+      <defaultcolor r="0.701961" g="0.701961" b="0.701961"/>
+    </usercolor>
+    <script>
+      <classpath>scripts</classpath>
+      <class>ElectricalPanel</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+    </script>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>hide_mount</id>
+      <description>Will hide the mounting brackets attached to the panel. (Not visible in editor)</description>
+      <label>Hide Mount</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>hide_pipe</id>
+      <description>Will hide the wire conduit attached to the panel. (Not visible in editor)</description>
+      <label>Hide Wire Conduit / Pipe</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>special_track_attach</id>
+      <description>Set the name of this object to the name of the Special Track you want this to attach to. Requires block to be set as well.</description>
+      <label>Attach to Transfer Track? (Hover for instructions)</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block</id>
+      <description>This is only used when the &quot;Attach to Transfer Track&quot; option above is selected. Block can be any block on the coaster.</description>
+      <label>Transfer Block (Only for Attachment)</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>string</type>
+      <defaultvalue>Only select ONE of the options below.</defaultvalue>
+      <id>texture_instructions</id>
+      <description>Selections for panel texture. Changing this text does nothing.</description>
+      <label>========== Texture Options ==========</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>true</defaultvalue>
+      <id>brushed_metal</id>
+      <description>Looks best when Panel Color is pure white, or can be colored.</description>
+      <label>Brushed Metal</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>bumpy_metal</id>
+      <description>Looks best when Panel Color is changed to any color, other than white.</description>
+      <label>Bumpy Painted Metal</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>rusty</id>
+      <description>Looks best when Panel Color is pure white.</description>
+      <label>Rusty</label>
+    </scriptparameter>
+    <materialpath name="metal">textures/panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="metal_galvanized">textures/metal_galvanized.nl2mat</materialpath>
+    <materialpath name="mount">intern:data/materials/metal/Metal A User1.nl2mat</materialpath>
+    <materialpath name="screw_normal">textures/screw.nl2mat</materialpath>
+  </sceneobject>
+</root>

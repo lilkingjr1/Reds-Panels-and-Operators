@@ -1,0 +1,21 @@
+// Pack Welcome NL2 Script
+// David Wolfe (Red-Thirten)
+// 12/15/2020
+// Thanks the user for downloading the pack, informs them of the README, and encourages them to look around at the different panel examples.
+
+import com.nolimitscoaster.Script;
+
+public class WelcomeScript extends Script{
+	
+	
+	public bool onInit(){ // On initialization of Play simulation
+		System.err.println("HEY! No error! Just wanted to thank you very much for downloading my Panels & Operators pack!");
+		System.err.println("If you have any questions, please check out the easy README.html in \\scenery\\reds_panels_and_operators.");
+		System.err.println("I recommend checking out all the different rides in this park.");
+		System.err.println("Each one demonstrates different ways you can customize the pack (even the flat rides!).");
+		System.err.println("\nHappy Panel Building! :D");
+		System.err.println(" -- Red-Thirten");
+		
+		return true; // Everything's just dandy
+	}
+}

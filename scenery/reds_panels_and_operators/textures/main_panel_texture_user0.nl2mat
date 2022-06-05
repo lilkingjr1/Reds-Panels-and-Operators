@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>A brushed metal, rusty, or painted bumpy metal texture, with normal map, roughness, and User 2 custom defined color.</description>
+    <preview>materials/Metal011_2K_Color.jpg</preview>
+    <renderpass>
+      <shadercore>//Specular = Mul(0.4, entity0);
+Metallic = 0.15;
+Roughness = Mul(tex2,2);
+Result = Mul(tex0, entity0);</shadercore>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <custommaterial>
+        <specular r="0.623529" g="0.639216" b="0.654902"/>
+        <shininess exponent="42.3385"/>
+      </custommaterial>
+      <reflection bump="true" fresnelconst="0.3" fresnelvar="0.3"/>
+      <rgbgen mode="bumplighting"/>
+      <texunit>
+        <animmap frequency="0">
+          <map>materials/Metal011_2K_Color.jpg</map>
+          <map>materials/Metal024_2K_Color.png</map>
+          <map>intern:data/textures/fx/white.png</map>
+        </animmap>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <animmap frequency="0">
+          <map>materials/Metal011_2K_Normal.jpg</map>
+          <map>materials/Metal024_2K_Normal.png</map>
+          <map>materials/metal_orange_peel_normal.png</map>
+        </animmap>
+        <bump mode="normalgloss"/>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <animmap frequency="0">
+          <map>materials/Metal011_2K_Roughness.jpg</map>
+          <map>materials/Metal024_2K_Roughness.png</map>
+          <map>materials/Metal011_2K_Roughness.jpg</map>
+        </animmap>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+    <footstepsounds>
+      <footstepsound>intern:data/sounds/walk/metal1.wav</footstepsound>
+      <footstepsound>intern:data/sounds/walk/metal2.wav</footstepsound>
+      <footstepsound>intern:data/sounds/walk/metal3.wav</footstepsound>
+      <footstepsound>intern:data/sounds/walk/metal4.wav</footstepsound>
+    </footstepsounds>
+  </material>
+</root>

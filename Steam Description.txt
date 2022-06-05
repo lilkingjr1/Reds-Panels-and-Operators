@@ -1,0 +1,58 @@
+[h1][u]Red's Panels and Operators[/u][/h1]
+[quote][b]Do you like buttons? Do you like switches? Do you like flashing lights? Do you have an unhealthy obsession with control panels like I do? Then this is the pack for you! 😃[/b][/quote]
+[i]Like what you see? Appreciate the months of hard work that went into making it?
+Then please consider giving this park a thumbs up! 👍
+Want to be even more awesome!? Supporting the project by [url=https://www.paypal.com/donate?hosted_button_id=LT9DY39634NGL]donating at this link[/url] helps me make more content like this in the future![/i]
+[hr][/hr]
+[h1]Description:[/h1]
+Red's Panels and Operators is a custom SCO package of various animated buttons, switches, lights, etc. to dress up your ride with custom-built control panels. Numerous different panel sizes and shapes, paired with 12 different types of highly detailed & scripted operators, each with countless configuration possibilities, means you can virtually build any panel you can think of. That, along with various extras like electrical panels, cable runners, etc; this pack is sure to add that extra level of realism to your park!
+
+[hr][/hr]
+[h1]Features:[/h1]
+[list]
+    [*][b]5 Main Panels[/b] of different sizes /w 4 button-layouts each & 3 different texture options
+    [*][b]5 "Operator" Panels[/b] of different sizes /w 3 different texture options & customizable mounts
+    [*][b]12 Different Operators[/b], each with easily customizable colors, placard, and scripted operation modes
+These include...
+[list]
+    [*]Push Button
+    [*]E-Stop Button
+    [*]Switch
+    [*]Key Switch
+    [*]and MORE!
+[/list]
+    [*]PanelView Plus 1000 Block Display
+    [*]3 Electrical Boxes, with customizable colors, textures, and mounts
+    [*]Labels
+    [*]Cable Runners
+    [*]Microphone
+    [*]Anemometer (Wind Sensor)
+    [*]Ground Hazard Tape
+    [*]Telephone
+[/list]
+
+[hr][/hr]
+[h1]How to Use:[/h1]
+[list]
+    [*]I tried my best to make the pack super user friendly, and it's entirely possible to pick it up without any prior instruction.
+    [*]However, to learn how to use the pack as efficiently as possible, please watch the [url=https://www.youtube.com/watch?v=Iw8XG1mUMP0]tutorial video above[/url], or open the README.html in the pack for best practices.
+    [*]If you have any issues with the pack, please make sure your question or issue isn't already answered by these resources first before posting a comment.
+[/list]
+
+[hr][/hr]
+[h1]Usage / License:[/h1]
+[list]
+    [*]All parts of this pack (models, scripts, etc.) are licensed under the GNU General Public License v3.0.
+    [*]Please see the README.html, or the LICENSE file, in the pack for more details on your rights to use this pack in your parks.
+[/list]
+
+[hr][/hr]
+[h1]Credits:[/h1]
+[list]
+    [*][url=https://steamcommunity.com/profiles/76561197967797620/myworkshopfiles/?appid=301320]bestdani[/url] -- Some code and a lot of scripting support
+    [*][url=https://steamcommunity.com/profiles/76561198332583014/myworkshopfiles/?appid=301320]Mayor 2018[/url] -- Provided the basis of the demo park; Beta testing and feedback
+    [*]Dustin Sloane -- Weld Bead Height Map Texture
+    [*][url=https://steamcommunity.com/profiles/76561198278741960/myworkshopfiles/?appid=301320]Square Boi[/url] -- Support with 3D Modeling/Scripting
+    [*]LostSoul -- Support with 3D Modeling/Scripting
+    [*]Freddie Ross -- Beta testing and feedback
+[/list]

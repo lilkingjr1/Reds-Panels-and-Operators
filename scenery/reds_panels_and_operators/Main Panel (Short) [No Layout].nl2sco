@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/main_panel_short_plain.dae">
+      <clip distance="175"/>
+    </model>
+    <description>A medium main control panel with no layout and no height, and optional audio panel attachement. -70 deg. X angle for button face.</description>
+    <preview>textures/previews/main_panel_short_plain.png</preview>
+    <param basescalex="2"/>
+    <param basescaley="2"/>
+    <param basescalez="2"/>
+    <usercolor>
+      <label>Panel Color</label>
+      <index>0</index>
+      <defaultcolor r="1" g="1" b="1"/>
+    </usercolor>
+    <script>
+      <classpath>scripts</classpath>
+      <class>MainPanel</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+    </script>
+    <scriptparameter>
+      <type>string</type>
+      <defaultvalue>Only select ONE of the options below.</defaultvalue>
+      <id>texture_instructions</id>
+      <description>Selections for panel texture. Changing this text does nothing.</description>
+      <label>========== Texture Options ==========</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>true</defaultvalue>
+      <id>brushed_metal</id>
+      <description>Looks best when Panel Color is pure white, or can be colored.</description>
+      <label>Brushed Metal</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>bumpy_metal</id>
+      <description>Looks best when Panel Color is changed to any color, other than white.</description>
+      <label>Bumpy Painted Metal</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>rusty</id>
+      <description>Looks best when Panel Color is pure white.</description>
+      <label>Rusty</label>
+    </scriptparameter>
+    <materialpath name="metal_large">textures/main_panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="vent">textures/vent.nl2mat</materialpath>
+  </sceneobject>
+</root>

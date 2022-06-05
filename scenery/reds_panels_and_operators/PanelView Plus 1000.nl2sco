@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/panelview_plus_1000.dae">
+      <clip distance="40"/>
+    </model>
+    <description>A scripted &quot;Allen-Bradley PanelView Plus 1000&quot;. This object is neither endorsed nor licensed by Rockwell Automation, Inc.</description>
+    <preview>textures/previews/panelview_plus_1000.png</preview>
+    <param basescalex="1.25"/>
+    <param basescaley="1.25"/>
+    <param basescalez="1.25"/>
+    <usercolor>
+      <label>Station Block Color</label>
+      <index>0</index>
+      <defaultcolor r="1" g="0.498039" b="0"/>
+    </usercolor>
+    <usercolor>
+      <label>Lift Block Color</label>
+      <index>1</index>
+      <defaultcolor r="0" g="1" b="0"/>
+    </usercolor>
+    <usercolor>
+      <label>Brake Block Color</label>
+      <index>2</index>
+      <defaultcolor r="1" g="0" b="1"/>
+    </usercolor>
+    <script>
+      <classpath>scripts</classpath>
+      <class>PanelView</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+    </script>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_0</id>
+      <description>Enter the station block for use as the first block in the block display, and for harness/gates indicators.</description>
+      <label>Station Block for Display (Required)</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_1</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 2 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_2</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 3 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_3</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 4 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_4</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 5 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_5</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 6 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_6</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 7 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_7</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 8 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_8</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 9 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_9</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 10 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_10</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 11 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_11</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 12 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_12</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 13 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_13</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 14 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_14</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 15 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_15</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 16 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_16</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 17 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_17</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 18 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_18</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 19 for Display</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block_19</id>
+      <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
+      <label>Block 20 for Display</label>
+    </scriptparameter>
+    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
+    <materialpath name="glass">textures/glass_dirty_transparent.nl2mat</materialpath>
+    <materialpath name="indicator">textures/panelview_indicator.nl2mat</materialpath>
+    <materialpath name="panel_screen">textures/panelview_screen.nl2mat</materialpath>
+    <materialpath name="panelview_sticker">textures/panelview_sticker.nl2mat</materialpath>
+  </sceneobject>
+</root>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>A ribbed metal texture, with normal map and roughness.</description>
+    <preview>materials/factory_wall_ao_1k.jpg</preview>
+    <renderpass>
+      <shadercore>Metallic = tex0;
+Roughness = Mul(0.4,tex2);
+Result = tex0;</shadercore>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <reflection bump="true" affectedbyspecular="true" fresnelconst="0.2" fresnelvar="0.7"/>
+      <rgbgen mode="bumplighting"/>
+      <texunit>
+        <map>materials/factory_wall_ao_1k.jpg</map>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <map>materials/factory_wall_nor_1k.jpg</map>
+        <bump mode="normalgloss"/>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <map>materials/factory_wall_rough_1k.jpg</map>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+    <footstepsounds>
+      <footstepsound>intern:data/sounds/walk/metal1.wav</footstepsound>
+      <footstepsound>intern:data/sounds/walk/metal2.wav</footstepsound>
+      <footstepsound>intern:data/sounds/walk/metal3.wav</footstepsound>
+      <footstepsound>intern:data/sounds/walk/metal4.wav</footstepsound>
+    </footstepsounds>
+  </material>
+</root>
