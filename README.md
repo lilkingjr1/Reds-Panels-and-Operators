@@ -1,0 +1,2 @@
+# Reds Panels and Operators
+ Red's Panels and Operators is a No Limits 2 custom SCO package of various animated buttons, switches, lights, etc. to dress up your ride with custom-built control panels. Numerous different panel sizes and shapes, paired with 12 different types of highly detailed & scripted operators, each with countless configuration possibilities, means you can virtually build any panel you can think of. That, along with various extras like electrical panels, cable runners, etc; this pack is sure to add that extra level of realism to your park!
