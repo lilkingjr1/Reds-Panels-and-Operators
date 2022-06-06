@@ -1,6 +1,6 @@
 // Push Button NL2 Script
 // David Wolfe (Red-Thirten)
-// 9/21/2020
+// 9/25/2021
 // Initializes the push button's placard and animates the pilot light and button during run time, based on user settings.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -14,7 +14,21 @@ public class PushButton extends Script{
 	protected float BUTTON_TRAVEL_TIME = 1.f;			// Time, in seconds, for the button to travel in and out ("speed")
 	protected bool BUTTON_HAS_LIGHT = true;				// True if the button has a pilot light
 	
-	private static final String[] MODES = {"static", "advance", "dispatch", "restraints_open", "restraints_lock", "platform", "e_stop", "e_stop_anim", "e_stop_reset", "automatic_mode", "full_manual_mode"}; // Possible mode parameters
+	private static final String[] MODES = { // Possible mode parameters
+		"static",
+		"advance",
+		"dispatch",
+		"restraints_open",
+		"restraints_lock",
+		"platform",
+		"e_stop",
+		"e_stop_anim",
+		"e_stop_reset",
+		"automatic_mode",
+		"full_manual_mode",
+		"manual_lift_jog",
+		"manual_brake_release"
+	};
 	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24}; // All platform coaster IDs in NL2, as of this file's creation date
 	// IDs with train states (flyers): 18, 23 -- Not currently able to handle due to NL2 limitations
 	
@@ -243,21 +257,61 @@ public class PushButton extends Script{
 	}
 	
 	private void handleAutomaticModeMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE || coaster.isEmergencyStop()){
+		if (coaster.isEmergencyStop()){
 			button.lightOff();
+		}
+		else if (block.getNormalModeState(Block.PROTOCOL_V1) != Block.STATE_FULL_MANUAL_MODE){
+			button.lightOff();
+			button.buttonPush();
         }
 		else{
-			button.lightOn();
+			button.lightBlink();
+			button.resetButtonState();
         }
 	}
 	
 	private void handleFullManualModeMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE && !coaster.isEmergencyStop()){
-			button.lightBlink();
+		if (coaster.isEmergencyStop()){
+			button.lightOff();
+		}
+		else if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE){
+			button.lightOff();
+			button.buttonPush();
         }
 		else{
-			button.lightOff();
+			button.lightBlink();
+			button.resetButtonState();
         }
+	}
+	
+	private void handleManualLiftJogMode(){
+		if (block.getNormalModeState(Block.PROTOCOL_V1) != Block.STATE_FULL_MANUAL_MODE || coaster.isEmergencyStop()){
+			button.lightOff();
+			button.buttonOut();
+		}
+		else if (section.isLift() && section.getLiftCurrentSpeed() > 0){
+			button.lightOn();
+			button.buttonIn();
+		}
+		else{
+			button.lightBlink();
+			button.buttonOut();
+		}
+	}
+	
+	private void handleManualBrakeReleaseMode(){
+		if (block.getNormalModeState(Block.PROTOCOL_V1) != Block.STATE_FULL_MANUAL_MODE || coaster.isEmergencyStop()){
+			button.lightOff();
+			button.buttonOut();
+		}
+		else if (!section.isBrakesOn()){
+			button.lightOn();
+			button.buttonIn();
+		}
+		else{
+			button.lightBlink();
+			button.buttonOut();
+		}
 	}
 
 	public void onNextFrame(float tick){
@@ -298,6 +352,12 @@ public class PushButton extends Script{
 				break;
 			case 10:
 				handleFullManualModeMode();
+				break;
+			case 11:
+				handleManualLiftJogMode();
+				break;
+			case 12:
+				handleManualBrakeReleaseMode();
 				break;
 			default:
 		}

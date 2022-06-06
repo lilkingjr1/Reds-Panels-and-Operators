@@ -64,8 +64,7 @@ public class OperatorSwitch{
 		keyElement.setVisible(true);
 	}
 	
-	public void onNextFrame(float tick)
-	{
+	public void onNextFrame(float tick){
 		if (animate){
 			if (hasKey && !keyIn){ // If switch has a key, animate it into the key hole first
 				if (t == 0) keyElement.setVisible(true);

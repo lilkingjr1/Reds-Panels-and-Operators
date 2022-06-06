@@ -15,8 +15,8 @@ public class Anemometer extends Script{
 	private static final float MAX_WIND_SPEED = 34.75187f;				// NL2's static max wind speed (m/s)
 	
 	private SceneObjectElement anemometer;
-	private float radRotation = 0.f;
 	
+	private float radRotation = 0.f;
 	
 	public bool onInit(){ // On initialization of Play simulation
 		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco

@@ -14,7 +14,11 @@ public class LightStack extends Script{
 	private static final String PARAMETER_PREFIX = "light";							// Prefix of the static light parameters in the SCO
 	private static final Vector3f SPEAKER_LOCATION = new Vector3f(0.f, 0.45f, 0.f);	// Speaker position in the model/SCO, relative to the origin
 	
-	private static final String[] MODES = {"static", "dispatch_mode", "block_mode"};// Possible mode parameters
+	private static final String[] MODES = { // Possible mode parameters
+		"static",
+		"dispatch_mode",
+		"block_mode"
+	};
 	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24};		// All platform coaster IDs in NL2, as of this file's creation date
 	
 	private Vector lightElements;

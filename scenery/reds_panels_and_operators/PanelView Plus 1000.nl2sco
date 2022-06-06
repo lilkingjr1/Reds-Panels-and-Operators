@@ -34,7 +34,7 @@
       <type>blocksection</type>
       <id>block_0</id>
       <description>Enter the station block for use as the first block in the block display, and for harness/gates indicators.</description>
-      <label>Station Block for Display (Required)</label>
+      <label>Station Block for Display</label>
     </scriptparameter>
     <scriptparameter>
       <type>blocksection</type>

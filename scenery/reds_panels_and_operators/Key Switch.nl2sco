@@ -111,6 +111,13 @@
       <label>Full Manual Mode</label>
     </scriptparameter>
     <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>manual_lift_jog</id>
+      <description>Only active when coaster is in Full Manual Mode. Will animate if block is a lift.</description>
+      <label>Manual Lift Jog Mode</label>
+    </scriptparameter>
+    <scriptparameter>
       <type>string</type>
       <defaultvalue>Only select ONE of the options below.</defaultvalue>
       <id>placard_instructions</id>

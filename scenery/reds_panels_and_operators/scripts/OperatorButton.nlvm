@@ -1,6 +1,6 @@
 // Operator Button Object NL2 Script
 // David Wolfe (Red-Thirten)
-// 9/24/2020
+// 9/25/2021
 // A Java object representing a button that can be animated to be pushed, or even lit differently if it has a pilot light.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -61,7 +61,7 @@ public class OperatorButton{
 		}
 	}
 	
-	public void buttonPush(){ // If not currently animating or already pushed in, prep the button to be animated in & out
+	public void buttonPush(){ // If not currently animating or already pushed, prep the button to be animated in & out
 		if (!animate && buttonState != 1){
 			t = 0.f;
 			buttonState = 2; // 2 = special state to indicate a push
@@ -77,8 +77,7 @@ public class OperatorButton{
 		}
 	}
 	
-	public void onNextFrame(float tick)
-	{
+	public void onNextFrame(float tick){
 		if (animate){
 			delta = deltaCurrent + (float)Tools.switchRampC1(DELTA_T, deltaTarget, DELTA_Ta, t); // Calculate change in position, based on smoothing function
 			button.setTranslation(0.f, delta, 0.f); // Set the translation 

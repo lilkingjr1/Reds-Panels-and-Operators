@@ -70,7 +70,7 @@
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
       <id>advance</id>
-      <description>Good for location at block break sections. Will light accordingly.</description>
+      <description>Good for location at block brake sections. Will light accordingly.</description>
       <label>Advance</label>
     </scriptparameter>
     <scriptparameter>

@@ -1,6 +1,6 @@
 // Switch NL2 Script
 // David Wolfe (Red-Thirten)
-// 11/13/2020
+// 9/27/2021
 // Initializes the switch's placard and animates the switch during run time, based on user settings.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -13,7 +13,18 @@ public class SwitchOperator extends Script{
 	protected String PLACARD_ELEMENT_NAME = "placard";	// Name of the placard element in the SCO/model
 	protected float SWITCH_TRAVEL_TIME = 0.4f;			// Time, in seconds, for the switch to travel ("speed")
 	
-	private static final String[] MODES = {"static", "restraints", "gates", "platform", "trains", "transports", "special_track", "maintenance_mode", "lights"}; // Possible mode parameters
+	private static final String[] MODES = { // Possible mode parameters
+		"static",
+		"restraints",
+		"gates",
+		"platform",
+		"trains",
+		"transports",
+		"special_track",
+		"maintenance_mode",
+		"lights",
+		"manual_lift_jog"
+	};
 	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24}; // All platform coaster IDs in NL2, as of this file's creation date
 	private static final float SUN_ELEVATION_LIMIT = (float)Math.toRadians(18.0); // 18 degrees is the default sun angle limit for lights to turn on and off
 	
@@ -95,7 +106,8 @@ public class SwitchOperator extends Script{
 					coaster.getTrainCount(), // States = # of Trains on Track
 					sco.getDoubleParameter("start_angle").floatValue(),
 					sco.getDoubleParameter("end_angle").floatValue(),
-					SWITCH_TRAVEL_TIME );
+					SWITCH_TRAVEL_TIME
+				);
 				break;
 			case 5: // Transports mode
 			case 6: // Special Track mode
@@ -105,7 +117,8 @@ public class SwitchOperator extends Script{
 					3, // States = BWD/N/FWD, Left/N/Right, or Off/Running/Emergency
 					sco.getDoubleParameter("start_angle").floatValue(),
 					sco.getDoubleParameter("end_angle").floatValue(),
-					SWITCH_TRAVEL_TIME );
+					SWITCH_TRAVEL_TIME
+				);
 				break;
 			default: // Every other mode just has two states
 				operatorSwitch = new OperatorSwitch(
@@ -113,7 +126,8 @@ public class SwitchOperator extends Script{
 					2,
 					sco.getDoubleParameter("start_angle").floatValue(),
 					sco.getDoubleParameter("end_angle").floatValue(),
-					SWITCH_TRAVEL_TIME );
+					SWITCH_TRAVEL_TIME
+				);
 		}
 	}
 	
@@ -231,6 +245,16 @@ public class SwitchOperator extends Script{
 		}
 	}
 	
+	public void handleManualLiftJogMode(){
+		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE && !coaster.isEmergencyStop() &&
+		section.isLift() && section.getLiftCurrentSpeed() > 0){
+			operatorSwitch.setSwitchState(1);
+		}
+		else{
+			operatorSwitch.setSwitchState(0);
+		}
+	}
+	
 	public void onNextFrame(float tick){
 		/*if (Button.isPressed(Button.FLY_SLOWER)){ //DEBUGGING
 			operatorSwitch.setSwitchState(0);
@@ -268,6 +292,9 @@ public class SwitchOperator extends Script{
 				break;
 			case 8:
 				handleLightsMode();
+				break;
+			case 9:
+				handleManualLiftJogMode();
 				break;
 			default:
 		}

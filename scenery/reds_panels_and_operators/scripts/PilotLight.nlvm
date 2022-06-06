@@ -11,7 +11,15 @@ public class PilotLight extends Script{
 	protected String LIGHT_ELEMENT_NAME = "pilot";		// Name of the pilot light element in the SCO/model
 	protected String PLACARD_ELEMENT_NAME = "placard";	// Name of the placard element in the SCO/model
 	
-	protected String[] MODES = {"static", "advance", "dispatch", "platform", "e_stop_reset", "automatic_mode", "full_manual_mode"}; // Possible mode parameters
+	protected String[] MODES = { // Possible mode parameters
+		"static",
+		"advance",
+		"dispatch",
+		"platform",
+		"e_stop_reset",
+		"automatic_mode",
+		"full_manual_mode"
+	};
 	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24}; // All platform coaster IDs in NL2, as of this file's creation date
 	
 	protected SceneObject sco;

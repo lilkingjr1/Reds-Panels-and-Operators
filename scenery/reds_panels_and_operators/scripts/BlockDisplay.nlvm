@@ -1,6 +1,6 @@
 // Block Display NL2 Script
 // bestdani & David Wolfe (Red-Thirten)
-// 11/28/2020
+// 9/27/2021
 // Animates indicator element textures on a pre-configured object, using block zones defined by user parameters, to emulate a block display.
 // Original concept and code by bestdani. Modified to be more efficient, and support extending.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
@@ -44,13 +44,13 @@ public class BlockDisplay extends Script{
 		
 		if (sco.getBlockParameter(PARAMETER_BLOCK_PREFIX + 0) == null){ // Check if required Station block has been set in the parameters
 			if (!sco.getName().equals("")){
-				System.err.println(sco.getName() + ": Station Block parameter required to be set for this object to work.");
-				System.err.println("\t(Double click the object in the editor to set block options)");
+				System.out.println(sco.getName() + ": Station Block parameter required to be set for block diagram to work.");
+				System.out.println("\t(Double click the object in the editor to set block options)");
 				return false;
 			}
 			else{
-				System.err.println(SCRIPT_NAME + ": Station Block parameter required to be set for this object to work.");
-				System.err.println("\t(Double click the object in the editor to set block options)");
+				System.out.println(SCRIPT_NAME + ": Station Block parameter required to be set for block diagram to work.");
+				System.out.println("\t(Double click the object in the editor to set block options)");
 				return false;
 			}
 		}

@@ -42,6 +42,7 @@ result = Add(tmp1, tmp2);</shadercore>
           <map>placards/placard_lift_start.png</map>
           <map>placards/placard_lift_stop.png</map>
           <map>placards/placard_manual_block_mode.png</map>
+          <map>placards/placard_manual_brake_release.png</map>
           <map>placards/placard_microphone_enable.png</map>
           <map>placards/placard_platform.png</map>
           <map>placards/placard_reset.png</map>

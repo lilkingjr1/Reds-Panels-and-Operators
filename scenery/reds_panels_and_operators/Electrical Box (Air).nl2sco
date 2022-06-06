@@ -8,7 +8,7 @@
       <clip mesh="mount" distance="30"/>
       <clip mesh="air_tank" distance="75"/>
     </model>
-    <description>An electrical panel, with air break compressor reservoir, optional mounting bracket, and wire conduits.</description>
+    <description>An electrical panel, with air brake compressor reservoir, optional mounting bracket, and wire conduits.</description>
     <preview>textures/previews/electrical_box_air.png</preview>
     <usercolor>
       <label>Panel Color</label>

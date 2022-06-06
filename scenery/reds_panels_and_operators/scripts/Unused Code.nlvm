@@ -1,0 +1,111 @@
+Modes: Static, Dispatch (B), Dispatch [Anim] (B), Harness (S), Gates (S), Floor/Seats (B/S), E-Stop (B), E-Stop [Anim] (B), E-Stop Reset (B), Automatic Mode (B/S), Manual Block Mode (B/S), Full Manual Mode (B/S)
+
+==================== onInit() =====================
+
+clickPos = _button.getAbsoluteMatrix().getTrans();
+
+private Matrix4x4f viewMatrix = new Matrix4x4f();
+
+sim.getViewMatrix(viewMatrix);
+
+==================== onNextFrame() =====================
+
+private static final float DELTA_MAX = 0.008f;
+private static final float DELTA_T=0.5f;
+private static final float DELTA_Ta=DELTA_T/5.f;
+private bool push,buttonIn = false;
+private float t=0.f;
+private float delta,deltaCurrent,deltaTarget=0.f;
+private Vector3f clickPos = new Vector3f();
+private Vector3f dis = new Vector3f();
+
+if (push){
+	delta = deltaCurrent + (float)Tools.switchRampC1(DELTA_T, deltaTarget, DELTA_Ta, t);
+	System.out.println(delta + ", " + deltaCurrent + ", " + DELTA_T + ", " + deltaTarget + ", " + DELTA_Ta + ", " + t + ", " + Tools.switchRampC1(DELTA_T, deltaTarget, DELTA_Ta, t));
+	_button.setTranslation(0.f, delta, 0.f);
+	if (t >= DELTA_T){
+		buttonIn = deltaTarget == DELTA_MAX;
+		if (buttonIn){
+			_light.toggleLight();
+			t = 0.f;
+			deltaCurrent = delta;
+			deltaTarget = -DELTA_MAX;
+		}
+		else {
+			push = false;
+		}
+	}
+	t += tick;
+	return;
+}
+if (Button.isPressed(Button.ACTION)){
+	sim.getViewPos(dis);
+	dis.sub(clickPos);
+	if (dis.length() > 0.5f) return;
+	System.out.println("I CLICKED!");
+	push = true;
+	t = 0.f;
+	deltaCurrent = delta;
+	deltaTarget = DELTA_MAX;
+}
+
+=============================================================
+
+sim.getViewMatrix(viewMatrix);
+_sco.setMatrix(viewMatrix);
+System.out.println(viewMatrix);
+
+=============================================================
+
+private float buttonPosinMeters = (float) 0;
+private bool movementDir = true;
+private static final float metersPerSecond = (float) 0.02;
+private float positionDelta;
+
+positionDelta = metersPerSecond * tick;
+System.out.println(buttonPosinMeters);
+if (buttonPosinMeters >= (float) 0.008)
+{
+	movementDir = false;
+}
+else if (buttonPosinMeters <= (float) 0.0001)
+{
+	movementDir = true;
+}
+
+if (movementDir == true)
+{
+	buttonPosinMeters = buttonPosinMeters + positionDelta;
+	_button.setTranslation((float) 0, buttonPosinMeters, (float) 0);
+}
+else
+{
+	buttonPosinMeters = buttonPosinMeters - positionDelta;
+	_button.setTranslation((float) 0, buttonPosinMeters, (float) 0);
+}
+
+===============================================================
+
+private static final String PLACARD_PARAMETER_PREFIX = "placard";
+	
+public static void setPlacardTextureFromScoParams(SceneObject sco, SceneObjectElement element){
+	Boolean curBool = null;
+	
+	for (int i = 0; i < PLACARD_PARAMETERS.length; i++){
+		curBool = sco.getBooleanParameter( PLACARD_PARAMETERS[i] );
+		if (curBool != null && curBool.boolValue()){
+			element.setTextureAnimationIndex(i);
+			return;
+		}
+	}
+}
+
+===============================================================
+Shader Code
+
+//Result = tex0;
+tmp0 = Mul(entity1, tex0.r);
+tmp1 = Mul(entity2, tex0.g);
+Result = Lerp(tex0.r, tmp0, tmp1);
+//Result = Add(tmp0, tmp1);
+

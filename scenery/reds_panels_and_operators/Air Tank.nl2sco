@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/air_tank.dae">
+      <clip distance="70"/>
+    </model>
+    <description>A standalone air tank. Use supports for pipes.</description>
+    <preview>textures/previews/air_tank.png</preview>
+    <usercolor>
+      <label>Tank Color</label>
+      <index>3</index>
+      <defaultcolor r="0.258824" g="0.380392" b="1"/>
+    </usercolor>
+    <materialpath name="housing_nut">textures/metal011.nl2mat</materialpath>
+    <materialpath name="tank">intern:data/materials/metal/Metal A User3.nl2mat</materialpath>
+    <materialpath name="weld">textures/weld_user3.nl2mat</materialpath>
+  </sceneobject>
+</root>
