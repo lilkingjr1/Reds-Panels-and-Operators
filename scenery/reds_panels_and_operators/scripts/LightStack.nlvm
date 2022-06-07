@@ -1,6 +1,6 @@
 // Light Stack NL2 Script
 // David Wolfe (Red-Thirten)
-// 12/1/2020
+// 6/7/2020
 // Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -49,6 +49,7 @@ public class LightStack extends Script{
 				coaster = block.getCoaster();
 				if (coaster.isScriptedOperationMode()){
 					System.err.println(SCRIPT_NAME + ": Sorry! Non-static modes do not support Scripted Operation Mode rides at this time.");
+					return false;
 				}
 				section = block.getSection();
 				coasterHasPlatform = isCoasterWithPlatform(coaster);

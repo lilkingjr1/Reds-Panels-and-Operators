@@ -1,6 +1,6 @@
 // Push Button NL2 Script
 // David Wolfe (Red-Thirten)
-// 6/6/2022
+// 6/7/2022
 // Initializes the push button's placard and animates the pilot light and button during run time, based on user settings.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -45,6 +45,7 @@ public class PushButton extends Script{
 	
 	private int mode = 0;
 	private bool coasterHasPlatform;
+	private float binaryState = 0.f; // Helps determine if a "binary" state starts to change to the other value (ie. restraints start to close, vice-versa, etc)
 	
 	public bool onInit(){ // On initialization of Play simulation
 		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco
@@ -66,8 +67,26 @@ public class PushButton extends Script{
 				coaster = block.getCoaster();
 				if (coaster.isScriptedOperationMode()){
 					System.err.println(SCRIPT_NAME + ": Sorry! Non-static modes do not support Scripted Operation Mode rides at this time.");
+					return false;
 				}
 				section = block.getSection();
+				switch (mode){ // Check if the specified block is a station for these modes
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+						if (!section.isStation()){
+							if (!sco.getName().equals("")){
+								System.err.println(sco.getName() + ": \"" + MODES[mode] + "\" mode requires the specified block to be a station.");
+							}
+							else{
+								System.err.println(SCRIPT_NAME + ": \"" + MODES[mode] + "\" mode requires the specified block to be a station.");
+							}
+							return false;
+						}
+						break;
+					default:
+				}
 				coasterHasPlatform = isCoasterWithPlatform(coaster);
 				return true;
 			}
@@ -193,17 +212,18 @@ public class PushButton extends Script{
 				button.lightOff();
 			}
 			else{
-				if ( (mode == 3 && section.getTrainOnSection().getHarnessState() == 1.f) || (mode == 4 && section.getTrainOnSection().getHarnessState() == 0.f) ){ // Harness is fully open
+				if ( (mode == 3 && binaryState == 1.f) || (mode == 4 && binaryState == 0.f) ){ // Open Mode: Harness Open - Lock Mode: Harness Closed
 					button.lightOn();
 				}
-				else if ( (mode == 3 && section.getTrainOnSection().getHarnessState() == 0.f) || (mode == 4 && section.getTrainOnSection().getHarnessState() == 1.f) ){ // Harness is fully closed
+				else if ( (mode == 3 && binaryState == 0.f) || (mode == 4 && binaryState == 1.f) ){ // Open Mode: Harness Closed - Lock Mode: Harness Open
 					button.lightBlink();
 					button.resetButtonState();
 				}
-				else{ // Harness is moving
+				else if ( (mode == 3 && section.getTrainOnSection().getHarnessState() > binaryState) || (mode == 4 && section.getTrainOnSection().getHarnessState() < binaryState) ){ // Harness is moving in specific direction
 					button.lightOff();
 					button.buttonPush();
 				}
+				binaryState = section.getTrainOnSection().getHarnessState();
 			}
 		}
 	}

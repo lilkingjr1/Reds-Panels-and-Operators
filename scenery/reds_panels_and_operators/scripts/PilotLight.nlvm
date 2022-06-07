@@ -1,6 +1,6 @@
 // Pilot Light NL2 Script
 // David Wolfe (Red-Thirten)
-// 6/6/2022
+// 6/7/2022
 // Initializes the pilot light's placard and animates the pilot light during run time, based on user settings.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -59,6 +59,7 @@ public class PilotLight extends Script{
 				coaster = block.getCoaster();
 				if (coaster.isScriptedOperationMode()){
 					System.err.println(SCRIPT_NAME + ": Sorry! Non-static modes do not support Scripted Operation Mode rides at this time.");
+					return false;
 				}
 				section = block.getSection();
 				coasterHasPlatform = isCoasterWithPlatform(coaster);
