@@ -4,6 +4,8 @@
 // A Java class to provide common placard texture assignment functionality.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
+package util;
+
 import com.nolimitscoaster.SceneObject;
 import com.nolimitscoaster.SceneObjectElement;
 

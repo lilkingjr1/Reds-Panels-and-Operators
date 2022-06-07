@@ -1,6 +1,6 @@
 // Electrical Panel Label NL2 Script
 // David Wolfe (Red-Thirten)
-// 11/10/2020
+// 6/6/2022
 // Initializes the label's texture based on user settings.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -9,20 +9,21 @@ import com.nolimitscoaster.SceneObject;
 import com.nolimitscoaster.SceneObjectElement;
 import nlvm.lang.String;
 
+import util.SpecialTrackModule;
+
 public class ElectricalPanelLabel extends Script{
 	private static final String SCRIPT_NAME = "ElectricalPanelLabel";		// Script name for debugging
 	private static final String LABEL_ELEMENT_NAME = "label";				// Name of the label element in the SCO/model
 	private static final String PLACARD_PARAMETER_PREFIX = "placard";		// Prefix for the placard texture parameters
 	
-	private SpecialTrackModule specialTrackLogic;
-	
+	private SpecialTrackModule specialTrackModule;
 	
 	public bool onInit(){ // On initialization of Play simulation
 		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco
 		setPlacardTextureFromScoParams( sco, getElementOnScoForName(sco, LABEL_ELEMENT_NAME) ); // Set placard texture
 		
-		if (sco.getBooleanParameter("special_track_attach").boolValue()){ // If set to attach to special track, set up the logic object for it
-			specialTrackLogic = new SpecialTrackModule(sco, SCRIPT_NAME);
+		if (sco.getSpecialTrackParameter("special_track") != null){ // If set to attach to special track, set up the module object for it
+			specialTrackModule = new SpecialTrackModule(sco);
 		}
 		
 		return true; // Everything's just dandy
@@ -57,8 +58,6 @@ public class ElectricalPanelLabel extends Script{
 	}
 	
 	public void onNextFrame(float tick){
-		if (specialTrackLogic != null && specialTrackLogic.isAttached()){ // If set to attach to special track, set translation of SCO
-			specialTrackLogic.setTranslation();
-		}
+		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
 	}
 }

@@ -6,6 +6,8 @@
 
 import com.nolimitscoaster.SceneObject;
 
+import util.OperatorSwitch;
+
 public class KeySwitch extends SwitchOperator{
 	private static final String KEY_ELEMENT_NAME = "key";	// Name of the key element in the SCO/model
 	private static final float KEY_TRAVEL_DIST = 0.04f;		// Distance the key travels out of the switch, in meters

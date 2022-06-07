@@ -1,10 +1,14 @@
 // Push Button NL2 Script
 // David Wolfe (Red-Thirten)
-// 9/25/2021
+// 6/6/2022
 // Initializes the push button's placard and animates the pilot light and button during run time, based on user settings.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
 import com.nolimitscoaster.*;
+
+import util.OperatorButton;
+import util.OperatorPlacard;
+import util.SpecialTrackModule;
 
 public class PushButton extends Script{
 	protected String SCRIPT_NAME = "PushButton";		// Script name for debugging
@@ -37,7 +41,7 @@ public class PushButton extends Script{
     private Section section;
 	
     private OperatorButton button;
-	private SpecialTrackModule specialTrackLogic;
+	private SpecialTrackModule specialTrackModule;
 	
 	private int mode = 0;
 	private bool coasterHasPlatform;
@@ -48,8 +52,8 @@ public class PushButton extends Script{
 		button = new OperatorButton(getElementOnScoForName(sco, BUTTON_ELEMENT_NAME), BUTTON_HAS_LIGHT, BUTTON_TRAVEL_DIST, BUTTON_TRAVEL_TIME); // Creates a new OperatorButton object
 		mode = getModeFromScoParams(sco);
 		
-		if (sco.getBooleanParameter("special_track_attach").boolValue()){ // If set to attach to special track, set up the logic object for it
-			specialTrackLogic = new SpecialTrackModule(sco, SCRIPT_NAME);
+		if (sco.getSpecialTrackParameter("special_track") != null){ // If set to attach to special track, set up the module object for it
+			specialTrackModule = new SpecialTrackModule(sco);
 		}
 		
 		if (mode == 0){
@@ -364,8 +368,6 @@ public class PushButton extends Script{
 		
 		button.onNextFrame(tick); // Run button object's onNextFrame() as well to animate
 		
-		if (specialTrackLogic != null && specialTrackLogic.isAttached()){ // If set to attach to special track, set translation of SCO
-			specialTrackLogic.setTranslation();
-		}
+		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
 	}
 }

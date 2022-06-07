@@ -4,6 +4,8 @@
 // A Java object representing a switch, with optional key component, that can animate to any given state position.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
+package util;
+
 import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Tools;
 

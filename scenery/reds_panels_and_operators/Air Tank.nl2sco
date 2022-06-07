@@ -11,6 +11,18 @@
       <index>3</index>
       <defaultcolor r="0.258824" g="0.380392" b="1"/>
     </usercolor>
+    <script>
+      <classpath>scripts</classpath>
+      <class>ElectricalBoxAir</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+    </script>
+    <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track</id>
+      <description>Select the special track of a ride you want this tank to move with during simulation. Set to &lt;None&gt; to disable.</description>
+      <label>Special Track to Attach To (Optional):</label>
+    </scriptparameter>
     <materialpath name="housing_nut">textures/metal011.nl2mat</materialpath>
     <materialpath name="tank">intern:data/materials/metal/Metal A User3.nl2mat</materialpath>
     <materialpath name="weld">textures/weld_user3.nl2mat</materialpath>

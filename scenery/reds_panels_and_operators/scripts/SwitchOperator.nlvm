@@ -1,11 +1,15 @@
 // Switch NL2 Script
 // David Wolfe (Red-Thirten)
-// 9/27/2021
+// 6/6/2022
 // Initializes the switch's placard and animates the switch during run time, based on user settings.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
 import com.nolimitscoaster.*;
 import nlvm.lang.Math;
+
+import util.OperatorSwitch;
+import util.OperatorPlacard;
+import util.SpecialTrackModule;
 
 public class SwitchOperator extends Script{
 	protected String SCRIPT_NAME = "SwitchOperator";	// Script name for debugging
@@ -20,7 +24,7 @@ public class SwitchOperator extends Script{
 		"platform",
 		"trains",
 		"transports",
-		"special_track",
+		"special_track_mode",
 		"maintenance_mode",
 		"lights",
 		"manual_lift_jog"
@@ -31,9 +35,10 @@ public class SwitchOperator extends Script{
     protected Coaster coaster;
     private Block block;
     private Section section;
+	private SpecialTrack specialTrack;
 	
     protected OperatorSwitch operatorSwitch;
-	private SpecialTrackModule specialTrackLogic;
+	private SpecialTrackModule specialTrackModule;
 	
 	protected int mode = 0;
 	private int trainsLashedToTrack;
@@ -47,8 +52,8 @@ public class SwitchOperator extends Script{
 		OperatorPlacard.setPlacardTextureFromScoParams( sco, getElementOnScoForName(sco, PLACARD_ELEMENT_NAME) ); // Set placard texture using external class
 		mode = getModeFromScoParams(sco);
 		
-		if (mode == 6 || sco.getBooleanParameter("special_track_attach").boolValue()){ // If set to Special Track mode, or to attach to special track, set up the logic object for it
-			specialTrackLogic = new SpecialTrackModule(sco, SCRIPT_NAME);
+		if (sco.getSpecialTrackParameter("special_track") != null){ // If set to attach to special track, set up the module object for it
+			specialTrackModule = new SpecialTrackModule(sco);
 		}
 		
 		if (mode != 0){ // If not static mode
@@ -151,9 +156,13 @@ public class SwitchOperator extends Script{
 		Boolean curBool = null;
 		
 		for (int i = 0; i < MODES.length; i++){
-			curBool = sco.getBooleanParameter( MODES[i] );
-			if (curBool != null && curBool.boolValue()){
-				return i;
+			if (MODES[i].equals("special_track_mode")){
+				specialTrack = sco.getSpecialTrackParameter( MODES[i] );
+				if (specialTrack != null) return i; else specialTrack = null;
+			}
+			else{
+				curBool = sco.getBooleanParameter( MODES[i] );
+				if (curBool != null && curBool.boolValue()) return i;
 			}
 		}
 		return 0;
@@ -223,7 +232,15 @@ public class SwitchOperator extends Script{
 	}
 	
 	private void handleSpecialTrackMode(){
-		operatorSwitch.setSwitchState(specialTrackLogic.getState());
+		if (specialTrack.getVisibleSwitchState() < binaryState){
+			binaryState = specialTrack.getVisibleSwitchState();
+			operatorSwitch.setSwitchState(0);
+		}
+		else if (specialTrack.getVisibleSwitchState() > binaryState){
+			binaryState = specialTrack.getVisibleSwitchState();
+			operatorSwitch.setSwitchState(2);
+		}
+		else operatorSwitch.setSwitchState(1);
 	}
 	
 	private void handleMaintenanceMode(){
@@ -301,8 +318,6 @@ public class SwitchOperator extends Script{
 		
 		operatorSwitch.onNextFrame(tick); // Run switch object's onNextFrame() as well to animate
 		
-		if (specialTrackLogic != null && specialTrackLogic.isAttached()){ // If set to attach to special track, set translation of SCO
-			specialTrackLogic.setTranslation();
-		}
+		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
 	}
 }

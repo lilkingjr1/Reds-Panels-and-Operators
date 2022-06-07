@@ -1,12 +1,14 @@
 // Electrical Panel Initialization NL2 Script
 // David Wolfe (Red-Thirten)
-// 11/8/2020
+// 6/6/2022
 // Initializes the electrical panel's texture, mount, and electrical conduit based on user settings.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;
 import com.nolimitscoaster.SceneObjectElement;
+
+import util.SpecialTrackModule;
 
 public class ElectricalPanel extends Script{
 	protected String SCRIPT_NAME = "ElectricalPanel";	// Script name for debugging
@@ -16,8 +18,7 @@ public class ElectricalPanel extends Script{
 	
 	private static final String[] TEXTURES = {"brushed_metal", "rusty", "bumpy_metal"}; // Possible texture parameter names
 	
-	private SpecialTrackModule specialTrackLogic;
-	
+	protected SpecialTrackModule specialTrackModule;
 	
 	public bool onInit(){ // On initialization of Play simulation
 		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco
@@ -30,8 +31,8 @@ public class ElectricalPanel extends Script{
 			getElementOnScoForName(sco, CONDUIT_ELEMENT_NAME).setVisible(false);
 		}
 		
-		if (sco.getBooleanParameter("special_track_attach").boolValue()){ // If set to attach to special track, set up the logic object for it
-			specialTrackLogic = new SpecialTrackModule(sco, SCRIPT_NAME);
+		if (sco.getSpecialTrackParameter("special_track") != null){ // If set to attach to special track, set up the module object for it
+			specialTrackModule = new SpecialTrackModule(sco);
 		}
 		
 		return true; // Everything's just dandy
@@ -66,8 +67,6 @@ public class ElectricalPanel extends Script{
 	}
 	
 	public void onNextFrame(float tick){
-		if (specialTrackLogic != null && specialTrackLogic.isAttached()){ // If set to attach to special track, set translation of SCO
-			specialTrackLogic.setTranslation();
-		}
+		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
 	}
 }

@@ -46,11 +46,10 @@
       <label>Block Location (for all Non-Static Modes):</label>
     </scriptparameter>
     <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>special_track_attach</id>
-      <description>Set the name of this object to the name of the Special Track you want this to attach to. Requires block to be set as well.</description>
-      <label>Attach to Transfer Track? (Hover for instructions)</label>
+      <type>specialtrack</type>
+      <id>special_track</id>
+      <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
+      <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
     <scriptparameter>
       <type>string</type>
