@@ -59,6 +59,12 @@
       <label>Block Location (for all Non-Static Modes):</label>
     </scriptparameter>
     <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track</id>
+      <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
+      <label>Special Track to Attach To (Optional):</label>
+    </scriptparameter>
+    <scriptparameter>
       <type filetype="audio">resourcepath</type>
       <defaultvalue>sounds/alarm.ogg</defaultvalue>
       <id>estop_sound</id>
@@ -92,6 +98,12 @@
       <id>block_mode</id>
       <description>Will illuminate to indicate the block&apos;s status (occupied, approaching, etc).</description>
       <label>Block Status</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track_mode</id>
+      <description>Special Track mode that will light to indicate the status of the chosen special track.</description>
+      <label>Special Track</label>
     </scriptparameter>
     <materialpath name="black_plastic">textures/plastic_black.nl2mat</materialpath>
     <materialpath name="black_plastic_ribbed">textures/plastic_black_ribbed.nl2mat</materialpath>

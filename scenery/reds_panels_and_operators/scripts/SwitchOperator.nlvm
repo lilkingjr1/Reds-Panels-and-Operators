@@ -153,10 +153,10 @@ public class SwitchOperator extends Script{
         return element;
     }
 	
-	private int getModeFromScoParams(SceneObject sco){
+	private int getModeFromScoParams(SceneObject sco){ // Returns the mode ID, based on the first MODES-based parameter to be found true
 		Boolean curBool = null;
 		
-		for (int i = 0; i < MODES.length; i++){
+		for (int i = 0; i < MODES.length; i++){ // Traverse the MODES array
 			if (MODES[i].equals("special_track_mode")){
 				specialTrack = sco.getSpecialTrackParameter( MODES[i] );
 				if (specialTrack != null) return i; else specialTrack = null;
@@ -166,7 +166,7 @@ public class SwitchOperator extends Script{
 				if (curBool != null && curBool.boolValue()) return i;
 			}
 		}
-		return 0;
+		return 0; // Default to static mode if no mode selection found
 	}
 	
 	private bool isCoasterWithPlatform(Coaster coaster){ // Returns if the given coaster has a platform station, based on the master PLATFORM_COASTERS list

@@ -1,12 +1,14 @@
 // Light Stack NL2 Script
 // David Wolfe (Red-Thirten)
-// 6/7/2020
+// 6/8/2022
 // Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
 import com.nolimitscoaster.*;
 import nlvm.util.Vector;
 import nlvm.math3d.Vector3f;
+
+import util.SpecialTrackModule;
 
 public class LightStack extends Script{
 	private static final String SCRIPT_NAME = "LightStack";							// Script name for debugging
@@ -17,7 +19,8 @@ public class LightStack extends Script{
 	private static final String[] MODES = { // Possible mode parameters
 		"static",
 		"dispatch_mode",
-		"block_mode"
+		"block_mode",
+		"special_track_mode"
 	};
 	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24};		// All platform coaster IDs in NL2, as of this file's creation date
 	
@@ -26,8 +29,10 @@ public class LightStack extends Script{
     private Coaster coaster;
     private Block block;
     private Section section;
-	
+	private SpecialTrack specialTrack;
     private StaticSound soundEmergency;
+	
+	private SpecialTrackModule specialTrackModule;
 	
 	private int mode = 0;
 	private bool coasterHasPlatform, soundPlayed;
@@ -37,6 +42,10 @@ public class LightStack extends Script{
 		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco
 		lightElements = getLightElementsOnSco(sco); // Get and assign light elements
 		mode = getModeFromScoParams(sco);
+		
+		if (sco.getSpecialTrackParameter("special_track") != null){ // If set to attach to special track, set up the module object for it
+			specialTrackModule = new SpecialTrackModule(sco);
+		}
 		
 		if (mode == 0){
 			handleStaticMode(sco);
@@ -97,9 +106,13 @@ public class LightStack extends Script{
 		Boolean curBool = null;
 		
 		for (int i = 0; i < MODES.length; i++){ // Traverse the MODES array
-			curBool = sco.getBooleanParameter( MODES[i] ); // Get the corresponding parameter
-			if (curBool != null && curBool.boolValue()){ // Check if it exists, then if it is positive
-				return i;
+			if (MODES[i].equals("special_track_mode")){
+				specialTrack = sco.getSpecialTrackParameter( MODES[i] );
+				if (specialTrack != null) return i; else specialTrack = null;
+			}
+			else{
+				curBool = sco.getBooleanParameter( MODES[i] );
+				if (curBool != null && curBool.boolValue()) return i;
 			}
 		}
 		return 0; // Default to static mode if no mode selection found
@@ -237,6 +250,45 @@ public class LightStack extends Script{
 			}
 		}
 	}
+	
+	private void handleSpecialTrackMode(){
+		if (coaster.isEmergencyStop()){ // All lights off when E-Stopped
+			((SceneObjectElement) lightElements.elementAt(0)).setTextureAnimationIndex(0);
+			((SceneObjectElement) lightElements.elementAt(1)).setTextureAnimationIndex(0);
+			((SceneObjectElement) lightElements.elementAt(2)).setTextureAnimationIndex(0);
+			
+			if (!soundPlayed && soundEmergency != null){ // Play E-Stop sound once, if set
+				soundEmergency.play();
+				soundPlayed = true;
+			}
+		}
+		else{
+			if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_OCCUPIED && section.getTrainOnSection() != null){
+				if (section.getTrainOnSection().getSpeed() == 0){
+					((SceneObjectElement) lightElements.elementAt(0)).setTextureAnimationIndex(1);
+					((SceneObjectElement) lightElements.elementAt(1)).setTextureAnimationIndex(0);
+				}
+				else{
+					((SceneObjectElement) lightElements.elementAt(0)).setTextureAnimationIndex(0);
+					((SceneObjectElement) lightElements.elementAt(1)).setTextureAnimationIndex(-1);
+				}
+			}
+			else{
+				((SceneObjectElement) lightElements.elementAt(0)).setTextureAnimationIndex(0);
+				((SceneObjectElement) lightElements.elementAt(1)).setTextureAnimationIndex(0);
+			}
+			if (specialTrack.getVisibleSwitchState() % 1.f != 0.f){
+				((SceneObjectElement) lightElements.elementAt(2)).setTextureAnimationIndex(-1);
+			}
+			else{
+				((SceneObjectElement) lightElements.elementAt(2)).setTextureAnimationIndex(0);
+			}
+			
+			if (soundPlayed){ // Reset E-Stop sound when not in E-Stop
+				soundPlayed = false;
+			}
+		}
+	}
 
 	public void onNextFrame(float tick){
 		switch (mode){
@@ -248,7 +300,12 @@ public class LightStack extends Script{
 			case 2:
 				handleBlockMode();
 				break;
+			case 3:
+				handleSpecialTrackMode();
+				break;
 			default:
 		}
+		
+		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
 	}
 }
