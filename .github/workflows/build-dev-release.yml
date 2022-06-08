@@ -1,4 +1,7 @@
-name: Build Development Release
+# Creates a pre-release for any dev branch commits
+# Note: Tag name CANNOT equal branch name
+
+name: Build Development Pre-Release
 
 on:
   push:
@@ -6,7 +9,7 @@ on:
 
 jobs:
   build-release:
-    name: Build Development Release
+    name: Build Development Pre-Release
     runs-on: ubuntu-latest
     steps:
       - name: Check out branch
