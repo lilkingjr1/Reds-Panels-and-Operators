@@ -1,5 +1,4 @@
 # Creates a pre-release for any dev branch commits
-# Note: Tag name CANNOT equal branch name
 
 name: Build Development Pre-Release
 
@@ -14,11 +13,19 @@ jobs:
     steps:
       - name: Check out branch
         uses: actions/checkout@v3
+      - name: Delete existing tag and release
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true # default: false
+          tag_name: v.${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
       - name: Create release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v.${{ github.ref_name }}
+          tag_name: v.${{ github.ref_name }} # Tag name CANNOT equal branch name
           release_name: Development Build (Unpackaged)
           prerelease: true
