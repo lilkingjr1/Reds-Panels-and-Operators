@@ -1,33 +1,38 @@
 // Panel View NL2 Script
 // David Wolfe (Red-Thirten)
-// 11/29/2020
+// 6/8/2022
 // Extends Block Display. Handles additional harness and gate indicator functionality.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
 import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.Section;
-import nlvm.lang.String;
+import nlvm.lang.Math;
 import nlvm.math3d.Vector4f;
 
 public class PanelView extends BlockDisplay{
     private static final String HARNESS_ELEMENT_NAME = "harness_indicator";						// Name of the harness indicator element in the SCO/model
     private static final String GATES_ELEMENT_NAME = "gates_indicator";							// Name of the gates indicator element in the SCO/model
+    private static final String WIND_ELEMENT_NAME = "wind_indicator";							// Name of the wind indicator element in the SCO/model
 	private static final Vector4f COLOR_HARNESS_GATES = new Vector4f(0.0f, 1.0f, 0.0f, 1.0f);	// Color of the harness and gates indicators
+	private static final Vector4f COLOR_WIND_SLOW = new Vector4f(0.0f, 1.0f, 0.0f, 1.0f);		// Color to indicate slow wind speeds
+	private static final Vector4f COLOR_WIND_FAST = new Vector4f(1.0f, 0.0f, 0.0f, 1.0f);		// Color to indicate fast wind speeds
+	private static final float WIND_SPEED_CAUTION = 0.55f;										// Wind speed at which the wind indicator will start flashing
+	private static final float MAX_WIND_SPEED = 34.75187f;										// NL2's static max wind speed (m/s)
 	
-	private SceneObjectElement harnessIndicatorElement;
-	private SceneObjectElement gatesIndicatorElement;
-	
-	private float stationGateState;
-	private float harnessState;
     private Section section;
+	private SceneObjectElement harnessIndicatorElement, gatesIndicatorElement, windIndicatorElement;
+	private Vector4f windIndicatorColor = COLOR_WIND_SLOW.dup();
+	
+	private float stationGateState, harnessState, windSpeed;
 
     public bool onInit(){ // On initialization of Play simulation
 		super.SCRIPT_NAME = "PanelView"; // Script name for debugging
 		
 		if (super.onInit()){ // If the base block display initializes successfully
-			harnessIndicatorElement = super.getElementOnScoForName(super.sco, HARNESS_ELEMENT_NAME); // Get and assign harness and gates indicators' elements
+			harnessIndicatorElement = super.getElementOnScoForName(super.sco, HARNESS_ELEMENT_NAME); // Get and assign harness, gates, and wind indicators' elements
 			gatesIndicatorElement = super.getElementOnScoForName(super.sco, GATES_ELEMENT_NAME);
+			windIndicatorElement = super.getElementOnScoForName(super.sco, WIND_ELEMENT_NAME);
 			harnessIndicatorElement.setEntityColor(super.INDICATOR_COLOR_SLOT, COLOR_HARNESS_GATES);
 			gatesIndicatorElement.setEntityColor(super.INDICATOR_COLOR_SLOT, COLOR_HARNESS_GATES);
 			section = super.blocks[0].getSection(); // Get the station section
@@ -35,9 +40,19 @@ public class PanelView extends BlockDisplay{
 		}
 		else return false;
     }
+	
+	private float saturateColorValue(float v){
+		// y = -2x^2 + 2x
+		// Saturate by adding y back to the original value and clamping
+		v = (-2.f*v*v + 2.f*v) + v;
+		v = Math.max(v, 0.f);
+		v = Math.min(v, 1.f);
+		return v;
+	}
 
     public void onNextFrame(float tick){
-		if (super.blocks[0].getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_IN_STATION){ // Handle harness indicator animation
+		// Handle harness indicator animation
+		if (super.blocks[0].getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_IN_STATION){
 			harnessState = section.getTrainOnSection().getHarnessState();
 			if (harnessState <= 0){
 				harnessIndicatorElement.setTextureAnimationIndex(1);
@@ -51,7 +66,8 @@ public class PanelView extends BlockDisplay{
 		}
 		else harnessIndicatorElement.setTextureAnimationIndex(0);
 		
-		stationGateState = section.getStationGateState(); // Handle gates indicator animation
+		// Handle gates indicator animation
+		stationGateState = section.getStationGateState();
 		if (stationGateState <= 0){
 			gatesIndicatorElement.setTextureAnimationIndex(1);
 		}
@@ -60,6 +76,20 @@ public class PanelView extends BlockDisplay{
 		}
 		else{
 			gatesIndicatorElement.setTextureAnimationIndex(0);
+		}
+		
+		// Handle wind indicator animation
+		windSpeed = sim.getCurWindSpeed() / MAX_WIND_SPEED; // Get current wind speed as a value between 0 and 1
+		windIndicatorColor.lerp(windSpeed, COLOR_WIND_SLOW, COLOR_WIND_FAST); // Linear interpolation between slow and fast wind colors based on wind speed
+		windIndicatorColor.x = saturateColorValue(windIndicatorColor.x); // Saturate color values to fix brightness
+		windIndicatorColor.y = saturateColorValue(windIndicatorColor.y);
+		windIndicatorColor.z = saturateColorValue(windIndicatorColor.z);
+		windIndicatorElement.setEntityColor(super.INDICATOR_COLOR_SLOT, windIndicatorColor);
+		if (windSpeed >= WIND_SPEED_CAUTION){ // Flash if wind speed is over caution value
+			windIndicatorElement.setTextureAnimationIndex(-1);
+		}
+		else{
+			windIndicatorElement.setTextureAnimationIndex(1);
 		}
 		
 		super.onNextFrame(tick); // Run the rest of the base animations
