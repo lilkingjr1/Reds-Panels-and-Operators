@@ -50,18 +50,13 @@ public class PushButton extends Script{
 	public bool onInit(){ // On initialization of Play simulation
 		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco
 		OperatorPlacard.setPlacardTextureFromScoParams( sco, getElementOnScoForName(sco, PLACARD_ELEMENT_NAME) ); // Set placard texture using external class
-		button = new OperatorButton(getElementOnScoForName(sco, BUTTON_ELEMENT_NAME), BUTTON_HAS_LIGHT, BUTTON_TRAVEL_DIST, BUTTON_TRAVEL_TIME); // Creates a new OperatorButton object
 		mode = getModeFromScoParams(sco);
 		
 		if (sco.getSpecialTrackParameter("special_track") != null){ // If set to attach to special track, set up the module object for it
 			specialTrackModule = new SpecialTrackModule(sco);
 		}
 		
-		if (mode == 0){
-			handleStaticMode(sco);
-			return true;
-		}
-		else{ // If not static mode
+		if (mode != 0){ // If not static mode
 			block = sco.getBlockParameter("block");
 			if (block != null){ // Get ride details based on block parameter
 				coaster = block.getCoaster();
@@ -70,25 +65,6 @@ public class PushButton extends Script{
 					return false;
 				}
 				section = block.getSection();
-				switch (mode){ // Check if the specified block is a station for these modes
-					case 2:
-					case 3:
-					case 4:
-					case 5:
-						if (!section.isStation()){
-							if (!sco.getName().equals("")){
-								System.err.println(sco.getName() + ": \"" + MODES[mode] + "\" mode requires the specified block to be a station.");
-							}
-							else{
-								System.err.println(SCRIPT_NAME + ": \"" + MODES[mode] + "\" mode requires the specified block to be a station.");
-							}
-							return false;
-						}
-						break;
-					default:
-				}
-				coasterHasPlatform = isCoasterWithPlatform(coaster);
-				return true;
 			}
 			else{
 				if (!sco.getName().equals("")){
@@ -100,6 +76,37 @@ public class PushButton extends Script{
 				return false;
 			}
 		}
+		
+		button = new OperatorButton( // Creates a new OperatorButton object
+			getElementOnScoForName(sco, BUTTON_ELEMENT_NAME),
+			BUTTON_HAS_LIGHT,
+			BUTTON_TRAVEL_DIST,
+			BUTTON_TRAVEL_TIME
+		);
+		
+		switch (mode){
+			case 0: // Static
+				handleStaticMode(sco);
+				break;
+			case 2: // Dispatch
+			case 3: // Restraints open
+			case 4: // Restraints lock
+			case 5: // Platform
+				if (!section.isStation()){ // Check if the specified block is a station for these modes
+					if (!sco.getName().equals("")){
+						System.err.println(sco.getName() + ": \"" + MODES[mode] + "\" mode requires the specified block to be a station.");
+					}
+					else{
+						System.err.println(SCRIPT_NAME + ": \"" + MODES[mode] + "\" mode requires the specified block to be a station.");
+					}
+					return false;
+				}
+				coasterHasPlatform = isCoasterWithPlatform(coaster);
+				break;
+			default:
+		}
+		
+		return true; // Everything's just dandy
 	}
 	
 	private SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling

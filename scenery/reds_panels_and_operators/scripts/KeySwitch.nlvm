@@ -38,6 +38,7 @@ public class KeySwitch extends SwitchOperator{
 				break;
 			case 5: // Transports mode
 			case 6: // Special Track mode
+			case 9: // Manual Lift Jog mode
 				operatorSwitch = new OperatorSwitch(
 					getElementOnScoForName(sco, SWITCH_ELEMENT_NAME),
 					3, // States = BWD/N/FWD or Left/N/Right
@@ -50,7 +51,6 @@ public class KeySwitch extends SwitchOperator{
 				);
 				break;
 			case 7: // Maintenance mode
-			case 9: // Manual Lift Jog mode
 				operatorSwitch = new OperatorSwitch(
 					getElementOnScoForName(sco, SWITCH_ELEMENT_NAME),
 					2,

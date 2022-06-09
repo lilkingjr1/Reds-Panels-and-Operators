@@ -97,6 +97,7 @@ public class SwitchOperator extends Script{
 				break;
 			case 5: // Transports
 			case 6: // Special Track
+			case 9: // Manual Lift Jog
 				operatorSwitch.setSwitchState(1);
 				break;
 		}
@@ -118,6 +119,7 @@ public class SwitchOperator extends Script{
 			case 5: // Transports mode
 			case 6: // Special Track mode
 			case 8: // Lights mode
+			case 9: // Manual Lift Jog
 				operatorSwitch = new OperatorSwitch(
 					getElementOnScoForName(sco, SWITCH_ELEMENT_NAME),
 					3, // States = BWD/N/FWD, Left/N/Right, or Off/Running/Emergency
@@ -264,12 +266,10 @@ public class SwitchOperator extends Script{
 	}
 	
 	public void handleManualLiftJogMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE && !coaster.isEmergencyStop() &&
-		section.isLift() && section.getLiftCurrentSpeed() > 0){
-			operatorSwitch.setSwitchState(1);
-		}
-		else{
-			operatorSwitch.setSwitchState(0);
+		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE && section.isLift()){
+			if (section.getLiftCurrentSpeed() < 0) operatorSwitch.setSwitchState(0);
+			else if (section.getLiftCurrentSpeed() > 0) operatorSwitch.setSwitchState(2);
+			else operatorSwitch.setSwitchState(1);
 		}
 	}
 	
