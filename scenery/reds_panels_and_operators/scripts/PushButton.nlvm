@@ -103,6 +103,17 @@ public class PushButton extends Script{
 				}
 				coasterHasPlatform = isCoasterWithPlatform(coaster);
 				break;
+			case 11: // Manual lift jog
+				if (!section.isLift()){ // Check if the specified block is a lift for this mode
+					if (!sco.getName().equals("")){
+						System.err.println(sco.getName() + ": \"" + MODES[mode] + "\" mode requires the specified block to be a lift.");
+					}
+					else{
+						System.err.println(SCRIPT_NAME + ": \"" + MODES[mode] + "\" mode requires the specified block to be a lift.");
+					}
+					return false;
+				}
+				break;
 			default:
 		}
 		
@@ -320,13 +331,17 @@ public class PushButton extends Script{
 			button.lightOff();
 			button.buttonOut();
 		}
-		else if (section.isLift() && section.getLiftCurrentSpeed() > 0){
-			button.lightOn();
-			button.buttonIn();
-		}
 		else{
-			button.lightBlink();
-			button.buttonOut();
+			float liftSpeed = (float) section.getLiftCurrentSpeed();
+			if ( (liftSpeed < 0.f && liftSpeed <= binaryState) || (liftSpeed > 0.f && liftSpeed >= binaryState) ){
+				button.lightOn();
+				button.buttonIn();
+			}
+			else{
+				button.lightBlink();
+				button.buttonOut();
+			}
+			binaryState = liftSpeed;
 		}
 	}
 	

@@ -228,9 +228,11 @@ public class SwitchOperator extends Script{
 	
 	private void handleTransportsMode(){
 		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE){
-			if (section.getTransportCurrentSpeed() < 0) operatorSwitch.setSwitchState(0);
-			else if (section.getTransportCurrentSpeed() > 0) operatorSwitch.setSwitchState(2);
+			float transSpeed = (float) section.getTransportCurrentSpeed();
+			if (transSpeed < 0.f && transSpeed <= binaryState) operatorSwitch.setSwitchState(0);
+			else if (transSpeed > 0.f && transSpeed >= binaryState) operatorSwitch.setSwitchState(2);
 			else operatorSwitch.setSwitchState(1);
+			binaryState = transSpeed;
 		}
 	}
 	
@@ -267,9 +269,11 @@ public class SwitchOperator extends Script{
 	
 	public void handleManualLiftJogMode(){
 		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE && section.isLift()){
-			if (section.getLiftCurrentSpeed() < 0) operatorSwitch.setSwitchState(0);
-			else if (section.getLiftCurrentSpeed() > 0) operatorSwitch.setSwitchState(2);
+			float liftSpeed = (float) section.getLiftCurrentSpeed();
+			if (liftSpeed < 0.f && liftSpeed <= binaryState) operatorSwitch.setSwitchState(0);
+			else if (liftSpeed > 0.f && liftSpeed >= binaryState) operatorSwitch.setSwitchState(2);
 			else operatorSwitch.setSwitchState(1);
+			binaryState = liftSpeed;
 		}
 	}
 	
