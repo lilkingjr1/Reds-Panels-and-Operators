@@ -1,8 +1,10 @@
-// Main Panel NL2 Script
-// David Wolfe (Red-Thirten)
-// 11/9/2020
-// Will texture the main panel and/or hide the audio panel, based on user settings.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Main Panel NL2 Script
+	David Wolfe (Red-Thirten)
+	11/9/2020
+	Will texture the main panel and/or hide the audio panel, based on user settings.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;

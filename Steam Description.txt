@@ -11,7 +11,7 @@ Red's Panels and Operators is a custom SCO package of various animated buttons, 
 [h1]Features:[/h1]
 [list]
     [*][b]5 Main Panels[/b] of different sizes /w 4 button-layouts each & 3 different texture options
-    [*][b]5 "Operator" Panels[/b] of different sizes /w 3 different texture options & customizable mounts
+    [*][b]13 "Operator" Panels[/b] of different sizes /w 3 different texture options & customizable mounts
     [*][b]12 Different Operators[/b], each with easily customizable colors, placard, and scripted operation modes
 These include...
 [list]
@@ -23,6 +23,7 @@ These include...
 [/list]
     [*]PanelView Plus 1000 Block Display
     [*]3 Electrical Boxes, with customizable colors, textures, and mounts
+    [*]Air Tank
     [*]Labels
     [*]Cable Runners
     [*]Microphone
@@ -36,6 +37,7 @@ These include...
 [list]
     [*]I tried my best to make the pack super user friendly, and it's entirely possible to pick it up without any prior instruction.
     [*]However, to learn how to use the pack as efficiently as possible, please watch the [url=https://www.youtube.com/watch?v=Iw8XG1mUMP0]tutorial video above[/url], or open the README.html in the pack for best practices.
+	[*][b]Note[/b]: Operators currently cannot be interacted with (they are not "clickable"); they will only animate based on what the ride is doing or what is being done on the in-game control panel GUI. They also will not animate if the coaster is in Scripted Operation mode. Unfortunately, there is no easy way around these limitations due to limitations with NL2's scripting API and the infinite configuration possibilities of scripted rides. I may release a "manual" version of this pack sometime in the future that will have it's own API for programmers to integrate the operators into their scripted rides.
     [*]If you have any issues with the pack, please make sure your question or issue isn't already answered by these resources first before posting a comment.
 [/list]
 
@@ -55,4 +57,5 @@ These include...
     [*][url=https://steamcommunity.com/profiles/76561198278741960/myworkshopfiles/?appid=301320]Square Boi[/url] -- Support with 3D Modeling/Scripting
     [*]LostSoul -- Support with 3D Modeling/Scripting
     [*]Freddie Ross -- Beta testing and feedback
+    [*]Kevin L. -- Development testing and feedback
 [/list]

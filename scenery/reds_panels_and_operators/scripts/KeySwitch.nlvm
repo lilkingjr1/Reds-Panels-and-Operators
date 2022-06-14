@@ -1,10 +1,14 @@
-// Key Switch NL2 Script
-// David Wolfe (Red-Thirten)
-// 11/14/2020
-// Extends Switch Operator. Initializes the key switch's placard and animates the switch & key during run time, based on user settings.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Key Switch NL2 Script
+	David Wolfe (Red-Thirten)
+	9/27/2021
+	Extends Switch Operator. Initializes the key switch's placard and animates the switch & key during run time, based on user settings.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 import com.nolimitscoaster.SceneObject;
+
+import util.OperatorSwitch;
 
 public class KeySwitch extends SwitchOperator{
 	private static final String KEY_ELEMENT_NAME = "key";	// Name of the key element in the SCO/model
@@ -31,10 +35,12 @@ public class KeySwitch extends SwitchOperator{
 					SWITCH_TRAVEL_TIME,
 					getElementOnScoForName(sco, KEY_ELEMENT_NAME),
 					KEY_TRAVEL_DIST,
-					false );
+					false
+				);
 				break;
 			case 5: // Transports mode
 			case 6: // Special Track mode
+			case 9: // Manual Lift Jog mode
 				operatorSwitch = new OperatorSwitch(
 					getElementOnScoForName(sco, SWITCH_ELEMENT_NAME),
 					3, // States = BWD/N/FWD or Left/N/Right
@@ -43,7 +49,8 @@ public class KeySwitch extends SwitchOperator{
 					SWITCH_TRAVEL_TIME,
 					getElementOnScoForName(sco, KEY_ELEMENT_NAME),
 					KEY_TRAVEL_DIST,
-					true );
+					true
+				);
 				break;
 			case 7: // Maintenance mode
 				operatorSwitch = new OperatorSwitch(
@@ -54,7 +61,8 @@ public class KeySwitch extends SwitchOperator{
 					SWITCH_TRAVEL_TIME,
 					getElementOnScoForName(sco, KEY_ELEMENT_NAME),
 					KEY_TRAVEL_DIST,
-					true );
+					true
+				);
 				break;
 			case 8: //Lights mode
 				operatorSwitch = new OperatorSwitch(
@@ -65,7 +73,8 @@ public class KeySwitch extends SwitchOperator{
 					SWITCH_TRAVEL_TIME,
 					getElementOnScoForName(sco, KEY_ELEMENT_NAME),
 					KEY_TRAVEL_DIST,
-					false );
+					false
+				);
 				break;
 			default: // Static mode, or other
 				operatorSwitch = new OperatorSwitch(
@@ -76,7 +85,8 @@ public class KeySwitch extends SwitchOperator{
 					SWITCH_TRAVEL_TIME,
 					getElementOnScoForName(sco, KEY_ELEMENT_NAME),
 					KEY_TRAVEL_DIST,
-					false );
+					false
+				);
 				if (!sco.getBooleanParameter("hide_key").boolValue() && mode == 0) operatorSwitch.setKeyVisible();
 		}
 	}

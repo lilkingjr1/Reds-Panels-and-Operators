@@ -8,7 +8,7 @@
       <clip mesh="mount" distance="30"/>
       <clip mesh="air_tank" distance="75"/>
     </model>
-    <description>An electrical panel, with air break compressor reservoir, optional mounting bracket, and wire conduits.</description>
+    <description>An electrical panel, with air brake compressor reservoir, optional mounting bracket, and wire conduits.</description>
     <preview>textures/previews/electrical_box_air.png</preview>
     <usercolor>
       <label>Panel Color</label>
@@ -37,17 +37,10 @@
       <resource id="LICENSE">LICENSE</resource>
     </script>
     <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>special_track_attach</id>
-      <description>Set the name of this object to the name of the Special Track you want this to attach to. Requires block to be set as well.</description>
-      <label>Attach to Transfer Track? (Hover for instructions)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>blocksection</type>
-      <id>block</id>
-      <description>This is only used when the &quot;Attach to Transfer Track&quot; option above is selected. Block can be any block on the coaster.</description>
-      <label>Transfer Block (Only for Attachment)</label>
+      <type>specialtrack</type>
+      <id>special_track</id>
+      <description>Select the special track of a ride you want this box to move with during simulation. Set to &lt;None&gt; to disable.</description>
+      <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
     <scriptparameter>
       <type>string</type>

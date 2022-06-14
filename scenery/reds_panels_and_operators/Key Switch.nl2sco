@@ -55,11 +55,10 @@
       <label>Block Location (for all Non-Static Modes):</label>
     </scriptparameter>
     <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>special_track_attach</id>
-      <description>Set the name of this object to the name of the Special Track you want this to attach to. Requires block to be set as well.</description>
-      <label>Attach to Transfer Track? (Hover for instructions)</label>
+      <type>specialtrack</type>
+      <id>special_track</id>
+      <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
+      <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
     <scriptparameter>
       <type>string</type>
@@ -97,11 +96,10 @@
       <label>Transports</label>
     </scriptparameter>
     <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>special_track</id>
-      <description>Set the name of this switch to the name of the Special Track you want this switch to animate to.</description>
-      <label>Special Track (Hover for instructions)</label>
+      <type>specialtrack</type>
+      <id>special_track_mode</id>
+      <description>Special Track you want this switch to animate to.</description>
+      <label>Special Track</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
@@ -109,6 +107,13 @@
       <id>maintenance_mode</id>
       <description>Will animate to End Angle when ride is in Full Manual mode. Block can be any block.</description>
       <label>Full Manual Mode</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>manual_lift_jog</id>
+      <description>Only active when coaster is in Full Manual Mode. Will animate if block is a lift.</description>
+      <label>Manual Lift Jog Mode</label>
     </scriptparameter>
     <scriptparameter>
       <type>string</type>

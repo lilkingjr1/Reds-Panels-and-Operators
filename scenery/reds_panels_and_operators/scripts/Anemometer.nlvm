@@ -1,8 +1,10 @@
-// Anemometer NL2 Script
-// David Wolfe (Red-Thirten)
-// 12/7/2020
-// Animates the anemometer to spin relative to the simulator's active wind speed.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Anemometer NL2 Script
+	David Wolfe (Red-Thirten)
+	12/7/2020
+	Animates the anemometer to spin relative to the simulator's active wind speed.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;
@@ -15,8 +17,8 @@ public class Anemometer extends Script{
 	private static final float MAX_WIND_SPEED = 34.75187f;				// NL2's static max wind speed (m/s)
 	
 	private SceneObjectElement anemometer;
-	private float radRotation = 0.f;
 	
+	private float radRotation = 0.f;
 	
 	public bool onInit(){ // On initialization of Play simulation
 		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco

@@ -46,11 +46,10 @@
       <label>Block Location (for all Non-Static Modes):</label>
     </scriptparameter>
     <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>special_track_attach</id>
-      <description>Set the name of this object to the name of the Special Track you want this to attach to. Requires block to be set as well.</description>
-      <label>Attach to Transfer Track? (Hover for instructions)</label>
+      <type>specialtrack</type>
+      <id>special_track</id>
+      <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
+      <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
     <scriptparameter>
       <type>string</type>
@@ -70,7 +69,7 @@
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
       <id>advance</id>
-      <description>Good for location at block break sections. Will light accordingly.</description>
+      <description>Good for location at block brake sections. Will light accordingly.</description>
       <label>Advance</label>
     </scriptparameter>
     <scriptparameter>
@@ -112,15 +111,29 @@
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
       <id>automatic_mode</id>
-      <description>Will light like an Automatic Mode button. (No, this is not a magical auto-mode setting)</description>
+      <description>Will light and animate like an Automatic Mode button. (No, this is not a magical auto-mode setting)</description>
       <label>Automatic Mode</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
       <id>full_manual_mode</id>
-      <description>Will light like a Full Manual Mode button. (No, it cannot be &quot;changed manually&quot; during play)</description>
+      <description>Will light and animate like a Full Manual Mode button. (No, it cannot be &quot;changed manually&quot; during play)</description>
       <label>Full Manual Mode</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>manual_lift_jog</id>
+      <description>Only active when coaster is in Full Manual Mode. Will light and animate if block is a lift.</description>
+      <label>Manual Lift Jog Mode</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>manual_brake_release</id>
+      <description>Only active when coaster is in Full Manual Mode. Will light and animate if block is a brake.</description>
+      <label>Manual Brake Release Mode</label>
     </scriptparameter>
     <scriptparameter>
       <type>string</type>
@@ -247,30 +260,42 @@
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
       <id>placard19</id>
-      <label>Platform Raise/Lower</label>
+      <label>Manual Brake Release</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
       <id>placard20</id>
-      <label>Reset</label>
+      <label>Platform Raise/Lower</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
       <id>placard21</id>
-      <label>Restraints Open</label>
+      <label>Reset</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
       <id>placard22</id>
-      <label>Ride Start</label>
+      <label>Restraints Lock</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
       <id>placard23</id>
+      <label>Restraints Open</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>placard24</id>
+      <label>Ride Start</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>placard25</id>
       <label>Ride Stop</label>
     </scriptparameter>
     <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
