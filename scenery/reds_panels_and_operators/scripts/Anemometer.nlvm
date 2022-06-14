@@ -1,8 +1,10 @@
-// Anemometer NL2 Script
-// David Wolfe (Red-Thirten)
-// 12/7/2020
-// Animates the anemometer to spin relative to the simulator's active wind speed.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Anemometer NL2 Script
+	David Wolfe (Red-Thirten)
+	12/7/2020
+	Animates the anemometer to spin relative to the simulator's active wind speed.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;

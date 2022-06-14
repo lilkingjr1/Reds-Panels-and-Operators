@@ -1,8 +1,10 @@
-// Audio Panel NL2 Script
-// David Wolfe (Red-Thirten)
-// 11/25/2020
-// Will texture the audio panel and/or hide the mounts, based on user settings.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Audio Panel NL2 Script
+	David Wolfe (Red-Thirten)
+	11/25/2020
+	Will texture the audio panel and/or hide the mounts, based on user settings.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;

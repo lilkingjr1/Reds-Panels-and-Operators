@@ -1,10 +1,17 @@
-// Pilot Light NL2 Script
-// David Wolfe (Red-Thirten)
-// 6/7/2022
-// Initializes the pilot light's placard and animates the pilot light during run time, based on user settings.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Pilot Light NL2 Script
+	David Wolfe (Red-Thirten)
+	6/14/2022
+	Initializes the pilot light's placard and animates the pilot light during run time, based on user settings.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
-import com.nolimitscoaster.*;
+import com.nolimitscoaster.Script;
+import com.nolimitscoaster.SceneObject;
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.Coaster;
+import com.nolimitscoaster.Block;
+import com.nolimitscoaster.Section;
 
 import util.OperatorPlacard;
 import util.SpecialTrackModule;
@@ -27,7 +34,6 @@ public class PilotLight extends Script{
 	
 	protected SceneObject sco;
 	protected SceneObjectElement light;
-	
     protected Coaster coaster;
     protected Block block;
     private Section section;
@@ -36,7 +42,6 @@ public class PilotLight extends Script{
 	
 	protected int mode = 0;
 	private bool coasterHasPlatform;
-	
 	
 	public bool onInit(){ // On initialization of Play simulation
 		sco = getScoFromParentEntity(); // Get and assign local sco

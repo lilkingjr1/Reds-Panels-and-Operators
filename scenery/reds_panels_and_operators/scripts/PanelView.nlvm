@@ -1,8 +1,10 @@
-// Panel View NL2 Script
-// David Wolfe (Red-Thirten)
-// 6/8/2022
-// Extends Block Display. Handles additional harness and gate indicator functionality.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Panel View NL2 Script
+	David Wolfe (Red-Thirten)
+	6/8/2022
+	Extends Block Display. Handles additional harness and gate indicator functionality.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Block;

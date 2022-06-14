@@ -1,8 +1,10 @@
-// Push Button NL2 Script
-// David Wolfe (Red-Thirten)
-// 11/7/2020
-// Extends Push Button.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Push Button NL2 Script
+	David Wolfe (Red-Thirten)
+	11/7/2020
+	Extends Push Button.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 public class PushButtonFlat extends PushButton{
 	public final bool onInit(){

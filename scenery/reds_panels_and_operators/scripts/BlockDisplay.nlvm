@@ -1,9 +1,11 @@
-// Block Display NL2 Script
-// bestdani & David Wolfe (Red-Thirten)
-// 9/27/2021
-// Animates indicator element textures on a pre-configured object, using block zones defined by user parameters, to emulate a block display.
-// Original concept and code by bestdani. Modified to be more efficient, and support extending.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Block Display NL2 Script
+	bestdani & David Wolfe (Red-Thirten)
+	9/27/2021
+	Animates indicator element textures on a pre-configured object, using block zones defined by user parameters, to emulate a block display.
+	Original concept and code by bestdani. Modified to be more efficient, and support extending.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.SceneObject;

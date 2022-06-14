@@ -1,8 +1,10 @@
-// Pilot Light 4Way NL2 Script
-// David Wolfe (Red-Thirten)
-// 11/23/2020
-// Extends Pilot Light. Handles additional lights' functionality.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Pilot Light 4Way NL2 Script
+	David Wolfe (Red-Thirten)
+	11/23/2020
+	Extends Pilot Light. Handles additional lights' functionality.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 import com.nolimitscoaster.SceneObject;
 import com.nolimitscoaster.SceneObjectElement;

@@ -1,10 +1,17 @@
-// Push Button NL2 Script
-// David Wolfe (Red-Thirten)
-// 6/7/2022
-// Initializes the push button's placard and animates the pilot light and button during run time, based on user settings.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Push Button NL2 Script
+	David Wolfe (Red-Thirten)
+	6/14/2022
+	Initializes the push button's placard and animates the pilot light and button during run time, based on user settings.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
-import com.nolimitscoaster.*;
+import com.nolimitscoaster.Script;
+import com.nolimitscoaster.SceneObject;
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.Coaster;
+import com.nolimitscoaster.Block;
+import com.nolimitscoaster.Section;
 
 import util.OperatorButton;
 import util.OperatorPlacard;

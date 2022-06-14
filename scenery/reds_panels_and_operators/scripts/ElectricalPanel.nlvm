@@ -1,8 +1,10 @@
-// Electrical Panel Initialization NL2 Script
-// David Wolfe (Red-Thirten)
-// 6/6/2022
-// Initializes the electrical panel's texture, mount, and electrical conduit based on user settings.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Electrical Panel Initialization NL2 Script
+	David Wolfe (Red-Thirten)
+	6/6/2022
+	Initializes the electrical panel's texture, mount, and electrical conduit based on user settings.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;

@@ -1,8 +1,10 @@
-// Electrical Panel (1 Wide) NL2 Script
-// David Wolfe (Red-Thirten)
-// 6/6/2022
-// Extends Electrical Panel
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Electrical Panel (1 Wide) NL2 Script
+	David Wolfe (Red-Thirten)
+	6/6/2022
+	Extends Electrical Panel
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
 public class ElectricalPanel1Wide extends ElectricalPanel{
 	public final bool onInit(){

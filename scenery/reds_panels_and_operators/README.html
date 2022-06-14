@@ -5,7 +5,7 @@
 			Red's Panels &amp; Operators<br>
 			©2022 David W. (Red-Thirten)<br>
 			<a href="mailto:rehlmgaming@gmail.com">rehlmgaming@gmail.com</a><br>
-			Version 1.3, 13 June 2022<br>
+			Version 1.3, 14 June 2022<br>
 			NL2 Scenery Custom Object (SCO) Package<br>
 		</h4></i>
 		<p>
@@ -97,9 +97,77 @@
 					<li>Added Telephone</li>
 				</ul>
 			</li>
-			<li>[v1.3]
+			<li>[v1.3] General QoL Improvements & Fixes
 				<ul>
-					<li>TODO</li>
+					<li>Added:</li>
+					<ul>
+						<li>Switch:</li>
+						<ul>
+							<li>Manual Lift Jog mode</li>
+						</ul>
+						<li>Key Switch:</li>
+						<ul>
+							<li>Manual Lift Jog mode</li>
+						</ul>
+						<li>Mushroom Button:</li>
+						<ul>
+							<li>Manual Lift Jog mode</li>
+							<li>Manual Brake Release mode</li>
+							<li>Restraints Lock placard</li>
+							<li>Ride Start placard</li>
+						</ul>
+						<li>Push Button:</li>
+						<ul>
+							<li>Manual Lift Jog mode</li>
+							<li>Manual Brake Release mode</li>
+							<li>Manual Brake Release placard</li>
+						</ul>
+						<li>Push Button (Shielded):</li>
+						<ul>
+							<li>Manual Lift Jog mode</li>
+							<li>Manual Brake Release mode</li>
+							<li>Manual Brake Release placard</li>
+						</ul>
+						<li>Push Button (Flat):</li>
+						<ul>
+							<li>Manual Lift Jog mode</li>
+							<li>Manual Brake Release mode</li>
+							<li>Manual Brake Release placard</li>
+						</ul>
+						<li>PanelView Plus 1000:</li>
+						<ul>
+							<li>Added animated wind intensity indicator</li>
+						</ul>
+						<li>Control Tower Stack Lights:</li>
+						<ul>
+							<li>Added ability to attach to special track</li>
+							<li>Added Special Track mode</li>
+						</ul>
+						<li>Panel (3x2)</li>
+						<li>Standalone Air Tank SCO</li>
+						<li>Large Lockout switch placard NL2MAT</li>
+					</ul>
+					<li>Improved:</li>
+					<ul>
+						<li>PanelView Plus 1000:</li>
+						<ul>
+							<li>No longer requires a station block to be configured and can be placed as a passive object.</li>
+							<li>Display texture improved.</li>
+						</ul>
+						<li>Push Buttons will now animate for Automatic and Full Manual modes.</li>
+						<li>Made Special Track attachment more simplified and easier to use. Users can now just specify the Special Track table to attach to in settings (instead of having to rename the object and set the block, etc). This also now allows for a switch to be able to attached to one table but "control" another if desired.</li>
+						<li>Transport and Lift Jog modes are now more responsive and realistically represent what the button/switch state would be instead of the track device state (ie. Switch to jog the lift motor wouldn't still be on while the lift is slowing down after a jog).</li>
+						<li>Manually linted code a bunch.</li>
+					</ul>
+					<li>Fixed:</li>
+					<ul>
+						<li>Buttons animating abnormally in Restraints mode if the restraints were already up when entering the station (Thanks to Kevin L. for finding this bug).</li>
+						<li>Switches and Key Switches Manual Lift Jog mode now support going forward and backward.</li>
+						<li>Added check during init if the specified block is a station for station-only modes.</li>
+						<li>Added init <code>false</code> return for all scripts that require non-scripted operation mode.</li>
+						<li>"Break" instead of "Brake" misspelling in many places.</li>
+						<li>Push Button lights staying on when the coaster was E-Stopped in certain modes.</li>
+					</ul>
 				</ul>
 			</li>
 		</ul>

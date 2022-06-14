@@ -1,7 +1,9 @@
-// Pack Welcome NL2 Script
-// David Wolfe (Red-Thirten)
-// 6/7/2022
-// Thanks the user for downloading the pack, informs them of the README, and encourages them to look around at the different panel examples.
+/**
+	Pack Welcome NL2 Script
+	David Wolfe (Red-Thirten)
+	6/7/2022
+	Thanks the user for downloading the pack, informs them of the README, and encourages them to look around at the different panel examples.
+*/
 
 import com.nolimitscoaster.Script;
 

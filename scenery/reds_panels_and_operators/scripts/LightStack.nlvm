@@ -1,10 +1,19 @@
-// Light Stack NL2 Script
-// David Wolfe (Red-Thirten)
-// 6/8/2022
-// Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Light Stack NL2 Script
+	David Wolfe (Red-Thirten)
+	6/14/2022
+	Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
 
-import com.nolimitscoaster.*;
+import com.nolimitscoaster.Script;
+import com.nolimitscoaster.SceneObject;
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.Coaster;
+import com.nolimitscoaster.Block;
+import com.nolimitscoaster.Section;
+import com.nolimitscoaster.SpecialTrack;
+import com.nolimitscoaster.StaticSound;
 import nlvm.util.Vector;
 import nlvm.math3d.Vector3f;
 
@@ -24,19 +33,17 @@ public class LightStack extends Script{
 	};
 	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24};		// All platform coaster IDs in NL2, as of this file's creation date
 	
-	private Vector lightElements;
-	
     private Coaster coaster;
     private Block block;
     private Section section;
 	private SpecialTrack specialTrack;
     private StaticSound soundEmergency;
+	private Vector lightElements;
 	
 	private SpecialTrackModule specialTrackModule;
 	
 	private int mode = 0;
 	private bool coasterHasPlatform, soundPlayed;
-	
 	
 	public bool onInit(){ // On initialization of Play simulation
 		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco
