@@ -6,7 +6,7 @@
       <clip mesh="placard" distance="20"/>
     </model>
     <description>A static large power cut off switch. Commonly seen on the side of main panels.</description>
-    <preview>textures/previews/power_switch.png</preview>
+    <preview>materials/previews/power_switch.png</preview>
     <param basescalex="1.75"/>
     <param basescaley="1.75"/>
     <param basescalez="1.75"/>
@@ -51,10 +51,10 @@
       <id>placard2</id>
       <label>Control Lockout</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="housing">textures/plastic_golden_yellow.nl2mat</materialpath>
-    <materialpath name="placard">textures/placard_power_switch.nl2mat</materialpath>
-    <materialpath name="rivet">textures/rivet.nl2mat</materialpath>
-    <materialpath name="switch">textures/plastic_red.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="housing">materials/plastic_golden_yellow.nl2mat</materialpath>
+    <materialpath name="placard">materials/placard_power_switch.nl2mat</materialpath>
+    <materialpath name="rivet">materials/rivet.nl2mat</materialpath>
+    <materialpath name="switch">materials/plastic_red.nl2mat</materialpath>
   </sceneobject>
 </root>

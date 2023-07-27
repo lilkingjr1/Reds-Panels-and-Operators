@@ -5,7 +5,7 @@
       <clip distance="70"/>
     </model>
     <description>A standalone air tank. Use supports for pipes.</description>
-    <preview>textures/previews/air_tank.png</preview>
+    <preview>materials/previews/air_tank.png</preview>
     <usercolor>
       <label>Tank Color</label>
       <index>3</index>
@@ -23,8 +23,8 @@
       <description>Select the special track of a ride you want this tank to move with during simulation. Set to &lt;None&gt; to disable.</description>
       <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
-    <materialpath name="housing_nut">textures/metal011.nl2mat</materialpath>
+    <materialpath name="housing_nut">materials/metal.nl2mat</materialpath>
     <materialpath name="tank">intern:data/materials/metal/Metal A User3.nl2mat</materialpath>
-    <materialpath name="weld">textures/weld_user3.nl2mat</materialpath>
+    <materialpath name="weld">materials/weld_user3.nl2mat</materialpath>
   </sceneobject>
 </root>

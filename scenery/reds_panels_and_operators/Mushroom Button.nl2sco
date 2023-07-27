@@ -7,7 +7,7 @@
       <clip mesh="button" distance="25"/>
     </model>
     <description>A recolorable &amp; animated mushroom (dispatch) button.</description>
-    <preview>textures/previews/mushroom_button.png</preview>
+    <preview>materials/previews/mushroom_button.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -298,11 +298,11 @@
       <id>placard25</id>
       <label>Ride Stop</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="button">textures/plastic_darker_user2.nl2mat</materialpath>
-    <materialpath name="button_color">textures/button_user2.nl2mat</materialpath>
-    <materialpath name="button_side_on_color">textures/estop_side_user2.nl2mat</materialpath>
-    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
-    <materialpath name="placard">textures/placard_push_button.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="button">materials/plastic_darker_user2.nl2mat</materialpath>
+    <materialpath name="button_color">materials/button_user2.nl2mat</materialpath>
+    <materialpath name="button_side_on_color">materials/estop_side_user2.nl2mat</materialpath>
+    <materialpath name="metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="placard">materials/placard_push_button.nl2mat</materialpath>
   </sceneobject>
 </root>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>A galvanized metal texture, with normal map, metalness, and roughness.</description>
+    <preview>textures/Metal_Galvanized_001_basecolor.jpg</preview>
+    <renderpass>
+      <shadercore>Result = Add(tex0, 0.1);
+Roughness = Mul(tex2, 3);
+Metallic = 0.03;</shadercore>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <custommaterial>
+        <specular r="0.623529" g="0.639216" b="0.654902"/>
+        <shininess exponent="42.3385"/>
+      </custommaterial>
+      <reflection fresnelconst="0.1" fresnelvar="0.3"/>
+      <rgbgen mode="bumplighting"/>
+      <texunit>
+        <map>textures/Metal_Galvanized_001_basecolor.jpg</map>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <map>textures/Metal_Galvanized_001_normal.jpg</map>
+        <bump mode="normalgloss"/>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <map>textures/Metal_Galvanized_001_roughness.jpg</map>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+    <footstepsounds>
+      <footstepsound>intern:data/sounds/walk/metal1.wav</footstepsound>
+      <footstepsound>intern:data/sounds/walk/metal2.wav</footstepsound>
+      <footstepsound>intern:data/sounds/walk/metal3.wav</footstepsound>
+      <footstepsound>intern:data/sounds/walk/metal4.wav</footstepsound>
+    </footstepsounds>
+  </material>
+</root>

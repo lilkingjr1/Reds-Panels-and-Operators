@@ -6,7 +6,7 @@
       <clip mesh="base" distance="20"/>
     </model>
     <description>A recolorable 3-stack tower of pilot lights.</description>
-    <preview>textures/previews/control_tower_stack_lights.png</preview>
+    <preview>materials/previews/control_tower_stack_lights.png</preview>
     <param basescalex="0.6"/>
     <param basescaley="0.6"/>
     <param basescalez="0.6"/>
@@ -105,15 +105,15 @@
       <description>Special Track mode that will light to indicate the status of the chosen special track.</description>
       <label>Special Track</label>
     </scriptparameter>
-    <materialpath name="black_plastic">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="black_plastic_ribbed">textures/plastic_black_ribbed.nl2mat</materialpath>
-    <materialpath name="bottom_light_ribbed">textures/plastic_ribbed_user2.nl2mat</materialpath>
-    <materialpath name="bottom_light_side">textures/button_side_user2.nl2mat</materialpath>
+    <materialpath name="black_plastic">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="black_plastic_ribbed">materials/plastic_black_ribbed.nl2mat</materialpath>
+    <materialpath name="bottom_light_ribbed">materials/plastic_ribbed_user2.nl2mat</materialpath>
+    <materialpath name="bottom_light_side">materials/button_side_user2.nl2mat</materialpath>
     <materialpath name="metal">intern:data/materials/Chrome.nl2mat</materialpath>
-    <materialpath name="middle_light_ribbed">textures/plastic_ribbed_user3.nl2mat</materialpath>
-    <materialpath name="middle_light_side">textures/button_side_user3.nl2mat</materialpath>
-    <materialpath name="screw_normal">textures/screw.nl2mat</materialpath>
-    <materialpath name="top_light_ribbed">textures/plastic_ribbed_user4.nl2mat</materialpath>
-    <materialpath name="top_light_side">textures/button_side_user4.nl2mat</materialpath>
+    <materialpath name="middle_light_ribbed">materials/plastic_ribbed_user3.nl2mat</materialpath>
+    <materialpath name="middle_light_side">materials/button_side_user3.nl2mat</materialpath>
+    <materialpath name="screw_normal">materials/screw.nl2mat</materialpath>
+    <materialpath name="top_light_ribbed">materials/plastic_ribbed_user4.nl2mat</materialpath>
+    <materialpath name="top_light_side">materials/button_side_user4.nl2mat</materialpath>
   </sceneobject>
 </root>

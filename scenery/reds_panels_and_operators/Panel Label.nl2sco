@@ -5,7 +5,7 @@
       <clip distance="15"/>
     </model>
     <description>A small label to add detail to an existing operator or electrical panel.</description>
-    <preview>textures/previews/label.png</preview>
+    <preview>materials/previews/label.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -110,9 +110,9 @@
       <id>placard11</id>
       <label>XFER</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="label_op1">textures/label.nl2mat</materialpath>
-    <materialpath name="rivet_normal">textures/rivet.nl2mat</materialpath>
-    <materialpath name="rivet_normal_0">textures/rivet.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="label_op1">materials/label.nl2mat</materialpath>
+    <materialpath name="rivet_normal">materials/rivet.nl2mat</materialpath>
+    <materialpath name="rivet_normal_0">materials/rivet.nl2mat</materialpath>
   </sceneobject>
 </root>

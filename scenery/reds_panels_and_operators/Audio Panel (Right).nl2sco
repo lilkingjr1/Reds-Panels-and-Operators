@@ -7,7 +7,7 @@
       <clip mesh="mount" distance="35"/>
     </model>
     <description>A standalone audio panel, with texture and mounting options. -70 deg. X angle for button face.</description>
-    <preview>textures/previews/audio_panel_right.png</preview>
+    <preview>materials/previews/audio_panel_right.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -63,12 +63,12 @@
       <label>Rusty</label>
     </scriptparameter>
     <materialpath name="audio_panel_mounts">intern:data/materials/metal/Metal A User1.nl2mat</materialpath>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="flexable_metal">textures/flexable_metal.nl2mat</materialpath>
-    <materialpath name="flexable_metal_0">textures/flexable_metal.nl2mat</materialpath>
-    <materialpath name="metal_small">textures/main_panel_texture_user0.nl2mat</materialpath>
-    <materialpath name="mic_opening">textures/mic_opening.nl2mat</materialpath>
-    <materialpath name="screw_normal">textures/screw.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="flexable_metal">materials/flexable_metal.nl2mat</materialpath>
+    <materialpath name="flexable_metal_0">materials/flexable_metal.nl2mat</materialpath>
+    <materialpath name="metal_small">materials/main_panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="mic_opening">materials/mic_opening.nl2mat</materialpath>
+    <materialpath name="screw_normal">materials/screw.nl2mat</materialpath>
     <materialpath name="silver">intern:data/materials/Chrome.nl2mat</materialpath>
   </sceneobject>
 </root>

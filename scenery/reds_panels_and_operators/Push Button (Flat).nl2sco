@@ -7,7 +7,7 @@
       <clip mesh="button" distance="15"/>
     </model>
     <description>A recolorable, scripted flat push button, with customizable placard.</description>
-    <preview>textures/previews/push_button_flat.png</preview>
+    <preview>materials/previews/push_button_flat.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -305,10 +305,10 @@
       <id>placard32</id>
       <label>Unloading Announcement</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="button">textures/plastic_user2.nl2mat</materialpath>
-    <materialpath name="flat_button_texture_normal">textures/button_flat_user2.nl2mat</materialpath>
-    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
-    <materialpath name="placard">textures/placard_push_button_flat.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="button">materials/plastic_user2.nl2mat</materialpath>
+    <materialpath name="flat_button_texture_normal">materials/button_flat_user2.nl2mat</materialpath>
+    <materialpath name="metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="placard">materials/placard_push_button_flat.nl2mat</materialpath>
   </sceneobject>
 </root>

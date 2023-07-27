@@ -7,7 +7,7 @@
       <clip mesh="button" distance="15"/>
     </model>
     <description>A recolorable, scripted, shielded push button, with customizable placard.</description>
-    <preview>textures/previews/push_button_shielded.png</preview>
+    <preview>materials/previews/push_button_shielded.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -298,12 +298,12 @@
       <id>placard25</id>
       <label>Ride Stop</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="button_color">textures/button_user2.nl2mat</materialpath>
-    <materialpath name="button_color_0">textures/button_user2.nl2mat</materialpath>
-    <materialpath name="button_side_color">textures/button_side_user2.nl2mat</materialpath>
-    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
-    <materialpath name="placard">textures/placard_push_button.nl2mat</materialpath>
-    <materialpath name="ribbed_height">textures/metal011_ribbed.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="button_color">materials/button_user2.nl2mat</materialpath>
+    <materialpath name="button_color_0">materials/button_user2.nl2mat</materialpath>
+    <materialpath name="button_side_color">materials/button_side_user2.nl2mat</materialpath>
+    <materialpath name="metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="placard">materials/placard_push_button.nl2mat</materialpath>
+    <materialpath name="ribbed_height">materials/metal_ribbed.nl2mat</materialpath>
   </sceneobject>
 </root>
