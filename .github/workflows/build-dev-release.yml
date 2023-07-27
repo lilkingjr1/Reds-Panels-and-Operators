@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Delete existing tag and release
-        uses: dev-drprasad/delete-tag-and-release
+        uses: dev-drprasad/delete-tag-and-release@latest
         with:
           delete_release: true # default: false
           tag_name: v.${{ github.ref_name }}
@@ -20,7 +20,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
       - name: Create release
-        uses: actions/create-release
+        uses: actions/create-release@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
