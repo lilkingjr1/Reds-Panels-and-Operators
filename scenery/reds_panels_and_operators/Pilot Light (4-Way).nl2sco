@@ -10,7 +10,7 @@
       <clip mesh="light4" distance="15"/>
     </model>
     <description>A recolorable, scripted 4-way pilot light, with customizable lights and placard.</description>
-    <preview>textures/previews/pilot_light_4way.png</preview>
+    <preview>materials/previews/pilot_light_4way.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -166,17 +166,17 @@
       <id>placard7</id>
       <label>System Status</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
-    <materialpath name="pilot_1_color">textures/button_user2.nl2mat</materialpath>
-    <materialpath name="pilot_2_color">textures/button_user3.nl2mat</materialpath>
-    <materialpath name="pilot_3_color">textures/button_user4.nl2mat</materialpath>
-    <materialpath name="pilot_4_color">textures/button_user5.nl2mat</materialpath>
-    <materialpath name="pilot_side_1_color">textures/button_side_user2.nl2mat</materialpath>
-    <materialpath name="pilot_side_2_color">textures/button_side_user3.nl2mat</materialpath>
-    <materialpath name="pilot_side_3_color">textures/button_side_user4.nl2mat</materialpath>
-    <materialpath name="pilot_side_4_color">textures/button_side_user5.nl2mat</materialpath>
-    <materialpath name="placard">textures/placard_pilot_light_4way.nl2mat</materialpath>
-    <materialpath name="ribbed_height">textures/metal011_ribbed.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="pilot_1_color">materials/button_user2.nl2mat</materialpath>
+    <materialpath name="pilot_2_color">materials/button_user3.nl2mat</materialpath>
+    <materialpath name="pilot_3_color">materials/button_user4.nl2mat</materialpath>
+    <materialpath name="pilot_4_color">materials/button_user5.nl2mat</materialpath>
+    <materialpath name="pilot_side_1_color">materials/button_side_user2.nl2mat</materialpath>
+    <materialpath name="pilot_side_2_color">materials/button_side_user3.nl2mat</materialpath>
+    <materialpath name="pilot_side_3_color">materials/button_side_user4.nl2mat</materialpath>
+    <materialpath name="pilot_side_4_color">materials/button_side_user5.nl2mat</materialpath>
+    <materialpath name="placard">materials/placard_pilot_light_4way.nl2mat</materialpath>
+    <materialpath name="ribbed_height">materials/metal_ribbed.nl2mat</materialpath>
   </sceneobject>
 </root>

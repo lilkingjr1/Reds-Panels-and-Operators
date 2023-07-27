@@ -5,7 +5,7 @@
       <clip distance="175"/>
     </model>
     <description>A medium main control panel with no layout and no height, and optional audio panel attachement. -70 deg. X angle for button face.</description>
-    <preview>textures/previews/main_panel_short_plain.png</preview>
+    <preview>materials/previews/main_panel_short_plain.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -48,7 +48,7 @@
       <description>Looks best when Panel Color is pure white.</description>
       <label>Rusty</label>
     </scriptparameter>
-    <materialpath name="metal_large">textures/main_panel_texture_user0.nl2mat</materialpath>
-    <materialpath name="vent">textures/vent.nl2mat</materialpath>
+    <materialpath name="metal_large">materials/main_panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="vent">materials/vent.nl2mat</materialpath>
   </sceneobject>
 </root>

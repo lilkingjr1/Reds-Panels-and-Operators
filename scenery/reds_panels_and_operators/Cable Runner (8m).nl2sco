@@ -6,7 +6,7 @@
       <clip distance="70"/>
     </model>
     <description>A 8 meter, recolorable cable runner. Best used in tandem with the Electrical Box; set coords. equal to Elec. Box to auto-align.</description>
-    <preview>textures/previews/cable_runner.png</preview>
+    <preview>materials/previews/cable_runner.png</preview>
     <usercolor>
       <label>Runner</label>
       <index>0</index>
@@ -62,8 +62,8 @@
       <description>Looks best when Panel Color is pure white.</description>
       <label>Rusty</label>
     </scriptparameter>
-    <materialpath name="metal">textures/panel_texture_user0.nl2mat</materialpath>
-    <materialpath name="wire1">textures/plastic_user1.nl2mat</materialpath>
-    <materialpath name="wire2">textures/plastic_user2.nl2mat</materialpath>
+    <materialpath name="metal">materials/panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="wire1">materials/plastic_user1.nl2mat</materialpath>
+    <materialpath name="wire2">materials/plastic_user2.nl2mat</materialpath>
   </sceneobject>
 </root>

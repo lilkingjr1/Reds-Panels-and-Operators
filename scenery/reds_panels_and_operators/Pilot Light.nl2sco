@@ -7,7 +7,7 @@
       <clip mesh="pilot" distance="15"/>
     </model>
     <description>A recolorable, scripted pilot light, with customizable light and placard.</description>
-    <preview>textures/previews/pilot_light.png</preview>
+    <preview>materials/previews/pilot_light.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -228,11 +228,11 @@
       <id>placard18</id>
       <label>Warning</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
-    <materialpath name="pilot_color">textures/button_user2.nl2mat</materialpath>
-    <materialpath name="pilot_side_color">textures/pilot_side_user2.nl2mat</materialpath>
-    <materialpath name="placard">textures/placard_pilot_light.nl2mat</materialpath>
-    <materialpath name="ribbed_height">textures/plastic_ribbed_user2.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="pilot_color">materials/button_user2.nl2mat</materialpath>
+    <materialpath name="pilot_side_color">materials/pilot_side_user2.nl2mat</materialpath>
+    <materialpath name="placard">materials/placard_pilot_light.nl2mat</materialpath>
+    <materialpath name="ribbed_height">materials/plastic_ribbed_user2.nl2mat</materialpath>
   </sceneobject>
 </root>

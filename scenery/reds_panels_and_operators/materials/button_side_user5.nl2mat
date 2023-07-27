@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>Button side that is recolorable using the User 5 custom defined color.</description>
+    <preview>textures/button/button_side_on_color.png</preview>
+    <renderpass>
+      <shadercore>tmp0 = Mul(2, entity5); // Get the user set color and multiply it by 2
+tmp0 = saturate(tmp0); // Clamp resulting value between 0 and 1
+tmp0 = lerp(0.3, 1, tmp0); // Interpolate
+Specular = tmp0; // Set specular to resulting value
+
+Emission = Mul(tex1, entity5); // Set emission to texture/custom color combination
+
+Result = Mul(tex0, entity5); // Set color output to texture/custom color combination</shadercore>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <custommaterial>
+        <shininess exponent="128"/>
+      </custommaterial>
+      <reflection affectedbyspecular="true" fresnelconst="0.05" fresnelvar="0.4"/>
+      <rgbgen mode="lighting"/>
+      <texunit>
+        <map>textures/button/button_side_off_color.png</map>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <animmap frequency="2">
+          <map>intern:data/textures/fx/black.png</map>
+          <map>textures/button/button_side_on_color.png</map>
+        </animmap>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+  </material>
+</root>

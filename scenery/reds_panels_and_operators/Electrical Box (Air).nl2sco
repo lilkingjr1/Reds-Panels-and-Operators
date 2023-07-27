@@ -9,7 +9,7 @@
       <clip mesh="air_tank" distance="75"/>
     </model>
     <description>An electrical panel, with air brake compressor reservoir, optional mounting bracket, and wire conduits.</description>
-    <preview>textures/previews/electrical_box_air.png</preview>
+    <preview>materials/previews/electrical_box_air.png</preview>
     <usercolor>
       <label>Panel Color</label>
       <index>0</index>
@@ -70,14 +70,14 @@
       <description>Looks best when Panel Color is pure white.</description>
       <label>Rusty</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="housing_nut">textures/metal011.nl2mat</materialpath>
-    <materialpath name="key_hole_displacement">textures/door_key_hole.nl2mat</materialpath>
-    <materialpath name="metal">textures/panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="housing_nut">materials/metal.nl2mat</materialpath>
+    <materialpath name="key_hole_displacement">materials/door_key_hole.nl2mat</materialpath>
+    <materialpath name="metal">materials/panel_texture_user0.nl2mat</materialpath>
     <materialpath name="mount">intern:data/materials/metal/Metal A User1.nl2mat</materialpath>
-    <materialpath name="pipe">textures/metal_galvanized.nl2mat</materialpath>
+    <materialpath name="pipe">materials/metal_galvanized.nl2mat</materialpath>
     <materialpath name="tank">intern:data/materials/metal/Metal A User3.nl2mat</materialpath>
-    <materialpath name="weld">textures/weld_user3.nl2mat</materialpath>
-    <materialpath name="wire">textures/plastic_user2.nl2mat</materialpath>
+    <materialpath name="weld">materials/weld_user3.nl2mat</materialpath>
+    <materialpath name="wire">materials/plastic_user2.nl2mat</materialpath>
   </sceneobject>
 </root>

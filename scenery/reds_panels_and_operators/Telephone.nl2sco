@@ -5,7 +5,7 @@
       <clip distance="40"/>
     </model>
     <description>Recolorable, decorative/static telephone.</description>
-    <preview>textures/previews/telephone.png</preview>
+    <preview>materials/previews/telephone.png</preview>
     <param basescalex="1.2"/>
     <param basescaley="1.2"/>
     <param basescalez="1.2"/>
@@ -19,8 +19,8 @@
       <index>2</index>
       <defaultcolor r="0.435294" g="0.435294" b="0.435294"/>
     </usercolor>
-    <materialpath name="base">textures/plastic_user1.nl2mat</materialpath>
-    <materialpath name="buttons">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="phone">textures/plastic_user2.nl2mat</materialpath>
+    <materialpath name="base">materials/plastic_user1.nl2mat</materialpath>
+    <materialpath name="buttons">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="phone">materials/plastic_user2.nl2mat</materialpath>
   </sceneobject>
 </root>

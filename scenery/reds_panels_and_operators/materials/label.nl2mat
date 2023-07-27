@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>All possible labels, listed in animation format.</description>
+    <preview>textures/labels/label_op1.png</preview>
+    <renderpass>
+      <shadercore>Roughness = 1;
+Specular = 0;
+tmp0 = Sub(1, tex0);
+tmp1 = Mul(tex0, entity0);
+tmp2 = Mul(tmp0, entity1);
+result = Add(tmp1, tmp2);</shadercore>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <rgbgen mode="lighting"/>
+      <texunit>
+        <animmap frequency="0">
+          <map>textures/labels/label_op1.png</map>
+          <map>textures/labels/label_op2.png</map>
+          <map>textures/labels/label_op3.png</map>
+          <map>textures/labels/label_op4.png</map>
+          <map>textures/labels/label_op5.png</map>
+          <map>textures/labels/label_brke.png</map>
+          <map>textures/labels/label_com.png</map>
+          <map>textures/labels/label_dispatch_enable.png</map>
+          <map>textures/labels/label_elec.png</map>
+          <map>textures/labels/label_lift.png</map>
+          <map>textures/labels/label_mcbr.png</map>
+          <map>textures/labels/label_xfer.png</map>
+        </animmap>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+  </material>
+</root>

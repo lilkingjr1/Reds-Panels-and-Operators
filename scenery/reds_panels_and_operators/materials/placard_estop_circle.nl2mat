@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>Circular E-Stop placard texture.</description>
+    <preview>textures/placards/placard_circle_estop.png</preview>
+    <renderpass>
+      <shadercore>Roughness = 1;
+Specular = 0;
+tmp0 = Sub(1, tex0);
+tmp1 = Mul(tex0, entity0);
+tmp2 = Mul(tmp0, entity1);
+result = Add(tmp1, tmp2);</shadercore>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <rgbgen mode="lighting"/>
+      <texunit>
+        <map>textures/placards/placard_circle_estop.png</map>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+  </material>
+</root>

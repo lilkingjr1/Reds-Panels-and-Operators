@@ -7,7 +7,7 @@
       <clip mesh="key" distance="15"/>
     </model>
     <description>An scripted, animated key switch, with customizable placard.</description>
-    <preview>textures/previews/key_switch.png</preview>
+    <preview>materials/previews/key_switch.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -188,10 +188,10 @@
       <id>placard10</id>
       <label>Transports (BWD / N / FWD)</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
     <materialpath name="key">intern:data/materials/Chrome.nl2mat</materialpath>
-    <materialpath name="key_arrow">textures/key_hole.nl2mat</materialpath>
-    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
-    <materialpath name="placard">textures/placard_key_switch.nl2mat</materialpath>
+    <materialpath name="key_arrow">materials/key_hole.nl2mat</materialpath>
+    <materialpath name="metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="placard">materials/placard_key_switch.nl2mat</materialpath>
   </sceneobject>
 </root>

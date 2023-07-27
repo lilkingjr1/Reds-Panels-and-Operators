@@ -5,7 +5,7 @@
       <clip distance="40"/>
     </model>
     <description>A scripted &quot;Allen-Bradley PanelView Plus 1000&quot;. This object is neither endorsed nor licensed by Rockwell Automation, Inc.</description>
-    <preview>textures/previews/panelview_plus_1000.png</preview>
+    <preview>materials/previews/panelview_plus_1000.png</preview>
     <param basescalex="1.25"/>
     <param basescaley="1.25"/>
     <param basescalez="1.25"/>
@@ -150,10 +150,10 @@
       <description>Blocks 2-20 will display in order on the block display, after the station. Additional stations can be listed as blocks; only the &quot;Station Block&quot; will be used for harness/gates indicators.</description>
       <label>Block 20 for Display</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="glass">textures/glass_dirty_transparent.nl2mat</materialpath>
-    <materialpath name="indicator">textures/panelview_indicator.nl2mat</materialpath>
-    <materialpath name="panel_screen">textures/panelview_screen.nl2mat</materialpath>
-    <materialpath name="panelview_sticker">textures/panelview_sticker.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="glass">materials/glass_dirty_transparent.nl2mat</materialpath>
+    <materialpath name="indicator">materials/panelview_indicator.nl2mat</materialpath>
+    <materialpath name="panel_screen">materials/panelview_screen.nl2mat</materialpath>
+    <materialpath name="panelview_sticker">materials/panelview_sticker.nl2mat</materialpath>
   </sceneobject>
 </root>

@@ -7,7 +7,7 @@
       <clip mesh="estop_button" distance="15"/>
     </model>
     <description>A recolorable &amp; animated E-Stop button, with a circle placard.</description>
-    <preview>textures/previews/estop_button_circle.png</preview>
+    <preview>materials/previews/estop_button_circle.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -112,10 +112,10 @@
       <id>placard1</id>
       <label>Emergency Stop</label>
     </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="button_color">textures/button_user2.nl2mat</materialpath>
-    <materialpath name="estop_side_on_color">textures/estop_side_user2.nl2mat</materialpath>
-    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
-    <materialpath name="placard_circle_estop">textures/placard_estop_circle.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="button_color">materials/button_user2.nl2mat</materialpath>
+    <materialpath name="estop_side_on_color">materials/estop_side_user2.nl2mat</materialpath>
+    <materialpath name="metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="placard_circle_estop">materials/placard_estop_circle.nl2mat</materialpath>
   </sceneobject>
 </root>

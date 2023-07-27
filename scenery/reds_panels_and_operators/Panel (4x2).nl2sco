@@ -7,7 +7,7 @@
       <clip mesh="mount" distance="30"/>
     </model>
     <description>A 4 operator wide, by 2 operator high, empty operator panel, with optional mounting bracket and wire conduit.</description>
-    <preview>textures/previews/panel_4x2.png</preview>
+    <preview>materials/previews/panel_4x2.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -75,9 +75,9 @@
       <description>Looks best when Panel Color is pure white.</description>
       <label>Rusty</label>
     </scriptparameter>
-    <materialpath name="metal">textures/panel_texture_user0.nl2mat</materialpath>
-    <materialpath name="metal_galvanized">textures/metal_galvanized.nl2mat</materialpath>
+    <materialpath name="metal">materials/panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="metal_galvanized">materials/metal_galvanized.nl2mat</materialpath>
     <materialpath name="mount">intern:data/materials/metal/Metal A User1.nl2mat</materialpath>
-    <materialpath name="screw_normal">textures/screw.nl2mat</materialpath>
+    <materialpath name="screw_normal">materials/screw.nl2mat</materialpath>
   </sceneobject>
 </root>

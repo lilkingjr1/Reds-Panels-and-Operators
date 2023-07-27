@@ -5,8 +5,8 @@
       <clip distance="50"/>
     </model>
     <description>Good for indicating where station crew should stand during dispatches.</description>
-    <preview>textures/previews/ground_hazard_tape.png</preview>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="caution_stripe">textures/hazard_stripes.nl2mat</materialpath>
+    <preview>materials/previews/ground_hazard_tape.png</preview>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="caution_stripe">materials/hazard_stripes.nl2mat</materialpath>
   </sceneobject>
 </root>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>The sticker/label for the top of a PanelView 1000.</description>
+    <preview>textures/panelview/panelview_sticker.jpg</preview>
+    <renderpass>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <rgbgen mode="lighting"/>
+      <texunit>
+        <map>textures/panelview/panelview_sticker.jpg</map>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+  </material>
+</root>
