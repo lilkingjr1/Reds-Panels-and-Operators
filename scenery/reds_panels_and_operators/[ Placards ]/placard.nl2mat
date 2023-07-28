@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
   <material>
-    <description>All possible labels, listed in animation format.</description>
-    <preview>textures/labels/label_op1.png</preview>
+    <description>Plastic placard that uses User Texture. Texture must have black text (will be replaced with Entity color 1) and white background (Entity 0 color).</description>
+    <preview>Default.png</preview>
     <renderpass>
       <shadercore>Result = Lerp(Tex0, Entity0, Entity1);
 Roughness = 1;

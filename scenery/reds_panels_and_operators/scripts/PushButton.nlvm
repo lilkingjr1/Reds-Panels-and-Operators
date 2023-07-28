@@ -1,8 +1,8 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	6/14/2022
-	Initializes the push button's placard and animates the pilot light and button during run time, based on user settings.
+	7/26/2023
+	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
 
@@ -14,7 +14,6 @@ import com.nolimitscoaster.Block;
 import com.nolimitscoaster.Section;
 
 import util.OperatorButton;
-import util.OperatorPlacard;
 import util.SpecialTrackModule;
 
 public class PushButton extends Script{
@@ -55,14 +54,29 @@ public class PushButton extends Script{
 	private float binaryState = 0.f; // Helps determine if a "binary" state starts to change to the other value (ie. restraints start to close, vice-versa, etc)
 	
 	public bool onInit(){ // On initialization of Play simulation
-		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco
-		OperatorPlacard.setPlacardTextureFromScoParams( sco, getElementOnScoForName(sco, PLACARD_ELEMENT_NAME) ); // Set placard texture using external class
-		mode = getModeFromScoParams(sco);
+		// Get and assign local sco
+		SceneObject sco = getScoFromParentEntity();
 		
-		if (sco.getSpecialTrackParameter("special_track") != null){ // If set to attach to special track, set up the module object for it
+		// Create OperatorButton object
+		button = new OperatorButton(
+			getElementOnScoForName(sco, BUTTON_ELEMENT_NAME),
+			BUTTON_HAS_LIGHT,
+			BUTTON_TRAVEL_DIST,
+			BUTTON_TRAVEL_TIME
+		);
+
+		// Hide placard if configured
+		if ( sco.getBooleanParameter("hide_placard").boolValue() ){
+			getElementOnScoForName(sco, PLACARD_ELEMENT_NAME).setVisible(false);
+		}
+		
+		// If set to attach to special track, set up the module object for it
+		if (sco.getSpecialTrackParameter("special_track") != null){
 			specialTrackModule = new SpecialTrackModule(sco);
 		}
 		
+		// Get and setup configured mode
+		mode = getModeFromScoParams(sco);
 		if (mode != 0){ // If not static mode
 			block = sco.getBlockParameter("block");
 			if (block != null){ // Get ride details based on block parameter
@@ -83,14 +97,6 @@ public class PushButton extends Script{
 				return false;
 			}
 		}
-		
-		button = new OperatorButton( // Creates a new OperatorButton object
-			getElementOnScoForName(sco, BUTTON_ELEMENT_NAME),
-			BUTTON_HAS_LIGHT,
-			BUTTON_TRAVEL_DIST,
-			BUTTON_TRAVEL_TIME
-		);
-		
 		switch (mode){
 			case 0: // Static
 				handleStaticMode(sco);
@@ -130,7 +136,7 @@ public class PushButton extends Script{
 	private SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling
         SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
         if (sco == null){
-            System.err.println(SCRIPT_NAME + ": This script only works with NL2 scene objects");
+            System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
         }
         return sco;
     }
@@ -138,7 +144,7 @@ public class PushButton extends Script{
 	private SceneObjectElement getElementOnScoForName(SceneObject sco, String name){ // Basically getElementForName() with error handling - Gratz to bestdani for idea
         SceneObjectElement element = sco.getElementForName(name);
         if (element == null){
-            System.err.println(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + name + "\" element)");
+            System.throwRuntimeException(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + name + "\" element)");
         }
         return element;
     }

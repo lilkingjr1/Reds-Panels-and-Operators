@@ -20,9 +20,9 @@
       <defaultcolor r="1" g="1" b="1"/>
     </usercolor>
     <usertexture>
-      <label>Label (Stock labels: materials\textures\labels\)</label>
+      <label>Label:</label>
       <description>Label text image to use. Can be custom, but must be black text with white background.</description>
-      <defaultpath>materials/textures/labels/label_op1.png</defaultpath>
+      <defaultpath>[ Labels ]/Operator 1.png</defaultpath>
     </usertexture>
     <script>
       <classpath>scripts</classpath>
@@ -37,7 +37,7 @@
       <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
     <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
-    <materialpath name="label_op1">materials/label.nl2mat</materialpath>
+    <materialpath name="label_op1">[ Labels ]/label.nl2mat</materialpath>
     <materialpath name="rivet_normal">materials/rivet.nl2mat</materialpath>
     <materialpath name="rivet_normal_0">materials/rivet.nl2mat</materialpath>
   </sceneobject>

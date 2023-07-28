@@ -24,6 +24,11 @@
       <index>2</index>
       <defaultcolor r="1" g="0" b="1"/>
     </usercolor>
+    <usertexture>
+      <label>Panel Screen:</label>
+      <description>Panel screen image to use. Can be custom, but the position of the dynamic elements (like the block display) unfortunately cannot be moved.</description>
+      <defaultpath>materials/textures/panelview/panel_screen.png</defaultpath>
+    </usertexture>
     <script>
       <classpath>scripts</classpath>
       <class>PanelView</class>

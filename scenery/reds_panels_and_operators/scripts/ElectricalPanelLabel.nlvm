@@ -1,21 +1,18 @@
 /**
 	Electrical Panel Label NL2 Script
 	David Wolfe (Red-Thirten)
-	7/26/2023
+	7/28/2023
 	Attaches the label to special track if configured.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;
-import com.nolimitscoaster.SceneObjectElement;
-import nlvm.lang.String;
 
 import util.SpecialTrackModule;
 
 public class ElectricalPanelLabel extends Script{
 	private static final String SCRIPT_NAME = "ElectricalPanelLabel";		// Script name for debugging
-	private static final String LABEL_ELEMENT_NAME = "label";				// Name of the label element in the model
 	
 	private SpecialTrackModule specialTrackModule;
 	
@@ -35,14 +32,6 @@ public class ElectricalPanelLabel extends Script{
             System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
         }
         return sco;
-    }
-	
-	private SceneObjectElement getElementOnScoForName(SceneObject sco, String name){ // Basically getElementForName() with error handling - Gratz to bestdani for idea
-		SceneObjectElement element = sco.getElementForName(name);
-        if (element == null){
-            System.throwRuntimeException(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + name + "\" element)");
-        }
-        return element;
     }
 	
 	public void onNextFrame(float tick){

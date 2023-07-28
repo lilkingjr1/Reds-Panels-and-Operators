@@ -19,8 +19,8 @@ public class PanelView extends BlockDisplay{
 	private static final Vector4f COLOR_HARNESS_GATES = new Vector4f(0.0f, 1.0f, 0.0f, 1.0f);	// Color of the harness and gates indicators
 	private static final Vector4f COLOR_WIND_SLOW = new Vector4f(0.0f, 1.0f, 0.0f, 1.0f);		// Color to indicate slow wind speeds
 	private static final Vector4f COLOR_WIND_FAST = new Vector4f(1.0f, 0.0f, 0.0f, 1.0f);		// Color to indicate fast wind speeds
-	private static final float WIND_SPEED_CAUTION = 0.55f;										// Wind speed at which the wind indicator will start flashing
 	private static final float MAX_WIND_SPEED = 34.75187f;										// NL2's static max wind speed (m/s)
+	private static final float WIND_SPEED_CAUTION = 0.55f;										// Wind speed % at which the wind indicator will start flashing
 	
     private Section section;
 	private SceneObjectElement harnessIndicatorElement, gatesIndicatorElement, windIndicatorElement;

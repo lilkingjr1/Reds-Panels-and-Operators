@@ -1,7 +1,7 @@
 /**
 	Block Display NL2 Script
 	bestdani & David Wolfe (Red-Thirten)
-	9/27/2021
+	7/27/2023
 	Animates indicator element textures on a pre-configured object, using block zones defined by user parameters, to emulate a block display.
 	Original concept and code by bestdani. Modified to be more efficient, and support extending.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
@@ -30,36 +30,41 @@ public class BlockDisplay extends Script{
     private Vector4f colorLift = new Vector4f(0.0f, 1.0f, 0.0f, 1.0f);		// Default lift indicator color
     private Vector4f colorBrake = new Vector4f(1.0f, 0.0f, 1.0f, 1.0f);		// Default brake indicator color
 	
-	// Array of dynamic arrays (Vectors) of elements. Each element in the master array represents a "block" of elements, representing the blocks on the ride.
+    // Array of dynamic arrays (Vectors) of elements. Each element in the master array represents a "block" of elements, representing the blocks on the ride.
     private Vector[] elementsForBlock;
-	
+
     public bool onInit(){ // On initialization of Play simulation
-        sco = getScoFromParentEntity(); // Get and assign local sco
-		
-        SceneObjectElement element0 = getElementOnScoForName(sco, MODEL_INDICATOR_PREFIX + "0"); // Temporarily get an element to read indicator color preferences
-        if (element0 != null){ // Assign block type colors via entity parameters
-			element0.getEntityColor(STATION_COLOR_SLOT, colorStation);
-			element0.getEntityColor(LIFT_COLOR_SLOT, colorLift);
-			element0.getEntityColor(BRAKE_COLOR_SLOT, colorBrake);
+        // Get and assign local sco
+        sco = getScoFromParentEntity();
+        
+        // Temporarily get an element to read indicator color preferences
+        SceneObjectElement element0 = getElementOnScoForName(sco, MODEL_INDICATOR_PREFIX + "0");
+        // Assign block type colors via entity parameters
+        if (element0 != null){
+            element0.getEntityColor(STATION_COLOR_SLOT, colorStation);
+            element0.getEntityColor(LIFT_COLOR_SLOT, colorLift);
+            element0.getEntityColor(BRAKE_COLOR_SLOT, colorBrake);
         }
-		else return false;
+        else return false;
+
+        // Check if required Station block has been set in the parameters
+        if (sco.getBlockParameter(PARAMETER_BLOCK_PREFIX + 0) == null){
+            if (!sco.getName().equals("")){
+                System.out.println(sco.getName() + ": Station Block parameter required to be set for block diagram to work.");
+            }
+            else{
+                System.out.println(SCRIPT_NAME + ": Station Block parameter required to be set for block diagram to work.");
+            }
+            System.out.println("\t(Double click the object in the editor to set block options)");
+            return false;
+        }
 		
-		if (sco.getBlockParameter(PARAMETER_BLOCK_PREFIX + 0) == null){ // Check if required Station block has been set in the parameters
-			if (!sco.getName().equals("")){
-				System.out.println(sco.getName() + ": Station Block parameter required to be set for block diagram to work.");
-				System.out.println("\t(Double click the object in the editor to set block options)");
-				return false;
-			}
-			else{
-				System.out.println(SCRIPT_NAME + ": Station Block parameter required to be set for block diagram to work.");
-				System.out.println("\t(Double click the object in the editor to set block options)");
-				return false;
-			}
-		}
-		
-        blocks = assignBlocksFromParameters(sco); // Get blocks from parameters
-        elementsForBlock = assignElementsFromBlocksForSco(sco); // Calculate which indicator elements will be assigned to which blocks
-        setElementColors(blocks, elementsForBlock); // Set indicator elements' colors based on what type of block they represent
+        // Get blocks from parameters
+        blocks = assignBlocksFromParameters(sco);
+        // Calculate which indicator elements will be assigned to which blocks
+        elementsForBlock = assignElementsFromBlocksForSco(sco);
+        // Set indicator elements' colors based on what type of block they represent
+        setElementColors(blocks, elementsForBlock);
 		
         return true; // Everything's just dandy
     }
@@ -67,7 +72,7 @@ public class BlockDisplay extends Script{
     protected SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling
         SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
         if (sco == null){
-            System.err.println(SCRIPT_NAME + ": This script only works with NL2 scene objects");
+            System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
         }
         return sco;
     }
@@ -75,7 +80,7 @@ public class BlockDisplay extends Script{
 	protected SceneObjectElement getElementOnScoForName(SceneObject sco, String name){ // Basically getElementForName() with error handling - Gratz to bestdani for idea
         SceneObjectElement element = sco.getElementForName(name);
         if (element == null){
-            System.err.println(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + name + "\" element)");
+            System.throwRuntimeException(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + name + "\" element)");
         }
         return element;
     }

@@ -26,6 +26,11 @@
       <index>2</index>
       <defaultcolor r="1" g="0.968628" b="0.823529"/>
     </usercolor>
+    <usertexture>
+      <label>Placard:</label>
+      <description>Placard text image to use. Can be custom, but must be black text with white background.</description>
+      <defaultpath>[ Placards ]/Default.png</defaultpath>
+    </usertexture>
     <script>
       <classpath>scripts</classpath>
       <class>SwitchOperator</class>
@@ -135,108 +140,18 @@
       <label>Manual Lift Jog Mode</label>
     </scriptparameter>
     <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>placard_instructions</id>
-      <description>Selections for placard text. Changing this text does nothing.</description>
-      <label>========== Placard Options ==========</label>
-    </scriptparameter>
-    <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
-      <id>placard0</id>
-      <label>No Placard (Invisible)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard1</id>
-      <label>Floor (Raise / Lower)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>placard2</id>
-      <label>Gates (Open / Close)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard3</id>
-      <label>Harness (Open / Lock)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard4</id>
-      <label>Jog Lift (BWD / N / FWD)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard5</id>
-      <label>Maintenance (Bypass / Off / Enable)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard6</id>
-      <label>Mic Zone (Station / Lift / Brakes)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard7</id>
-      <label>Operation Mode (Auto / Maint / Xfer)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard8</id>
-      <label>Platform (Raise / Lower)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard9</id>
-      <label>Restraints (Open / Lock)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard10</id>
-      <label>Running Lights (Off / On / Emrg)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard11</id>
-      <label>Switch Track (Left / Right)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard12</id>
-      <label>Trains In Service (1 / 2 / 3)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard13</id>
-      <label>Transfer Table (Left / N / Right)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard14</id>
-      <label>Transports (BWD / N / FWD)</label>
+      <id>hide_placard</id>
+      <description>Hides the placard during Play Mode.</description>
+      <label>Hide Placard</label>
     </scriptparameter>
     <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
     <materialpath name="black_plastic">materials/plastic_black_textured.nl2mat</materialpath>
     <materialpath name="ivory">materials/plastic_user2.nl2mat</materialpath>
     <materialpath name="metal">materials/metal.nl2mat</materialpath>
     <materialpath name="metal_0">materials/metal.nl2mat</materialpath>
-    <materialpath name="placard">materials/placard_switch.nl2mat</materialpath>
+    <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
     <materialpath name="switch_grip_height">materials/switch_grip.nl2mat</materialpath>
   </sceneobject>
 </root>

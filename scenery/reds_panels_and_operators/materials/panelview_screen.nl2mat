@@ -11,7 +11,7 @@ Result = tmp0;</shadercore>
       <linearshading/>
       <rgbgen mode="lighting"/>
       <texunit>
-        <map>textures/panelview/panel_screen.png</map>
+        <entity/>
         <tcgen mode="base"/>
       </texunit>
       <texunit>

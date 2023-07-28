@@ -20,6 +20,11 @@
       <index>1</index>
       <defaultcolor r="0" g="0" b="0"/>
     </usercolor>
+    <usertexture>
+      <label>Placard:</label>
+      <description>Placard text image to use. Can be custom, but must be black text with white background.</description>
+      <defaultpath>[ Placards ]/Control Lockout (Large).png</defaultpath>
+    </usertexture>
     <script>
       <classpath>scripts</classpath>
       <class>PowerSwitch</class>
@@ -27,33 +32,15 @@
       <resource id="LICENSE">LICENSE</resource>
     </script>
     <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>placard_instructions</id>
-      <description>Selections for placard text. Changing this text does nothing.</description>
-      <label>========== Placard Options ==========</label>
-    </scriptparameter>
-    <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
-      <id>placard0</id>
-      <label>No Placard (Invisible)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>placard1</id>
-      <label>Power Lockout</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard2</id>
-      <label>Control Lockout</label>
+      <id>hide_placard</id>
+      <description>Hides the placard during Play Mode.</description>
+      <label>Hide Placard</label>
     </scriptparameter>
     <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
     <materialpath name="housing">materials/plastic_golden_yellow.nl2mat</materialpath>
-    <materialpath name="placard">materials/placard_power_switch.nl2mat</materialpath>
+    <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
     <materialpath name="rivet">materials/rivet.nl2mat</materialpath>
     <materialpath name="switch">materials/plastic_red.nl2mat</materialpath>
   </sceneobject>

@@ -26,6 +26,11 @@
       <index>2</index>
       <defaultcolor r="0" g="1" b="0"/>
     </usercolor>
+    <usertexture>
+      <label>Placard:</label>
+      <description>Placard text image to use. Can be custom, but must be black text with white background.</description>
+      <defaultpath>[ Placards ]/Default.png</defaultpath>
+    </usertexture>
     <script>
       <classpath>scripts</classpath>
       <class>PushButton</class>
@@ -136,174 +141,18 @@
       <label>Manual Brake Release Mode</label>
     </scriptparameter>
     <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>placard_instructions</id>
-      <description>Selections for placard text. Changing this text does nothing.</description>
-      <label>========== Placard Options ==========</label>
-    </scriptparameter>
-    <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
-      <id>placard0</id>
-      <label>No Placard (Invisible)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard1</id>
-      <label>Acknowledge</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard2</id>
-      <label>Advance</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard3</id>
-      <label>Automatic Mode</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard4</id>
-      <label>Block Reset</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard5</id>
-      <label>Clear Block</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>placard6</id>
-      <label>Dispatch / Advance</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard7</id>
-      <label>E-Stop Reset</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard8</id>
-      <label>Full Manual Mode</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard9</id>
-      <label>Harness Lock</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard10</id>
-      <label>Harness Open</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard11</id>
-      <label>Horn</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard12</id>
-      <label>Jog Lift</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard13</id>
-      <label>Lamp Test</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard14</id>
-      <label>Launch</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard15</id>
-      <label>Launch Boost Enable</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard16</id>
-      <label>Lift Start</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard17</id>
-      <label>Lift Stop</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard18</id>
-      <label>Manual Block Mode</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard19</id>
-      <label>Manual Brake Release</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard20</id>
-      <label>Platform Raise/Lower</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard21</id>
-      <label>Reset</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard22</id>
-      <label>Restraints Lock</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard23</id>
-      <label>Restraints Open</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard24</id>
-      <label>Ride Start</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard25</id>
-      <label>Ride Stop</label>
+      <id>hide_placard</id>
+      <description>Hides the placard during Play Mode.</description>
+      <label>Hide Placard</label>
     </scriptparameter>
     <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
     <materialpath name="button_color">materials/button_user2.nl2mat</materialpath>
     <materialpath name="button_color_0">materials/button_user2.nl2mat</materialpath>
     <materialpath name="button_side_color">materials/button_side_user2.nl2mat</materialpath>
     <materialpath name="metal">materials/metal.nl2mat</materialpath>
-    <materialpath name="placard">materials/placard_push_button.nl2mat</materialpath>
+    <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
     <materialpath name="ribbed_height">materials/metal_ribbed.nl2mat</materialpath>
   </sceneobject>
 </root>

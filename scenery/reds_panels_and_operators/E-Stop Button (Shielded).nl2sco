@@ -27,6 +27,11 @@
       <index>2</index>
       <defaultcolor r="1" g="0" b="0"/>
     </usercolor>
+    <usertexture>
+      <label>Placard:</label>
+      <description>Placard text image to use. Can be custom, but must be black text with white background.</description>
+      <defaultpath>[ Placards ]/Default.png</defaultpath>
+    </usertexture>
     <script>
       <classpath>scripts</classpath>
       <class>EStopButton</class>
@@ -95,52 +100,16 @@
       <label>E-Stop (Light + Animate)</label>
     </scriptparameter>
     <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>placard_instructions</id>
-      <description>Selections for placard text. Changing this text does nothing.</description>
-      <label>========== Placard Options ==========</label>
-    </scriptparameter>
-    <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
-      <id>placard0</id>
-      <label>No Placard (Invisible)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard1</id>
-      <label>Advance</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard2</id>
-      <label>Dispatch / Advance</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>placard3</id>
-      <label>Emergency Stop</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard4</id>
-      <label>Ride Stop</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard5</id>
-      <label>Trouble</label>
+      <id>hide_placard</id>
+      <description>Hides the placard during Play Mode.</description>
+      <label>Hide Placard</label>
     </scriptparameter>
     <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
     <materialpath name="button_color">materials/button_user2.nl2mat</materialpath>
     <materialpath name="estop_side_on_color">materials/estop_side_user2.nl2mat</materialpath>
     <materialpath name="metal">materials/metal.nl2mat</materialpath>
-    <materialpath name="placard">materials/placard_estop.nl2mat</materialpath>
+    <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
   </sceneobject>
 </root>

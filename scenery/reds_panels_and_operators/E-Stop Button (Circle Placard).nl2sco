@@ -94,28 +94,16 @@
       <label>E-Stop (Light + Animate)</label>
     </scriptparameter>
     <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>placard_instructions</id>
-      <description>Selections for placard text. Changing this text does nothing.</description>
-      <label>========== Placard Options ==========</label>
-    </scriptparameter>
-    <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
-      <id>placard0</id>
-      <label>No Placard (Invisible)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>placard1</id>
-      <label>Emergency Stop</label>
+      <id>hide_placard</id>
+      <description>Hides the placard during Play Mode.</description>
+      <label>Hide Placard</label>
     </scriptparameter>
     <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
     <materialpath name="button_color">materials/button_user2.nl2mat</materialpath>
     <materialpath name="estop_side_on_color">materials/estop_side_user2.nl2mat</materialpath>
     <materialpath name="metal">materials/metal.nl2mat</materialpath>
-    <materialpath name="placard_circle_estop">materials/placard_estop_circle.nl2mat</materialpath>
+    <materialpath name="placard_circle_estop">[ Placards ]/placard_circle_estop.nl2mat</materialpath>
   </sceneobject>
 </root>

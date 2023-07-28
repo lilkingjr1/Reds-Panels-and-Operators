@@ -1,7 +1,7 @@
 /**
 	Light Stack NL2 Script
 	David Wolfe (Red-Thirten)
-	6/14/2022
+	7/27/2023
 	Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -20,9 +20,9 @@ import nlvm.math3d.Vector3f;
 import util.SpecialTrackModule;
 
 public class LightStack extends Script{
-	private static final String SCRIPT_NAME = "LightStack";							// Script name for debugging
-	private static final String ELEMENT_PREFIX = "light";							// Prefix of the light elements in the model
-	private static final String PARAMETER_PREFIX = "light";							// Prefix of the static light parameters in the SCO
+	private static final String SCRIPT_NAME = "LightStack";		// Script name for debugging
+	private static final String ELEMENT_PREFIX = "light";		// Prefix of the light elements in the model
+	private static final String PARAMETER_PREFIX = "light";		// Prefix of the static light parameters in the SCO
 	private static final Vector3f SPEAKER_LOCATION = new Vector3f(0.f, 0.45f, 0.f);	// Speaker position in the model/SCO, relative to the origin
 	
 	private static final String[] MODES = { // Possible mode parameters
@@ -31,7 +31,7 @@ public class LightStack extends Script{
 		"block_mode",
 		"special_track_mode"
 	};
-	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24};		// All platform coaster IDs in NL2, as of this file's creation date
+	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24}; // All platform coaster IDs in NL2, as of this file's creation date
 	
     private Coaster coaster;
     private Block block;
@@ -86,7 +86,7 @@ public class LightStack extends Script{
 	private SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling
         SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
         if (sco == null){
-            System.err.println(SCRIPT_NAME + ": This script only works with NL2 scene objects");
+            System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
         }
         return sco;
     }

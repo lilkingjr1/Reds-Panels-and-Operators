@@ -21,6 +21,11 @@
       <index>1</index>
       <defaultcolor r="0" g="0" b="0"/>
     </usercolor>
+    <usertexture>
+      <label>Placard:</label>
+      <description>Placard text image to use. Can be custom, but must be black text with white background.</description>
+      <defaultpath>[ Placards ]/Default.png</defaultpath>
+    </usertexture>
     <script>
       <classpath>scripts</classpath>
       <class>KeySwitch</class>
@@ -116,82 +121,16 @@
       <label>Manual Lift Jog Mode</label>
     </scriptparameter>
     <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>placard_instructions</id>
-      <description>Selections for placard text. Changing this text does nothing.</description>
-      <label>========== Placard Options ==========</label>
-    </scriptparameter>
-    <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
-      <id>placard0</id>
-      <label>No Placard (Invisible)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard1</id>
-      <label>Control Power (Off / On)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard2</id>
-      <label>Jog Lift (BWD / N / FWD)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard3</id>
-      <label>Maintenance (Bypass / Off / Enable)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard4</id>
-      <label>Mic Zone (Station / Lift / Brakes)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>placard5</id>
-      <label>Operation Mode (Auto / Maint / Xfer)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard6</id>
-      <label>Running Lights (Off / On / Emrg)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard7</id>
-      <label>Switch Track (Left / Right)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard8</id>
-      <label>Trains In Service (1 / 2 / 3)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard9</id>
-      <label>Transfer Table (Left / N / Right)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard10</id>
-      <label>Transports (BWD / N / FWD)</label>
+      <id>hide_placard</id>
+      <description>Hides the placard during Play Mode.</description>
+      <label>Hide Placard</label>
     </scriptparameter>
     <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
     <materialpath name="key">intern:data/materials/Chrome.nl2mat</materialpath>
     <materialpath name="key_arrow">materials/key_hole.nl2mat</materialpath>
     <materialpath name="metal">materials/metal.nl2mat</materialpath>
-    <materialpath name="placard">materials/placard_key_switch.nl2mat</materialpath>
+    <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
   </sceneobject>
 </root>

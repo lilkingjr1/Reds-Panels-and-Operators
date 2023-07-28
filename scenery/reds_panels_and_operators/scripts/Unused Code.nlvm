@@ -86,6 +86,7 @@ else
 
 ===============================================================
 
+// No longer needed after v2.6.4.0 thanks to User Textures
 private static final String PLACARD_PARAMETER_PREFIX = "placard";
 	
 public static void setPlacardTextureFromScoParams(SceneObject sco, SceneObjectElement element){
