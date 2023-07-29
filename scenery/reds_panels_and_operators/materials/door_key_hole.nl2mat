@@ -18,8 +18,8 @@ Metallic = 0.75;</shadercore>
       <texunit>
         <animmap frequency="0">
           <map>textures/Metal011_2K_Color.jpg</map>
-          <map>textures/rusty_metal_02_diff_2k.png</map>
           <map>textures/Metal011_2K_Color.jpg</map>
+          <map>textures/rusty_metal_02_diff_2k.jpg</map>
         </animmap>
         <tcgen mode="base"/>
       </texunit>
@@ -31,8 +31,8 @@ Metallic = 0.75;</shadercore>
       <texunit>
         <animmap frequency="0">
           <map>textures/Metal011_2K_Roughness.jpg</map>
-          <map>textures/rusty_metal_02_rough_2k.png</map>
           <map>textures/Metal011_2K_Roughness.jpg</map>
+          <map>textures/rusty_metal_02_rough_2k.jpg</map>
         </animmap>
         <tcgen mode="base"/>
       </texunit>

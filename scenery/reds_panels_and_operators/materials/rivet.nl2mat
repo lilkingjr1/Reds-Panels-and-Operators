@@ -2,7 +2,7 @@
 <root>
   <material>
     <description>A brushed metal rivet, with normal map and roughness.</description>
-    <preview>textures/rivet_normal.png</preview>
+    <preview>textures/rivet_normal.jpg</preview>
     <renderpass>
       <shadercore>Result = tex0;
 Roughness = Mul(tex2,2);
@@ -20,7 +20,7 @@ Metallic = 0.7;</shadercore>
         <tcgen mode="base"/>
       </texunit>
       <texunit>
-        <map>textures/rivet_normal.png</map>
+        <map>textures/rivet_normal.jpg</map>
         <bump mode="normalgloss"/>
         <tcgen mode="base"/>
       </texunit>

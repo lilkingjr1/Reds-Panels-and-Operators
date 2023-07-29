@@ -18,7 +18,7 @@
         <tcgen mode="base"/>
       </texunit>
       <texunit>
-        <map>textures/lined_cement_nrm.png</map>
+        <map>textures/lined_cement_nrm.jpg</map>
         <bump mode="normalgloss"/>
         <tcgen mode="base"/>
         <tcmod mode="scale" scales="0.4" scalet="0.4"/>

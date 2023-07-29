@@ -2,7 +2,7 @@
 <root>
   <material>
     <description>A brushed metal screw, with normal map and roughness.</description>
-    <preview>textures/screw_philips_normal.png</preview>
+    <preview>textures/screw_philips_normal.jpg</preview>
     <renderpass>
       <shadercore>Result = tex0;
 Roughness = Mul(tex2,1.5);
@@ -18,21 +18,21 @@ Metallic = 0.5;</shadercore>
       <texunit>
         <animmap frequency="0">
           <map>textures/Metal011_2K_Color.jpg</map>
-          <map>textures/rusty_metal_02_diff_2k.png</map>
           <map>textures/Metal011_2K_Color.jpg</map>
+          <map>textures/rusty_metal_02_diff_2k.jpg</map>
         </animmap>
         <tcgen mode="base"/>
       </texunit>
       <texunit>
-        <map>textures/screw_philips_normal.png</map>
+        <map>textures/screw_philips_normal.jpg</map>
         <bump mode="normalgloss"/>
         <tcgen mode="base"/>
       </texunit>
       <texunit>
         <animmap frequency="0">
           <map>textures/Metal011_2K_Roughness.jpg</map>
-          <map>textures/rusty_metal_02_rough_2k.png</map>
           <map>textures/Metal011_2K_Roughness.jpg</map>
+          <map>textures/rusty_metal_02_rough_2k.jpg</map>
         </animmap>
         <tcgen mode="base"/>
       </texunit>

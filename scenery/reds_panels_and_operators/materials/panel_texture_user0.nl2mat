@@ -19,16 +19,16 @@ Result = Mul(tex0, entity0);</shadercore>
       <texunit>
         <animmap frequency="0">
           <map>textures/Metal011_2K_Color.jpg</map>
-          <map>textures/rusty_metal_02_diff_2k.png</map>
           <map>intern:data/textures/fx/white.png</map>
+          <map>textures/rusty_metal_02_diff_2k.jpg</map>
         </animmap>
         <tcgen mode="base"/>
       </texunit>
       <texunit>
         <animmap frequency="0">
           <map>textures/Metal011_2K_Normal.jpg</map>
-          <map>textures/rusty_metal_02_nor_2k.png</map>
-          <map>textures/metal_orange_peel_normal.png</map>
+          <map>textures/metal_orange_peel_normal.jpg</map>
+          <map>textures/rusty_metal_02_nor_2k.jpg</map>
         </animmap>
         <bump mode="normalgloss"/>
         <tcgen mode="base"/>
@@ -36,8 +36,8 @@ Result = Mul(tex0, entity0);</shadercore>
       <texunit>
         <animmap frequency="0">
           <map>textures/Metal011_2K_Roughness.jpg</map>
-          <map>textures/rusty_metal_02_rough_2k.png</map>
           <map>textures/Metal011_2K_Roughness.jpg</map>
+          <map>textures/rusty_metal_02_rough_2k.jpg</map>
         </animmap>
         <tcgen mode="base"/>
       </texunit>

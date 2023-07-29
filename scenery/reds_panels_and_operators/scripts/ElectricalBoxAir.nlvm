@@ -1,27 +1,38 @@
 /**
 	Electrical Box (Air) NL2 Script
 	David Wolfe (Red-Thirten)
-	6/6/2022
+	7/28/2023
 	Extends Electrical Panel
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
 
 import com.nolimitscoaster.SceneObject;
+import com.nolimitscoaster.SceneObjectElement;
 
 import util.SpecialTrackModule;
 
 public class ElectricalBoxAir extends ElectricalPanel{
-	public final bool onInit(){ // Custom init (doesn't allow hiding of elements)
+	public final bool onInit(){ // Custom init
 		super.SCRIPT_NAME = "ElectricalBoxAir";			// Script name for debugging
 		super.PANEL_ELEMENT_NAME = "electrical_box";	// Name of the panel element in the SCO/model
 		
-		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco
-		setTextureFromScoParams(sco, sco.getElementForName(PANEL_ELEMENT_NAME)); // Set the texture chosen by the SCO parameters to the element by given name
+		// Get and assign local sco
+		SceneObject sco = getScoFromParentEntity();
 		
-		if (sco.getSpecialTrackParameter("special_track") != null){ // If set to attach to special track, set up the module object for it
-			super.specialTrackModule = new SpecialTrackModule(sco);
+		// Set the texture chosen by the SCO parameters to the element by given name
+		// (if possible - script is also paired to standalone Air Tank without electrical_box element)
+		SceneObjectElement element = sco.getElementForName(PANEL_ELEMENT_NAME);
+		if (element != null){
+			setTextureFromScoParams(sco, element);
 		}
 		
-		return true; // Everything's just dandy
+		// If set to attach to special track, set up the module object for it
+		if (sco.getSpecialTrackParameter("special_track") != null){
+			super.specialTrackModule = new SpecialTrackModule(sco);
+			return true;
+		}
+		else{
+			return false; // Prevent unused onNextFrame() from running
+		}
 	}
 }
