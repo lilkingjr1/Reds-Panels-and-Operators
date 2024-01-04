@@ -1,7 +1,7 @@
 /**
 	Key Switch NL2 Script
 	David Wolfe (Red-Thirten)
-	9/27/2021
+	09/27/2021
 	Extends Switch Operator. Animates the switch & key during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */

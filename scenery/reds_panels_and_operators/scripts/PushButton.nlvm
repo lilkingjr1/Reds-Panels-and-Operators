@@ -1,7 +1,7 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	7/26/2023
+	07/26/2023
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -42,11 +42,11 @@ public class PushButton extends Script{
 	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24}; // All platform coaster IDs in NL2, as of this file's creation date
 	// IDs with train states (flyers): 18, 23 -- Not currently able to handle due to NL2 limitations
 	
-    private Coaster coaster;
-    private Block block;
-    private Section section;
+	private Coaster coaster;
+	private Block block;
+	private Section section;
 	
-    private OperatorButton button;
+	private OperatorButton button;
 	private SpecialTrackModule specialTrackModule;
 	
 	private int mode = 0;
@@ -134,20 +134,20 @@ public class PushButton extends Script{
 	}
 	
 	private SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling
-        SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
-        if (sco == null){
-            System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
-        }
-        return sco;
-    }
+		SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
+		if (sco == null){
+			System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
+		}
+		return sco;
+	}
 	
 	private SceneObjectElement getElementOnScoForName(SceneObject sco, String name){ // Basically getElementForName() with error handling - Gratz to bestdani for idea
-        SceneObjectElement element = sco.getElementForName(name);
-        if (element == null){
-            System.throwRuntimeException(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + name + "\" element)");
-        }
-        return element;
-    }
+		SceneObjectElement element = sco.getElementForName(name);
+		if (element == null){
+			System.throwRuntimeException(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + name + "\" element)");
+		}
+		return element;
+	}
 	
 	private int getModeFromScoParams(SceneObject sco){ // Returns the mode ID, based on the first MODES-based parameter to be found true
 		Boolean curBool = null;
@@ -274,7 +274,7 @@ public class PushButton extends Script{
 				button.lightOn();
 				button.buttonPush();
 			}
-        }
+		}
 		else{ // Otherwise, light is off
 			button.lightOff();
 		}
@@ -283,32 +283,32 @@ public class PushButton extends Script{
 	private void handleEStopMode(){
 		if (coaster.isEmergencyStop()){
 			button.lightOn();
-        }
+		}
 		else{
 			button.lightBlink();
-        }
+		}
 	}
 	
 	private void handleEStopAnimMode(){
 		if (coaster.isEmergencyStop()){
 			button.lightOn();
 			button.buttonIn();
-        }
+		}
 		else{
 			button.lightBlink();
 			button.buttonOut();
-        }
+		}
 	}
 	
 	private void handleEStopResetMode(){
 		if (coaster.isEmergencyStop()){
 			button.lightBlink();
 			button.resetButtonState();
-        }
+		}
 		else{
 			button.lightOff();
 			button.buttonPush();
-        }
+		}
 	}
 	
 	private void handleAutomaticModeMode(){
@@ -318,11 +318,11 @@ public class PushButton extends Script{
 		else if (block.getNormalModeState(Block.PROTOCOL_V1) != Block.STATE_FULL_MANUAL_MODE){
 			button.lightOff();
 			button.buttonPush();
-        }
+		}
 		else{
 			button.lightBlink();
 			button.resetButtonState();
-        }
+		}
 	}
 	
 	private void handleFullManualModeMode(){
@@ -332,11 +332,11 @@ public class PushButton extends Script{
 		else if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE){
 			button.lightOff();
 			button.buttonPush();
-        }
+		}
 		else{
 			button.lightBlink();
 			button.resetButtonState();
-        }
+		}
 	}
 	
 	private void handleManualLiftJogMode(){

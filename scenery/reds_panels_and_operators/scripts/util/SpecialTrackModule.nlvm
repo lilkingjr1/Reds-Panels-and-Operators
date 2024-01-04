@@ -1,6 +1,6 @@
 // Special Track Module NL2 Class
 // David Wolfe (Red-Thirten)
-// 6/6/2022
+// 06/06/2022
 // A Java object representing a logic entity that will attach a given SCO to a specified coaster Special Track during run time, relative to where it was placed initially.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 

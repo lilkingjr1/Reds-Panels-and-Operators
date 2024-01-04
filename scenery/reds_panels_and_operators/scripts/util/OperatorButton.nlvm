@@ -1,6 +1,6 @@
 // Operator Button Object NL2 Script
 // David Wolfe (Red-Thirten)
-// 9/25/2021
+// 09/25/2021
 // A Java object representing a button that can be animated to be pushed, or even lit differently if it has a pilot light.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
