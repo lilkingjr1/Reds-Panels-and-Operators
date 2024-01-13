@@ -15,7 +15,7 @@
     <usercolor>
       <label>Placard Background</label>
       <index>0</index>
-      <defaultcolor r="1" g="0" b="0"/>
+      <defaultcolor r="0.698039" g="0.133333" b="0.133333"/>
     </usercolor>
     <usercolor>
       <label>Placard Text</label>
@@ -30,7 +30,7 @@
     <usertexture>
       <label>Placard:</label>
       <description>Placard text image to use. Can be custom, but must be black text with white background.</description>
-      <defaultpath>[ Placards ]/Default.png</defaultpath>
+      <defaultpath>[ Placards ]/Emergency Stop.png</defaultpath>
     </usertexture>
     <script>
       <classpath>scripts</classpath>

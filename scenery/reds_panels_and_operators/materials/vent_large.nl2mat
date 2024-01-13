@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>Custom vent texture for the PLC Controller model.</description>
+    <preview>textures/plc_controller/vent_large.jpg</preview>
+    <renderpass>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <rgbgen mode="bumplighting"/>
+      <texunit>
+        <map>textures/plc_controller/vent_large.jpg</map>
+        <tcgen mode="base"/>
+      </texunit>
+      <texunit>
+        <map>textures/plc_controller/vent_large.jpg</map>
+        <bump mode="heightgloss" heightscale="25"/>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+  </material>
+</root>

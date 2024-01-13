@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/plc_controller.dae">
+      <clip mesh="estop_pilot" distance="20"/>
+      <clip mesh="indicator1" distance="15"/>
+      <clip mesh="indicator2" distance="15"/>
+      <clip mesh="indicator3" distance="15"/>
+      <clip mesh="indicator4" distance="15"/>
+      <clip mesh="indicator5" distance="15"/>
+      <clip mesh="indicator6" distance="15"/>
+      <clip mesh="indicator7" distance="15"/>
+      <clip mesh="indicator8" distance="15"/>
+      <clip mesh="indicator9" distance="15"/>
+      <clip mesh="indicator10" distance="15"/>
+      <clip mesh="indicator11" distance="15"/>
+      <clip mesh="indicator12" distance="15"/>
+      <clip mesh="indicator13" distance="15"/>
+      <clip mesh="indicator14" distance="15"/>
+      <clip mesh="indicator15" distance="15"/>
+      <clip mesh="indicator16" distance="15"/>
+      <clip mesh="indicator17" distance="15"/>
+      <clip mesh="indicator18" distance="15"/>
+      <clip mesh="indicator19" distance="15"/>
+      <clip mesh="indicator20" distance="15"/>
+      <clip mesh="switch1" distance="30"/>
+      <clip mesh="control_lockout_switch" distance="25"/>
+    </model>
+    <defaultinstancename>PLC Controller</defaultinstancename>
+    <preview>materials/previews/plc_controller.png</preview>
+    <param lockonterrain="true"/>
+    <usercolor>
+      <label>Placard Background</label>
+      <index>0</index>
+      <defaultcolor r="0.698039" g="0.133333" b="0.133333"/>
+    </usercolor>
+    <usercolor>
+      <label>Placard Text</label>
+      <index>1</index>
+      <defaultcolor r="1" g="1" b="1"/>
+    </usercolor>
+    <usercolor>
+      <label>E-Stop Pilot Light</label>
+      <index>2</index>
+      <lightsources>estop_pilot</lightsources>
+      <defaultcolor r="1" g="0" b="0"/>
+    </usercolor>
+    <usercolor>
+      <label>Indicator Pilot Light</label>
+      <index>3</index>
+      <lightsources>indicator*</lightsources>
+      <defaultcolor r="1" g="0.517647" b="0"/>
+    </usercolor>
+    <usertexture>
+      <label>E-Stop Placard:</label>
+      <description></description>
+      <defaultpath>[ Placards ]/Emergency Stop.png</defaultpath>
+    </usertexture>
+    <script>
+      <classpath>scripts</classpath>
+      <class>PLCController</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+    </script>
+    <scriptparameter>
+      <type>coaster</type>
+      <id>coaster</id>
+      <description>Leave as &lt;None&gt; for passive/inactive mode.</description>
+      <label>Coaster:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>start_powered_off</id>
+      <description>Start with the coaster &quot;powered off&quot; (E-Stopped until PLC turned on and Reset button pressed).</description>
+      <label>Start Powered Off</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>invisible_mode</id>
+      <description>Hide the controller during Play mode (remains functional).</description>
+      <label>Invisible Mode</label>
+    </scriptparameter>
+    <materialpath name="black_plastic">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="brushed_metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="estop_pilot_color">materials/button_user2.nl2mat</materialpath>
+    <materialpath name="estop_pilot_side_color">materials/pilot_side_user2.nl2mat</materialpath>
+    <materialpath name="estop_ribbed_height">materials/plastic_ribbed_user2.nl2mat</materialpath>
+    <materialpath name="indicator_pilot_color">materials/button_user3.nl2mat</materialpath>
+    <materialpath name="indicator_pilot_side_color">materials/pilot_side_user3.nl2mat</materialpath>
+    <materialpath name="indicator_ribbed_height">materials/plastic_ribbed_user3.nl2mat</materialpath>
+    <materialpath name="key_norm">materials/door_key_hole.nl2mat</materialpath>
+    <materialpath name="lsr13">materials/lsr13.nl2mat</materialpath>
+    <materialpath name="metal">materials/soft_metal.nl2mat</materialpath>
+    <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
+    <materialpath name="plastic_golden_yellow">materials/plastic_golden_yellow.nl2mat</materialpath>
+    <materialpath name="rivet">materials/screw.nl2mat</materialpath>
+    <materialpath name="vent_large">materials/vent_large.nl2mat</materialpath>
+    <materialpath name="vented_metal">materials/vented_metal.nl2mat</materialpath>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>estop_pilot</name>
+      <parent>estop_pilot</parent>
+      <position x="0.2603" y="1.4806" z="0.45"/>
+      <color r="1" g="0" b="0"/>
+      <halo zoffset="0" intensity="0.4" size="0.1"/>
+    </lightsource>
+    <lightsource range="0.001" intensity="0.001" type="point">
+      <name>reset_ready</name>
+      <position x="0" y="0" z="0"/>
+      <color r="0" g="0" b="0"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator1</name>
+      <parent>indicator1</parent>
+      <position x="-0.0627" y="1.3536" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator2</name>
+      <parent>indicator2</parent>
+      <position x="0.0091" y="1.3536" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator3</name>
+      <parent>indicator3</parent>
+      <position x="0.0809" y="1.3536" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator4</name>
+      <parent>indicator4</parent>
+      <position x="0.1527" y="1.3536" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator5</name>
+      <parent>indicator5</parent>
+      <position x="0.2245" y="1.3536" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator6</name>
+      <parent>indicator6</parent>
+      <position x="0.2963" y="1.3536" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator7</name>
+      <parent>indicator7</parent>
+      <position x="0.3681" y="1.3536" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator8</name>
+      <parent>indicator8</parent>
+      <position x="0.4399" y="1.3536" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator9</name>
+      <parent>indicator9</parent>
+      <position x="0.5117" y="1.3536" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator10</name>
+      <parent>indicator10</parent>
+      <position x="0.5835" y="1.3536" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator11</name>
+      <parent>indicator11</parent>
+      <position x="-0.0627" y="1.2266" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator12</name>
+      <parent>indicator12</parent>
+      <position x="0.0091" y="1.2266" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator13</name>
+      <parent>indicator13</parent>
+      <position x="0.0809" y="1.2266" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator14</name>
+      <parent>indicator14</parent>
+      <position x="0.1527" y="1.2266" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator15</name>
+      <parent>indicator15</parent>
+      <position x="0.2245" y="1.2266" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator16</name>
+      <parent>indicator16</parent>
+      <position x="0.2963" y="1.2266" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator17</name>
+      <parent>indicator17</parent>
+      <position x="0.3681" y="1.2266" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator18</name>
+      <parent>indicator18</parent>
+      <position x="0.4399" y="1.2266" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator19</name>
+      <parent>indicator19</parent>
+      <position x="0.5117" y="1.2266" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>indicator20</name>
+      <parent>indicator20</parent>
+      <position x="0.5835" y="1.2266" z="0.435"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+  </sceneobject>
+</root>

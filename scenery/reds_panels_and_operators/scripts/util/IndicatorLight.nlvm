@@ -1,0 +1,96 @@
+/**
+	Indicator Light NL2 Class
+	David Wolfe (Red-Thirten)
+	01/10/2024
+	A Java object representing an indicator/pilot light that can manage the indicator's light and texture animation.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+
+	Constructors:
+		IndicatorLight(SceneObjectElement element, SceneObjectLight light, float blinkInterval, bool hasLight)
+
+	Methods:
+		void lightOff() - Turns the indicator off.
+		void lightOn() - Turns the indicator on.
+		void lightBlink() - Sets the indicator to blink (onNextFrame calls req.).
+        void setLightState(int state) - Sets the indicator's state given a com.nolimitscoaster.block LAMP constant.
+        bool isOn() - Returns if the light is currently on (blinking may be on or off).
+        void onNextFrame(float tick) - Called every frame to handle light and texture blink sync. Don't call if blink state unused.
+*/
+
+package util;
+
+import com.nolimitscoaster.Block;
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.SceneObjectLight;
+
+public class IndicatorLight{
+	private SceneObjectElement element;
+	private SceneObjectLight light;
+    private float t, blinkInterval = 0.f;
+    private bool hasLight, indicatorOn, blink = false;
+
+	public IndicatorLight(SceneObjectElement element, SceneObjectLight light, float blinkInterval, bool hasLight){ // Default object constructor
+		this.element = element;
+        this.light = light;
+        this.blinkInterval = blinkInterval;
+        this.hasLight = hasLight;
+        element.setTextureAnimationIndex(0);
+        if (this.hasLight) light.setEnabled(false);
+	}
+
+	public void lightOff(){
+        blink = false;
+        element.setTextureAnimationIndex(0);
+		if (hasLight) light.setEnabled(false);
+        indicatorOn = false;
+	}
+
+	public void lightOn(){
+        blink = false;
+        element.setTextureAnimationIndex(1);
+		if (hasLight) light.setEnabled(true);
+        indicatorOn = true;
+	}
+
+	public void lightBlink(){
+        blink = true;
+	}
+
+	public void setLightState(int state){
+		switch(state){
+			case Block.LAMP_ON:
+				lightOn();
+				break;
+			case Block.LAMP_FLASHING:
+				lightBlink();
+				break;
+			default:
+				lightOff();
+		}
+	}
+
+    public bool isOn(){
+        return indicatorOn;
+    }
+
+    public void onNextFrame(float tick){
+        // Handle light and texture blink sync
+        if (t >= blinkInterval){
+            t = 0.f;
+            if (blink){
+                if (indicatorOn){
+                    element.setTextureAnimationIndex(0);
+                    if (hasLight) light.setEnabled(false);
+                    indicatorOn = false;
+                }
+                else{
+                    element.setTextureAnimationIndex(1);
+                    if (hasLight) light.setEnabled(true);
+                    indicatorOn = true;
+                }
+            }
+        }
+
+        t += tick;
+    }
+}

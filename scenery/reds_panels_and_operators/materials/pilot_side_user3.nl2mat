@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
   <material>
-    <description>Button side that is recolorable using the User 2 custom defined color.</description>
+    <description>Button side that is recolorable using the User 3 custom defined color.</description>
     <preview>textures/button/button_side_on_color.png</preview>
     <renderpass>
-      <shadercore>tmp0 = Mul(2, entity2); // Get the user set color and multiply it by 2
+      <shadercore>tmp0 = Mul(2, entity3); // Get the user set color and multiply it by 2
 tmp0 = saturate(tmp0); // Clamp resulting value between 0 and 1
 tmp0 = lerp(0.3, 1, tmp0); // Interpolate
 Specular = tmp0; // Set specular to resulting value
 
-Emission = Mul(tex1, entity2); // Set emission to texture/custom color combination
+Emission = Mul(tex1, entity3); // Set emission to texture/custom color combination
 
-Result = Mul(tex0, entity2); // Set color output to texture/custom color combination</shadercore>
+Result = Mul(tex0, entity3); // Set color output to texture/custom color combination</shadercore>
       <transparency mode="opaque"/>
       <linearshading/>
       <custommaterial>

@@ -1,6 +1,6 @@
 // Operator Switch Object NL2 Script
 // David Wolfe (Red-Thirten)
-// 11/14/2020
+// 01/10/2024
 // A Java object representing a switch, with optional key component, that can animate to any given state position.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -8,6 +8,7 @@ package util;
 
 import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Tools;
+import nlvm.math3d.Vector3f;
 
 public class OperatorSwitch{
 	private SceneObjectElement switchElement, keyElement;
@@ -50,6 +51,20 @@ public class OperatorSwitch{
 		this.switchElement.setRotation(0.f, 0.f, -START_ANGLE);
 		this.keyElement.setRotation(0.f, 0.f, -START_ANGLE);
 		this.keyElement.setVisible(false);
+	}
+
+	public Vector3f getAbsoluteTranslation(){
+		return switchElement.getAbsoluteTranslation();
+	}
+
+	public int getCurrentState(){
+		return currentState;
+	}
+
+	public void toggleSwitch(){
+		if (TOTAL_STATES == 2){
+			setSwitchState((currentState == 0) ? 1 : 0);
+		}
 	}
 	
 	public void setSwitchState(int newState){ // Primes the switch to animate to a new state position (newState values start from 0; not 1)
