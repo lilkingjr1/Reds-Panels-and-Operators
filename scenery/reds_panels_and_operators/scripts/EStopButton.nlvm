@@ -1,7 +1,7 @@
 /**
 	Emergency Stop Button NL2 Script
 	David Wolfe (Red-Thirten)
-	01/10/2024
+	03/02/2024
 	Extends Push Button.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -12,11 +12,8 @@ public class EStopButton extends PushButton{
 	public final bool onInit(){
 		super.SCRIPT_NAME = "EStopButton";			// Script name for debugging
 		super.BUTTON_ELEMENT_NAME = "estop_button";	// Name of the button element in the SCO/model
-		super.PLACARD_ELEMENT_NAME = "placard";		// Name of the placard element in the SCO/model
-		super.BUTTON_TRAVEL_DIST = 0.008f;			// Distance, in meters, the button will travel to be fully "pressed"
 		super.BUTTON_TRAVEL_TIME = 0.2f;			// Time, in seconds, for the button to travel in and out ("speed")
 		super.BUTTON_INTERACTION_RADIUS = 0.05f;	// Radius, in meters, of the InteractionObject detection sphere
-		super.BUTTON_HAS_LIGHT = true;				// True if the button has a pilot light
 		
 		return super.onInit();						// Run the rest of the init code in PushButton
 	}
@@ -30,9 +27,9 @@ public class EStopButton extends PushButton{
 		int funcVal = sco.getIntegerParameter("function").intValue();
 		switch (funcVal){
 			case 3: // E-Stop (Simple)
-				return M_ESTOP_SIMPLE;
+				return F_ESTOP_SIMPLE;
 			case 4: // E-Stop (Advanced)
-				return M_ESTOP_ADVANCED;
+				return F_ESTOP_ADVANCED;
 		}
 		return funcVal;
 	}
