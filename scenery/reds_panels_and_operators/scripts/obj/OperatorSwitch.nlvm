@@ -1,10 +1,10 @@
 // Operator Switch Object NL2 Script
 // David Wolfe (Red-Thirten)
-// 01/10/2024
+// 03/03/2024
 // A Java object representing a switch, with optional key component, that can animate to any given state position.
 // Licensed under GNU GPLv3 - See LICENSE for more details.
 
-package util;
+package obj;
 
 import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Tools;

@@ -1,7 +1,7 @@
 /**
 	Switch NL2 Script
 	David Wolfe (Red-Thirten)
-	07/28/2023
+	03/03/2023
 	Animates the switch during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -15,7 +15,7 @@ import com.nolimitscoaster.Section;
 import com.nolimitscoaster.SpecialTrack;
 import nlvm.lang.Math;
 
-import util.OperatorSwitch;
+import obj.OperatorSwitch;
 import util.SpecialTrackModule;
 
 public class SwitchOperator extends Script{

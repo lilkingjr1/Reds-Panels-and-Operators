@@ -1,7 +1,7 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	03/02/2024
+	03/03/2024
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -16,11 +16,11 @@ import com.nolimitscoaster.SpecialTrack;
 import com.nolimitscoaster.InteractionObject;
 import com.nolimitscoaster.InteractionActionListener;
 
+import obj.OperatorButton;
+import obj.IndicatorLight;
 import util.Logger;
 import util.SceneObjectTools;
-import util.OperatorButton;
 import util.SpecialTrackModule;
-import util.IndicatorLight;
 
 public class PushButton extends Script implements InteractionActionListener{
 	protected String SCRIPT_NAME = "PushButton";						// Script name for debugging

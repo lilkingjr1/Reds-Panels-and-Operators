@@ -1,7 +1,7 @@
 /**
 	Operator Button Object NL2 Script
 	David Wolfe (Red-Thirten)
-	01/12/2024
+	03/03/2024
 	A Java object representing a button that can be animated to be pushed, or even lit differently if it has a pilot light.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -22,7 +22,7 @@
 		void onNextFrame(float tick) - Should be called every frame to animate button.
 */
 
-package util;
+package obj;
 
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.SceneObjectElement;

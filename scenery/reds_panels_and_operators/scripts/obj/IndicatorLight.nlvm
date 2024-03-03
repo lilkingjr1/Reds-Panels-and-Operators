@@ -1,7 +1,7 @@
 /**
-	Indicator Light NL2 Class
+	Indicator Light Object NL2 Class
 	David Wolfe (Red-Thirten)
-	01/10/2024
+	03/03/2024
 	A Java object representing an indicator/pilot light that can manage the indicator's light and texture animation.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -17,7 +17,7 @@
         void onNextFrame(float tick) - Called every frame to handle light and texture blink sync. Don't call if blink state unused.
 */
 
-package util;
+package obj;
 
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.SceneObjectElement;

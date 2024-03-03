@@ -1,7 +1,7 @@
 /**
 	PLC Controller NL2 Script
 	David Wolfe (Red-Thirten)
-	01/10/2024
+	03/03/2024
 	Handles configured coaster's E-Stop state by checking the state of local lights.
 	External E-Stop buttons claim a local indicator light and turn it on when pressed in.
 	E-Stop Reset buttons reference light [1] for when the coaster is ready to be reset.
@@ -17,9 +17,9 @@ import com.nolimitscoaster.Coaster;
 import com.nolimitscoaster.InteractionObject;
 import com.nolimitscoaster.InteractionActionListener;
 
+import obj.OperatorSwitch;
+import obj.IndicatorLight;
 import util.SceneObjectTools;
-import util.OperatorSwitch;
-import util.IndicatorLight;
 
 public class PLCController extends Script implements InteractionActionListener{
 	private static final String SCRIPT_NAME = "PLC Controller";			// Script name for debugging
