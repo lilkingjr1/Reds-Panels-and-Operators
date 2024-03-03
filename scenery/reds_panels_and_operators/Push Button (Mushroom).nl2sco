@@ -33,7 +33,7 @@
     </usertexture>
     <script>
       <classpath>scripts</classpath>
-      <class>PushButton</class>
+      <class>PushButtonMushroom</class>
       <sharedvm>true</sharedvm>
       <resource id="LICENSE">LICENSE</resource>
     </script>
