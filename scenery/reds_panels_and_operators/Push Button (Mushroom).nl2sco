@@ -47,14 +47,14 @@
     <scriptparameter>
       <type>blocksection</type>
       <id>block</id>
-      <description>This is the block that this operator will be assigned to for all Non-Static Modes.</description>
-      <label>Block Location (for all Non-Static Modes):</label>
+      <description>This is the block that this operator will be assigned to for all Non-Static Functions.</description>
+      <label>Block Location (for all Non-Static Functions):</label>
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>
       <id>special_track</id>
-      <description>This is the Special Track that this operator will control. Required for the Special Track functions.</description>
-      <label>Special Track (for Special Track functions):</label>
+      <description>This is the Special Track that this operator will control. Required for the Special Track Functions.</description>
+      <label>Special Track (for Special Track Functions):</label>
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>
