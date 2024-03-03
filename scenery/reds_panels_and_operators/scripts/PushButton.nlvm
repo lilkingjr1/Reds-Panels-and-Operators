@@ -40,38 +40,38 @@ public class PushButton extends Script implements InteractionActionListener{
 	private static final int[] FLYER_COASTERS = {18, 23};
 
 	// All Button Functions (Functions):
-	protected static final int M_STATIC_OFF = 0;
-	protected static final int M_STATIC_ON = 1;
-	protected static final int M_STATIC_BLINK = 2;
-	protected static final int M_BLOCK_FWD = 3;
-	protected static final int M_BLOCK_BWD = 4;
-	protected static final int M_DISPATCH = 5;
-	protected static final int M_RESTRAINTS_OPEN = 6;
-	protected static final int M_RESTRAINTS_LOCK = 7;
-	protected static final int M_PLATFORM_RAISE = 8;
-	protected static final int M_PLATFORM_LOWER = 9;
-	protected static final int M_PLATFORM_TOGGLE = 10;
-	protected static final int M_SEATS_UNLOCK = 11;
-	protected static final int M_SEATS_LOCK = 12;
-	protected static final int M_SEATS_TOGGLE = 13;
-	protected static final int M_SPECIAL_LEFT = 14;
-	protected static final int M_SPECIAL_RIGHT = 15;
-	protected static final int M_AUTO_DISPATCH = 16;
-	protected static final int M_MANUAL_DISPATCH = 17;
-	protected static final int M_AUTOMATIC_OP = 18;
-	protected static final int M_SEMI_MAN_OP = 19;
-	protected static final int M_FULL_MAN_OP = 20;
-	protected static final int M_ESTOP_RESET = 21;
-	protected static final int M_LIFT_JOG = 22;
-	protected static final int M_BRAKE_RELEASE = 23;
-	protected static final int M_ESTOP_SIMPLE = 24;
-	protected static final int M_ESTOP_ADVANCED = 25;
+	protected static final int F_STATIC_OFF = 0;
+	protected static final int F_STATIC_ON = 1;
+	protected static final int F_STATIC_BLINK = 2;
+	protected static final int F_BLOCK_FWD = 3;
+	protected static final int F_BLOCK_BWD = 4;
+	protected static final int F_DISPATCH = 5;
+	protected static final int F_RESTRAINTS_OPEN = 6;
+	protected static final int F_RESTRAINTS_LOCK = 7;
+	protected static final int F_PLATFORM_RAISE = 8;
+	protected static final int F_PLATFORM_LOWER = 9;
+	protected static final int F_PLATFORM_TOGGLE = 10;
+	protected static final int F_SEATS_UNLOCK = 11;
+	protected static final int F_SEATS_LOCK = 12;
+	protected static final int F_SEATS_TOGGLE = 13;
+	protected static final int F_SPECIAL_LEFT = 14;
+	protected static final int F_SPECIAL_RIGHT = 15;
+	protected static final int F_AUTO_DISPATCH = 16;
+	protected static final int F_MANUAL_DISPATCH = 17;
+	protected static final int F_AUTOMATIC_OP = 18;
+	protected static final int F_SEMI_MAN_OP = 19;
+	protected static final int F_FULL_MAN_OP = 20;
+	protected static final int F_ESTOP_RESET = 21;
+	protected static final int F_LIFT_JOG = 22;
+	protected static final int F_BRAKE_RELEASE = 23;
+	protected static final int F_ESTOP_SIMPLE = 24;
+	protected static final int F_ESTOP_ADVANCED = 25;
 	private static final int[] NON_INTERACT_MODES = {
-		M_STATIC_OFF,
-		M_STATIC_ON,
-		M_STATIC_BLINK,
-		M_LIFT_JOG,
-		M_BRAKE_RELEASE
+		F_STATIC_OFF,
+		F_STATIC_ON,
+		F_STATIC_BLINK,
+		F_LIFT_JOG,
+		F_BRAKE_RELEASE
 	};
 
 	private Coaster coaster;
@@ -86,7 +86,7 @@ public class PushButton extends Script implements InteractionActionListener{
 	private SpecialTrackModule specialTrackModule;
 	private IndicatorLight plcIndicatorLight;
 	
-	private int func = M_STATIC_OFF;
+	private int func = F_STATIC_OFF;
 	private float binaryState = 0.f; // Helps determine if a "binary" state starts to change to the other value (ie. restraints start to close, vice-versa, etc)
 	private bool enabled = false;
 	
@@ -121,7 +121,7 @@ public class PushButton extends Script implements InteractionActionListener{
 		
 		// Get and check configured function
 		func = getFuncFromScoParams(sco);
-		if (func > M_STATIC_BLINK){ // If not static function
+		if (func > F_STATIC_BLINK){ // If not static function
 			block = sco.getBlockParameter("block");
 			if (block == null){ // Check for unconfigured block
 				log.err("Block parameter required for any non-static functions.");
@@ -141,31 +141,31 @@ public class PushButton extends Script implements InteractionActionListener{
 		SceneObject plc = null;
 		switch (func){
 			// Static functions
-			case M_STATIC_OFF:
-			case M_STATIC_ON:
-			case M_STATIC_BLINK:
+			case F_STATIC_OFF:
+			case F_STATIC_ON:
+			case F_STATIC_BLINK:
 				handleStaticFunc(sco);
 				return false;
 			// Functions that require station section
-			case M_DISPATCH:
-			case M_RESTRAINTS_OPEN:
-			case M_RESTRAINTS_LOCK:
-			case M_PLATFORM_RAISE:
-			case M_PLATFORM_LOWER:
-			case M_PLATFORM_TOGGLE:
-			case M_SEATS_UNLOCK:
-			case M_SEATS_LOCK:
-			case M_SEATS_TOGGLE:
-			case M_AUTO_DISPATCH:
-			case M_MANUAL_DISPATCH:
+			case F_DISPATCH:
+			case F_RESTRAINTS_OPEN:
+			case F_RESTRAINTS_LOCK:
+			case F_PLATFORM_RAISE:
+			case F_PLATFORM_LOWER:
+			case F_PLATFORM_TOGGLE:
+			case F_SEATS_UNLOCK:
+			case F_SEATS_LOCK:
+			case F_SEATS_TOGGLE:
+			case F_AUTO_DISPATCH:
+			case F_MANUAL_DISPATCH:
 				if (!section.isStation()){
 					log.err("The configured function requires the specified block to be a station.");
 					return false;
 				}
 				break;
 			// Functions that require Special Track
-			case M_SPECIAL_LEFT:
-			case M_SPECIAL_RIGHT:
+			case F_SPECIAL_LEFT:
+			case F_SPECIAL_RIGHT:
 				specialTrack = sco.getSpecialTrackParameter("special_track");
 				if (specialTrack == null){
 					log.err("The configured function requires the Special Track parameter to be specified.");
@@ -173,15 +173,15 @@ public class PushButton extends Script implements InteractionActionListener{
 				}
 				break;
 			// Functions that require lift section
-			case M_LIFT_JOG:
+			case F_LIFT_JOG:
 				if (!section.isLift()){
 					log.err("The configured function requires the specified block to be a lift.");
 					return false;
 				}
 				break;
 			// Functions that require PLC Controller handle
-			case M_ESTOP_ADVANCED:
-			case M_ESTOP_RESET:
+			case F_ESTOP_ADVANCED:
+			case F_ESTOP_RESET:
 				SceneObject[] plcs = sim.getSceneObjectsWithName(PLC_NAME);
 				for (int i = 0; i < plcs.length; i++){
 					if (coaster == plcs[i].getCoasterParameter("coaster")){
@@ -202,9 +202,9 @@ public class PushButton extends Script implements InteractionActionListener{
 
 		// Check for platform (if applicable)
 		switch (func){
-			case M_PLATFORM_RAISE:
-			case M_PLATFORM_LOWER:
-			case M_PLATFORM_TOGGLE:
+			case F_PLATFORM_RAISE:
+			case F_PLATFORM_LOWER:
+			case F_PLATFORM_TOGGLE:
 				if (!isCoasterWithPlatform(coaster)){
 					log.err("The configured function requires that the coaster have a platform in the station.");
 					return false;
@@ -213,9 +213,9 @@ public class PushButton extends Script implements InteractionActionListener{
 
 		// Check for flyer (if applicable)
 		switch (func){
-			case M_SEATS_UNLOCK:
-			case M_SEATS_LOCK:
-			case M_SEATS_TOGGLE:
+			case F_SEATS_UNLOCK:
+			case F_SEATS_LOCK:
+			case F_SEATS_TOGGLE:
 				if (!isCoasterFlyer(coaster)){
 					log.err("The configured function requires that the coaster be a flyer coaster.");
 					return false;
@@ -223,7 +223,7 @@ public class PushButton extends Script implements InteractionActionListener{
 		}
 
 		// Register with PLC Controller if E-Stop (Advanced)
-		if (func == M_ESTOP_ADVANCED){
+		if (func == F_ESTOP_ADVANCED){
 			for (int i = 1; i < plc.getLightCount() - 1; i++){
 				SceneObjectLight curLight = SceneObjectTools.getLightForName(
 					plc,
@@ -244,11 +244,11 @@ public class PushButton extends Script implements InteractionActionListener{
 			if (plcIndicatorLight == null){
 				log.out("Could not register with the PLC Controller because the max amount of E-Stop buttons have already been registered.");
 				System.out.println("\tDefaulting to simple behavior...");
-				func = M_ESTOP_SIMPLE;
+				func = F_ESTOP_SIMPLE;
 			}
 		}
 		// Get PLC Controller reset light handle if E-Stop Reset
-		else if (func == M_ESTOP_RESET){
+		else if (func == F_ESTOP_RESET){
 			plcLight = SceneObjectTools.getLightForName(
 				plc,
 				PLC_RESET_LIGHT_NAME,
@@ -342,7 +342,7 @@ public class PushButton extends Script implements InteractionActionListener{
 	private void handleAdvanceFunc(bool action){
 		if (action){
 			button.buttonPush();
-			if (func == M_BLOCK_FWD){
+			if (func == F_BLOCK_FWD){
 				block.doSemiManualMoveForward();
 			}
 			else{
@@ -352,8 +352,8 @@ public class PushButton extends Script implements InteractionActionListener{
 		}
 
 		bool canSemiManualMove = false;
-		if ( (func == M_BLOCK_FWD && block.canSemiManualMoveForward())
-				|| (func == M_BLOCK_BWD && block.canSemiManualMoveBackward()) ){
+		if ( (func == F_BLOCK_FWD && block.canSemiManualMoveForward())
+				|| (func == F_BLOCK_BWD && block.canSemiManualMoveBackward()) ){
 			canSemiManualMove = true;
 		}
 		// Can't Semi-Manual move
@@ -395,7 +395,7 @@ public class PushButton extends Script implements InteractionActionListener{
 	
 	private void handleRestraintsFunc(bool action){
 		if (action){
-			if (func == M_RESTRAINTS_OPEN){ // Restraints open
+			if (func == F_RESTRAINTS_OPEN){ // Restraints open
 				section.doStationManualOpenHarness();
 			}
 			else{ // Restraints close
@@ -405,8 +405,8 @@ public class PushButton extends Script implements InteractionActionListener{
 			return;
 		}
 
-		if ( (func == M_RESTRAINTS_OPEN && section.canStationManualOpenHarness())
-				|| (func == M_RESTRAINTS_LOCK && section.canStationManualCloseHarness()) ){
+		if ( (func == F_RESTRAINTS_OPEN && section.canStationManualOpenHarness())
+				|| (func == F_RESTRAINTS_LOCK && section.canStationManualCloseHarness()) ){
 			enableActionIf(section.isStationManualDispatchMode());
 			button.lightBlink();
 		}
@@ -437,9 +437,9 @@ public class PushButton extends Script implements InteractionActionListener{
 			button.lightOn();
 		}
 		// Platform ready to move
-		else if ( (func == M_PLATFORM_RAISE && canEngage)
-				|| (func == M_PLATFORM_LOWER && canDisengage)
-				|| (func == M_PLATFORM_TOGGLE && (canEngage || canDisengage)) ){
+		else if ( (func == F_PLATFORM_RAISE && canEngage)
+				|| (func == F_PLATFORM_LOWER && canDisengage)
+				|| (func == F_PLATFORM_TOGGLE && (canEngage || canDisengage)) ){
 			enableActionIf(section.isStationManualDispatchMode());
 			button.lightBlink();
 		}
@@ -476,9 +476,9 @@ public class PushButton extends Script implements InteractionActionListener{
 			button.lightOn();
 		}
 		// Seats ready to move
-		else if ( (func == M_SEATS_UNLOCK && canUnlock)
-				|| (func == M_SEATS_LOCK && canLock)
-				|| (func == M_SEATS_TOGGLE && (canUnlock || canLock)) ){
+		else if ( (func == F_SEATS_UNLOCK && canUnlock)
+				|| (func == F_SEATS_LOCK && canLock)
+				|| (func == F_SEATS_TOGGLE && (canUnlock || canLock)) ){
 			enableActionIf(section.isStationManualDispatchMode());
 			button.lightBlink();
 		}
@@ -492,7 +492,7 @@ public class PushButton extends Script implements InteractionActionListener{
 	private void handleSpecialTrackFunc(bool action){
 		if (action){
 			int curSetPos = specialTrack.getSetSwitchDirection();
-			if (func == M_SPECIAL_LEFT){
+			if (func == F_SPECIAL_LEFT){
 				specialTrack.setManualSwitchDirection(
 					specialTrack.getSetSwitchDirection() - 1
 				);
@@ -518,8 +518,8 @@ public class PushButton extends Script implements InteractionActionListener{
 		}
 		// Track ready to move to new position
 		else if ( specialTrack.canChangeManualSwitchDirection() 
-				&& ( (func == M_SPECIAL_LEFT && specialTrack.getSetSwitchDirection() - 1 > 0) 
-					|| (func == M_SPECIAL_RIGHT && specialTrack.getSetSwitchDirection() + 1 < specialTrack.getNumberOfSwitchDirections()) ) ){
+				&& ( (func == F_SPECIAL_LEFT && specialTrack.getSetSwitchDirection() - 1 > 0) 
+					|| (func == F_SPECIAL_RIGHT && specialTrack.getSetSwitchDirection() + 1 < specialTrack.getNumberOfSwitchDirections()) ) ){
 			enableAction();
 			button.lightBlink();
 		}
@@ -542,8 +542,8 @@ public class PushButton extends Script implements InteractionActionListener{
 			disableAction();
 			button.lightOff();
 		}
-		else if ( (func == M_AUTO_DISPATCH && section.isStationManualDispatchMode())
-				|| (func == M_MANUAL_DISPATCH && !section.isStationManualDispatchMode()) ){
+		else if ( (func == F_AUTO_DISPATCH && section.isStationManualDispatchMode())
+				|| (func == F_MANUAL_DISPATCH && !section.isStationManualDispatchMode()) ){
 			enableAction();
 			button.lightBlink();
 		}
@@ -556,13 +556,13 @@ public class PushButton extends Script implements InteractionActionListener{
 	private void handleBlockSystemModeFunc(bool action){
 		if (action){
 			switch (func){
-				case M_AUTOMATIC_OP:
+				case F_AUTOMATIC_OP:
 					coaster.setBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC);
 					break;
-				case M_SEMI_MAN_OP:
+				case F_SEMI_MAN_OP:
 					coaster.setBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL);
 					break;
-				case M_FULL_MAN_OP:
+				case F_FULL_MAN_OP:
 					coaster.setBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL);
 					break;
 			}
@@ -572,13 +572,13 @@ public class PushButton extends Script implements InteractionActionListener{
 		
 		int targetMode = 0;
 		switch (func){
-			case M_AUTOMATIC_OP:
+			case F_AUTOMATIC_OP:
 				targetMode = Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC;
 				break;
-			case M_SEMI_MAN_OP:
+			case F_SEMI_MAN_OP:
 				targetMode = Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL;
 				break;
-			case M_FULL_MAN_OP:
+			case F_FULL_MAN_OP:
 				targetMode = Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL;
 				break;
 		}
@@ -700,53 +700,53 @@ public class PushButton extends Script implements InteractionActionListener{
 
 	private void handleFunc(bool action){
 		switch (func){
-			case M_BLOCK_FWD:
-			case M_BLOCK_BWD:
+			case F_BLOCK_FWD:
+			case F_BLOCK_BWD:
 				handleAdvanceFunc(action);
 				break;
-			case M_DISPATCH:
+			case F_DISPATCH:
 				handleDispatchFunc(action);
 				break;
-			case M_RESTRAINTS_OPEN:
-			case M_RESTRAINTS_LOCK:
+			case F_RESTRAINTS_OPEN:
+			case F_RESTRAINTS_LOCK:
 				handleRestraintsFunc(action);
 				break;
-			case M_PLATFORM_RAISE:
-			case M_PLATFORM_LOWER:
-			case M_PLATFORM_TOGGLE:
+			case F_PLATFORM_RAISE:
+			case F_PLATFORM_LOWER:
+			case F_PLATFORM_TOGGLE:
 				handlePlatformFunc(action);
 				break;
-			case M_SEATS_UNLOCK:
-			case M_SEATS_LOCK:
-			case M_SEATS_TOGGLE:
+			case F_SEATS_UNLOCK:
+			case F_SEATS_LOCK:
+			case F_SEATS_TOGGLE:
 				handleSeatsFunc(action);
 				break;
-			case M_SPECIAL_LEFT:
-			case M_SPECIAL_RIGHT:
+			case F_SPECIAL_LEFT:
+			case F_SPECIAL_RIGHT:
 				handleSpecialTrackFunc(action);
 				break;
-			case M_AUTO_DISPATCH:
-			case M_MANUAL_DISPATCH:
+			case F_AUTO_DISPATCH:
+			case F_MANUAL_DISPATCH:
 				handleDispatchModeFunc(action);
 				break;
-			case M_AUTOMATIC_OP:
-			case M_SEMI_MAN_OP:
-			case M_FULL_MAN_OP:
+			case F_AUTOMATIC_OP:
+			case F_SEMI_MAN_OP:
+			case F_FULL_MAN_OP:
 				handleBlockSystemModeFunc(action);
 				break;
-			case M_ESTOP_SIMPLE:
+			case F_ESTOP_SIMPLE:
 				handleEStopSimpleFunc(action);
 				break;
-			case M_ESTOP_ADVANCED:
+			case F_ESTOP_ADVANCED:
 				handleEStopAdvancedFunc(action);
 				break;
-			case M_ESTOP_RESET:
+			case F_ESTOP_RESET:
 				handleEStopResetFunc(action);
 				break;
-			case M_LIFT_JOG:
+			case F_LIFT_JOG:
 				handleManualLiftJogFunc();
 				break;
-			case M_BRAKE_RELEASE:
+			case F_BRAKE_RELEASE:
 				handleManualBrakeReleaseFunc();
 				break;
 		}
@@ -773,7 +773,13 @@ public class PushButton extends Script implements InteractionActionListener{
 			handleFunc(true);
 		}
 		else{
-			button.buttonPush();
+			switch (func){
+				case F_ESTOP_SIMPLE:
+				case F_ESTOP_ADVANCED:
+					break;
+				default:
+					button.buttonPush();
+			}
 		}
 	}
 }
