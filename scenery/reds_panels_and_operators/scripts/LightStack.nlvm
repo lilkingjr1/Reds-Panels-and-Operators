@@ -1,7 +1,7 @@
 /**
 	Light Stack NL2 Script
 	David Wolfe (Red-Thirten)
-	03/03/2024
+	03/05/2024
 	Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -17,6 +17,7 @@ import com.nolimitscoaster.StaticSound;
 import nlvm.util.Vector;
 import nlvm.math3d.Vector3f;
 
+import util.SceneObjectTools;
 import util.SpecialTrackModule;
 
 public class LightStack extends Script{
@@ -46,7 +47,12 @@ public class LightStack extends Script{
 	private bool coasterHasPlatform, soundPlayed;
 	
 	public bool onInit(){ // On initialization of Play simulation
-		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco
+		// Get and assign local sco
+		SceneObject sco = SceneObjectTools.getSceneObjectForEntityId(
+			sim,
+			getParentEntityId(),
+			SCRIPT_NAME
+		);
 		lightElements = getLightElementsOnSco(sco); // Get and assign light elements
 		mode = getModeFromScoParams(sco);
 		
@@ -83,19 +89,15 @@ public class LightStack extends Script{
 		}
 	}
 	
-	private SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling
-		SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
-		if (sco == null){
-			System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
-		}
-		return sco;
-	}
-	
-	private Vector getLightElementsOnSco(SceneObject sco){ // Returns a dynamic array of all the light elements in the model/SCO (can be any amount)
+	private Vector getLightElementsOnSco(SceneObject sco){
+		/* Get Light Elements On SCO
+			Returns a dynamic array of all the light elements in the model/SCO (can be any amount)
+		*/
 		int elementCount = 0;
 		Vector elements = new Vector();
 		
-		SceneObjectElement element = sco.getElementForName(ELEMENT_PREFIX + elementCount); // Check if at least one element exists using the provided prefix
+		// Check if at least one element exists using the provided prefix
+		SceneObjectElement element = sco.getElementForName(ELEMENT_PREFIX + elementCount);
 		if (element == null){
 			System.err.println(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + ELEMENT_PREFIX + elementCount + "\" element)");
 		}

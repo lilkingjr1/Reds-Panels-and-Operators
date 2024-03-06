@@ -1,7 +1,7 @@
 /**
 	Pilot Light 4Way NL2 Script
 	David Wolfe (Red-Thirten)
-	11/23/2020
+	03/05/2024
 	Extends Pilot Light. Handles additional lights' functionality.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -9,6 +9,8 @@
 import com.nolimitscoaster.SceneObject;
 import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Block;
+
+import util.SceneObjectTools;
 
 public class PilotLight4Way extends PilotLight{
 	private static final String LIGHT2_ELEMENT_NAME = "light2";		// Name of the right pilot light element in the SCO/model
@@ -30,9 +32,10 @@ public class PilotLight4Way extends PilotLight{
 		super.PLACARD_ELEMENT_NAME = "placard";		// Name of the placard element in the SCO/model
 		
 		if(super.onInit()){ // If PilotLight initialization succeeds, continue with self-initialization
-			light2 = super.getElementOnScoForName(super.sco, LIGHT2_ELEMENT_NAME);
-			light3 = super.getElementOnScoForName(super.sco, LIGHT3_ELEMENT_NAME); // Get/assign other light elements
-			light4 = super.getElementOnScoForName(super.sco, LIGHT4_ELEMENT_NAME);
+			// Get/assign other light elements
+			light2 = SceneObjectTools.getElementForName(super.sco, LIGHT2_ELEMENT_NAME, SCRIPT_NAME);
+			light3 = SceneObjectTools.getElementForName(super.sco, LIGHT3_ELEMENT_NAME, SCRIPT_NAME);
+			light4 = SceneObjectTools.getElementForName(super.sco, LIGHT4_ELEMENT_NAME, SCRIPT_NAME);
 			if (light2 == null || light3 == null || light4 == null) return false; // Missing element check
 			
 			if (mode == 0){ // Static mode

@@ -1,13 +1,14 @@
 /**
 	Electrical Panel Initialization NL2 Script
 	David Wolfe (Red-Thirten)
-	03/03/2024
+	03/05/2024
 	Initializes the electrical panel's texture, mount, and electrical conduit based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
 
 import com.nolimitscoaster.SceneObject;
 
+import util.SceneObjectTools;
 import util.SpecialTrackModule;
 
 public class ElectricalPanel extends MainPanel{
@@ -20,18 +21,25 @@ public class ElectricalPanel extends MainPanel{
 		super.SCRIPT_NAME = "ElectricalPanel";		// Script name for debugging
 
 		// Get and assign local sco
-		SceneObject sco = getScoFromParentEntity();
+		SceneObject sco = SceneObjectTools.getSceneObjectForEntityId(
+			sim,
+			getParentEntityId(),
+			SCRIPT_NAME
+		);
 
 		// Set the texture chosen by the SCO parameters to the element by given name
-		setTextureFromScoParams(sco, getElementOnScoForName(sco, PANEL_ELEMENT_NAME));
+		setTextureFromScoParams(
+			sco,
+			SceneObjectTools.getElementForName(sco, PANEL_ELEMENT_NAME, SCRIPT_NAME)
+		);
 		
 		// Determine if the mount should be hidden
 		if (sco.getBooleanParameter("hide_mount").boolValue()){
-			getElementOnScoForName(sco, MOUNT_ELEMENT_NAME).setVisible(false);
+			SceneObjectTools.getElementForName(sco, MOUNT_ELEMENT_NAME, SCRIPT_NAME).setVisible(false);
 		}
 		// Determine if the pipe should be hidden
 		if (sco.getBooleanParameter("hide_pipe").boolValue()){
-			getElementOnScoForName(sco, CONDUIT_ELEMENT_NAME).setVisible(false);
+			SceneObjectTools.getElementForName(sco, CONDUIT_ELEMENT_NAME, SCRIPT_NAME).setVisible(false);
 		}
 		
 		// If set to attach to special track, set up the module object for it

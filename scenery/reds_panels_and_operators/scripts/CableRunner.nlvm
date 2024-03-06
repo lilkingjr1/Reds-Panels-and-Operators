@@ -1,13 +1,14 @@
 /**
 	Cable Runner NL2 Script
 	David Wolfe (Red-Thirten)
-	07/28/2023
+	03/05/2024
 	Extends Electrical Panel
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
 
 import com.nolimitscoaster.SceneObject;
 
+import util.SceneObjectTools;
 import util.SpecialTrackModule;
 
 public class CableRunner extends ElectricalPanel{
@@ -17,10 +18,17 @@ public class CableRunner extends ElectricalPanel{
 		super.PANEL_ELEMENT_NAME = "cable_runner";	// Name of the panel element in the SCO/model
 		
 		// Get and assign local sco
-		SceneObject sco = getScoFromParentEntity();
+		SceneObject sco = SceneObjectTools.getSceneObjectForEntityId(
+			sim,
+			getParentEntityId(),
+			SCRIPT_NAME
+		);
 
 		// Set the texture chosen by the SCO parameters to the element by given name
-		setTextureFromScoParams(sco, getElementOnScoForName(sco, PANEL_ELEMENT_NAME));
+		setTextureFromScoParams(
+			sco,
+			SceneObjectTools.getElementForName(sco, PANEL_ELEMENT_NAME, SCRIPT_NAME)
+		);
 		
 		// If set to attach to special track, set up the module object for it
 		if (sco.getSpecialTrackParameter("special_track") != null){

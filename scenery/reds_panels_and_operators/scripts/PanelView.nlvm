@@ -1,7 +1,7 @@
 /**
 	Panel View NL2 Script
 	David Wolfe (Red-Thirten)
-	06/08/2022
+	03/05/2024
 	Extends Block Display. Handles additional harness and gate indicator functionality.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -11,6 +11,8 @@ import com.nolimitscoaster.Block;
 import com.nolimitscoaster.Section;
 import nlvm.lang.Math;
 import nlvm.math3d.Vector4f;
+
+import util.SceneObjectTools;
 
 public class PanelView extends BlockDisplay{
 	private static final String HARNESS_ELEMENT_NAME = "harness_indicator";						// Name of the harness indicator element in the SCO/model
@@ -32,9 +34,10 @@ public class PanelView extends BlockDisplay{
 		super.SCRIPT_NAME = "PanelView"; // Script name for debugging
 		
 		if (super.onInit()){ // If the base block display initializes successfully
-			harnessIndicatorElement = super.getElementOnScoForName(super.sco, HARNESS_ELEMENT_NAME); // Get and assign harness, gates, and wind indicators' elements
-			gatesIndicatorElement = super.getElementOnScoForName(super.sco, GATES_ELEMENT_NAME);
-			windIndicatorElement = super.getElementOnScoForName(super.sco, WIND_ELEMENT_NAME);
+			// Get and assign harness, gates, and wind indicators' elements
+			harnessIndicatorElement = SceneObjectTools.getElementForName(super.sco, HARNESS_ELEMENT_NAME, SCRIPT_NAME);
+			gatesIndicatorElement = SceneObjectTools.getElementForName(super.sco, GATES_ELEMENT_NAME, SCRIPT_NAME);
+			windIndicatorElement = SceneObjectTools.getElementForName(super.sco, WIND_ELEMENT_NAME, SCRIPT_NAME);
 			harnessIndicatorElement.setEntityColor(super.INDICATOR_COLOR_SLOT, COLOR_HARNESS_GATES);
 			gatesIndicatorElement.setEntityColor(super.INDICATOR_COLOR_SLOT, COLOR_HARNESS_GATES);
 			section = super.blocks[0].getSection(); // Get the station section

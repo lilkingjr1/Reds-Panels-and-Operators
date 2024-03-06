@@ -1,7 +1,7 @@
 /**
 	Electrical Box (Air) NL2 Script
 	David Wolfe (Red-Thirten)
-	07/28/2023
+	03/05/2024
 	Extends Electrical Panel
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -9,6 +9,7 @@
 import com.nolimitscoaster.SceneObject;
 import com.nolimitscoaster.SceneObjectElement;
 
+import util.SceneObjectTools;
 import util.SpecialTrackModule;
 
 public class ElectricalBoxAir extends ElectricalPanel{
@@ -17,7 +18,11 @@ public class ElectricalBoxAir extends ElectricalPanel{
 		super.PANEL_ELEMENT_NAME = "electrical_box";	// Name of the panel element in the SCO/model
 		
 		// Get and assign local sco
-		SceneObject sco = getScoFromParentEntity();
+		SceneObject sco = SceneObjectTools.getSceneObjectForEntityId(
+			sim,
+			getParentEntityId(),
+			SCRIPT_NAME
+		);
 		
 		// Set the texture chosen by the SCO parameters to the element by given name
 		// (if possible - script is also paired to standalone Air Tank without electrical_box element)
