@@ -1,7 +1,7 @@
 /**
 	Electrical Panel Label NL2 Script
 	David Wolfe (Red-Thirten)
-	07/28/2023
+	03/03/2024
 	Attaches the label to special track if configured.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -35,6 +35,8 @@ public class ElectricalPanelLabel extends Script{
 	}
 	
 	public void onNextFrame(float tick){
-		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
+		// If set to attach to special track, update translation of SCO
+		if (specialTrackModule != null)
+			specialTrackModule.updateTranslation();
 	}
 }

@@ -1,7 +1,7 @@
 /**
 	Light Stack NL2 Script
 	David Wolfe (Red-Thirten)
-	07/27/2023
+	03/03/2024
 	Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -313,6 +313,8 @@ public class LightStack extends Script{
 			default:
 		}
 		
-		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
+		// If set to attach to special track, update translation of SCO
+		if (specialTrackModule != null)
+			specialTrackModule.updateTranslation();
 	}
 }

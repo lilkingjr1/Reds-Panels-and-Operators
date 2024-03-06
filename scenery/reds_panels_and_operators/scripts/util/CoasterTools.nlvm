@@ -1,0 +1,38 @@
+/**
+	Coaster Tools Class NL2 Script
+	David Wolfe (Red-Thirten)
+	03/03/2024
+	Helper methods to check coaster types.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+
+	Methods:
+		bool isCoasterWithPlatform(Coaster coaster) - Returns if the given coaster has a platform station, based on the master PLATFORM_COASTERS list.
+		bool isCoasterFlyer(Coaster coaster) - Returns if the given coaster has flyer trains, based on the master FLYER_COASTERS list.
+*/
+
+package util;
+
+import com.nolimitscoaster.Coaster;
+
+public class CoasterTools{
+	// All platform coaster IDs in NL2, as of this file's creation date
+	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24};
+	// All flyer coaster IDs in NL2, as of this file's creation date
+	private static final int[] FLYER_COASTERS = {18, 23};
+
+	public static bool isCoasterWithPlatform(Coaster coaster){
+		int coasterID = coaster.getCoasterStyleId();
+		for (int i = 0; i < PLATFORM_COASTERS.length; i++){
+			if (PLATFORM_COASTERS[i] == coasterID) return true;
+		}
+		return false;
+	}
+	
+	public static bool isCoasterFlyer(Coaster coaster){
+		int coasterID = coaster.getCoasterStyleId();
+		for (int i = 0; i < FLYER_COASTERS.length; i++){
+			if (FLYER_COASTERS[i] == coasterID) return true;
+		}
+		return false;
+	}
+}
