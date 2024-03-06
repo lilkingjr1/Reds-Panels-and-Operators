@@ -1,7 +1,7 @@
 /**
 	Electrical Panel Label NL2 Script
 	David Wolfe (Red-Thirten)
-	7/28/2023
+	03/03/2024
 	Attaches the label to special track if configured.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -27,14 +27,16 @@ public class ElectricalPanelLabel extends Script{
 	}
 	
 	private SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling
-        SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
-        if (sco == null){
-            System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
-        }
-        return sco;
-    }
+		SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
+		if (sco == null){
+			System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
+		}
+		return sco;
+	}
 	
 	public void onNextFrame(float tick){
-		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
+		// If set to attach to special track, update translation of SCO
+		if (specialTrackModule != null)
+			specialTrackModule.updateTranslation();
 	}
 }

@@ -1,13 +1,29 @@
-// Operator Switch Object NL2 Script
-// David Wolfe (Red-Thirten)
-// 11/14/2020
-// A Java object representing a switch, with optional key component, that can animate to any given state position.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Operator Switch Object NL2 Script
+	David Wolfe (Red-Thirten)
+	03/03/2024
+	A Java object representing a switch, with optional key component, that can animate to any given state position.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
 
-package util;
+	Constructors:
+		OperatorSwitch(SceneObjectElement switchElement, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime)
+		OperatorSwitch(SceneObjectElement switchElement, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime,
+			SceneObjectElement keyElement, float keyTravelDistance, bool keyStaysIn)
+
+	Methods:
+		Vector3f getAbsoluteTranslation() - Returns the absolute translation of the button element.
+		int getCurrentState() - Returns the current state/position the switch is set to (not necessarily current position).
+		void toggleSwitch() - If the switch only has 2 states, this toggles between them.
+		void setSwitchState(int newState) - Primes the switch to animate to a new state position (newState values start from 0; not 1)
+		void setKeyVisible() - Makes the key element visible.
+		void onNextFrame(float tick) - Should be called every frame to animate switch.
+*/
+
+package obj;
 
 import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Tools;
+import nlvm.math3d.Vector3f;
 
 public class OperatorSwitch{
 	private SceneObjectElement switchElement, keyElement;
@@ -51,8 +67,22 @@ public class OperatorSwitch{
 		this.keyElement.setRotation(0.f, 0.f, -START_ANGLE);
 		this.keyElement.setVisible(false);
 	}
+
+	public Vector3f getAbsoluteTranslation(){
+		return switchElement.getAbsoluteTranslation();
+	}
+
+	public int getCurrentState(){
+		return currentState;
+	}
+
+	public void toggleSwitch(){
+		if (TOTAL_STATES == 2){
+			setSwitchState((currentState == 0) ? 1 : 0);
+		}
+	}
 	
-	public void setSwitchState(int newState){ // Primes the switch to animate to a new state position (newState values start from 0; not 1)
+	public void setSwitchState(int newState){
 		if (newState != currentState && newState >= 0 && newState < TOTAL_STATES){ // Sanitize passed state
 			t = 0.f;
 			thetaTarget = SLOPE * newState + START_ANGLE - theta; // Equation to calculate the angle target, based on the pre-calculated slope and current angle position

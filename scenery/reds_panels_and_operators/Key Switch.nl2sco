@@ -6,7 +6,7 @@
       <clip mesh="housing_nut" distance="5"/>
       <clip mesh="key" distance="15"/>
     </model>
-    <description>An scripted, animated key switch, with customizable placard.</description>
+    <description>A scripted, animated key switch, with customizable placard.</description>
     <preview>materials/previews/key_switch.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
@@ -33,6 +33,14 @@
       <resource id="LICENSE">LICENSE</resource>
     </script>
     <scriptparameter>
+      <type>int</type>
+      <defaultvalue>0</defaultvalue>
+      <enums>None,Special Track (Toggle Only),Dispatch Mode,Operation Mode,Trains In Service (No Interaction),Lift Jog (No Interaction),Transports (No Interaction),Special Track (No Interaction),Coaster Lights (No Interaction)</enums>
+      <id>function</id>
+      <description>How this button will behave during Play Mode.</description>
+      <label>Function:</label>
+    </scriptparameter>
+    <scriptparameter>
       <type>double</type>
       <defaultvalue>-45</defaultvalue>
       <id>start_angle</id>
@@ -41,10 +49,28 @@
     </scriptparameter>
     <scriptparameter>
       <type>double</type>
-      <defaultvalue>0</defaultvalue>
+      <defaultvalue>45</defaultvalue>
       <id>end_angle</id>
       <description>Relative to straight up (0 deg). Used for all non-static modes.</description>
       <label>End Angle:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block</id>
+      <description>This is the block that this operator will be assigned to for all Non-Static Functions.</description>
+      <label>Block Location (for all Non-Static Functions):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track</id>
+      <description>This is the Special Track that this operator will control. Required for the Special Track Functions.</description>
+      <label>Special Track (for Special Track Functions):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track_attach</id>
+      <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
+      <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
@@ -52,73 +78,6 @@
       <id>hide_key</id>
       <description>Will hide the key during play. Only works with static mode.</description>
       <label>Hide Key (Static Mode Only)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>blocksection</type>
-      <id>block</id>
-      <description>This is the block that this operator will be assigned to for all Non-Static Modes.</description>
-      <label>Block Location (for all Non-Static Modes):</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>specialtrack</type>
-      <id>special_track</id>
-      <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
-      <label>Special Track to Attach To (Optional):</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>mode_instructions</id>
-      <description>How this button will behave during Play Mode. Changing this text does nothing.</description>
-      <label>=========== Operator Mode ===========</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>static</id>
-      <description>Will remain static with no animations.</description>
-      <label>Static</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>lights</id>
-      <description>Block can be any block. Animates to middle angle at night, and End Angle for E-Stop.</description>
-      <label>Night Lights</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>trains</id>
-      <description>ONLY trains that are LASHED to track are counted as off. Block can be any block. Animates accordingly.</description>
-      <label>Trains In Service</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>transports</id>
-      <description>Will animate to a block&apos;s transport&apos;s state while ride is in Full Manual mode.</description>
-      <label>Transports</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>specialtrack</type>
-      <id>special_track_mode</id>
-      <description>Special Track you want this switch to animate to.</description>
-      <label>Special Track</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>maintenance_mode</id>
-      <description>Will animate to End Angle when ride is in Full Manual mode. Block can be any block.</description>
-      <label>Full Manual Mode</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>manual_lift_jog</id>
-      <description>Only active when coaster is in Full Manual Mode. Will animate if block is a lift.</description>
-      <label>Manual Lift Jog Mode</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>

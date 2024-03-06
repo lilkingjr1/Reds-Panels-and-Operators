@@ -1,8 +1,18 @@
-// Special Track Module NL2 Class
-// David Wolfe (Red-Thirten)
-// 6/6/2022
-// A Java object representing a logic entity that will attach a given SCO to a specified coaster Special Track during run time, relative to where it was placed initially.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Special Track Module NL2 Script
+	David Wolfe (Red-Thirten)
+	03/03/2024
+	A Java object representing a logic entity that will attach a given SCO to a specified
+		coaster Special Track during run time, relative to where it was placed initially.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+
+	Constructors:
+		SpecialTrackModule(SceneObject sco)
+			(SCO must have a Special Track Parameter named "special_track_attach")
+
+	Methods:
+		void updateTranslation() - Should be called every frame to set the translation of the SCO relative to the Special Track's current location (translation)
+*/
 
 package util;
 
@@ -17,12 +27,12 @@ public class SpecialTrackModule{
 	
 	public SpecialTrackModule(SceneObject sco){ // Default object constructor
 		this.sco = sco; // Assign SCO
-		specialTrack = sco.getSpecialTrackParameter("special_track");
+		specialTrack = sco.getSpecialTrackParameter("special_track_attach");
 		translationFromSpecialTracktoSCO = new Vector3f( sco.getTranslation() ); // Get the SCO's translation
 		translationFromSpecialTracktoSCO.sub( specialTrack.getMoveableBranchMatrix(0).getTrans() ); // Subtract the Special Track's translation to get the translation between the two
 	}
 	
-	public void setTranslation(){ // Sets the translation of the SCO relative to the Special Track's current location (translation)
+	public void updateTranslation(){
 		Vector3f scoTranslation = new Vector3f( specialTrack.getMoveableBranchMatrix(0).getTrans() );
 		scoTranslation.add(translationFromSpecialTracktoSCO);
 		sco.setTranslation(scoTranslation);

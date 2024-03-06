@@ -43,7 +43,7 @@
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>
-      <id>special_track</id>
+      <id>special_track_attach</id>
       <description>Select the special track of a ride you want this panel to move with during simulation. Set to &lt;None&gt; to disable.</description>
       <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>

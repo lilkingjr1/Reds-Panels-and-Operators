@@ -1,7 +1,7 @@
 /**
 	Audio Panel NL2 Script
 	David Wolfe (Red-Thirten)
-	7/28/2023
+	07/28/2023
 	Extends Main Panel. Will texture the audio panel and/or hide the mounts, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */

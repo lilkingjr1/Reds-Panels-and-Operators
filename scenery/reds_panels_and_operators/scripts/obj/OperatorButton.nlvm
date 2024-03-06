@@ -1,13 +1,33 @@
-// Operator Button Object NL2 Script
-// David Wolfe (Red-Thirten)
-// 9/25/2021
-// A Java object representing a button that can be animated to be pushed, or even lit differently if it has a pilot light.
-// Licensed under GNU GPLv3 - See LICENSE for more details.
+/**
+	Operator Button Object NL2 Script
+	David Wolfe (Red-Thirten)
+	03/03/2024
+	A Java object representing a button that can be animated to be pushed, or even lit differently if it has a pilot light.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
 
-package util;
+	Constructors:
+		OperatorButton(SceneObjectElement element, bool hasLight, float maxDistance, float travelTime)
 
+	Methods:
+		Vector3f getAbsoluteTranslation() - Returns the absolute translation of the button element.
+		void lightOff() - Turns the light texture off.
+		void lightOn() - Turns the light texture on.
+		void lightBlink() - Sets the light texture to blink.
+		void setLightState(int state) - Sets the button's light state given a com.nolimitscoaster.block LAMP constant.
+		void buttonIn() - If not currently animating or already pushed in, prep the button to be animated in (via onNextFrame).
+		void buttonOut() - If not currently animating or already pushed out, prep the button to be animated out (via onNextFrame).
+		void buttonPush() - If not currently animating or already pushed, prep the button to be animated in & out (via onNextFrame).
+		bool isAnimating() - Returns if the button is in the middle of an animation.
+		bool isPushedIn() - Returns if the button is pressed in.
+		void onNextFrame(float tick) - Should be called every frame to animate button.
+*/
+
+package obj;
+
+import com.nolimitscoaster.Block;
 import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Tools;
+import nlvm.math3d.Vector3f;
 
 public class OperatorButton{
 	private SceneObjectElement button;
@@ -23,6 +43,10 @@ public class OperatorButton{
 		DELTA_MAX = maxDistance;
 		DELTA_T = travelTime/2; // DELTA_T is the time to do half a full "push"
 		DELTA_Ta = DELTA_T/3.f; // (De)Acceleration window is the first and last 3rd of the animation
+	}
+
+	public Vector3f getAbsoluteTranslation(){
+		return button.getAbsoluteTranslation();
 	}
 
 	public void lightOff(){
@@ -42,9 +66,24 @@ public class OperatorButton{
 			button.setTextureAnimationIndex(-1);
 		}
 	}
+
+	public void setLightState(int state){
+		if (!hasLight) return;
+
+		switch(state){
+			case Block.LAMP_ON:
+				button.setTextureAnimationIndex(1);
+				break;
+			case Block.LAMP_FLASHING:
+				button.setTextureAnimationIndex(-1);
+				break;
+			default:
+				button.setTextureAnimationIndex(0);
+		}
+	}
 	
 	public void buttonIn(){
-		if (!animate && buttonState != 1){ // If not currently animating or already pushed in, prep the button to be animated in
+		if (!animate && buttonState != 1){
 			t = 0.f;
 			buttonState = 1;
 			deltaCurrent = delta;
@@ -53,7 +92,7 @@ public class OperatorButton{
 		}
 	}
 	
-	public void buttonOut(){ // If not currently animating or already pushed out, prep the button to be animated out
+	public void buttonOut(){
 		if (!animate && buttonState != 0){
 			t = 0.f;
 			buttonState = 0;
@@ -63,7 +102,7 @@ public class OperatorButton{
 		}
 	}
 	
-	public void buttonPush(){ // If not currently animating or already pushed, prep the button to be animated in & out
+	public void buttonPush(){
 		if (!animate && buttonState != 1){
 			t = 0.f;
 			buttonState = 2; // 2 = special state to indicate a push
@@ -73,10 +112,19 @@ public class OperatorButton{
 		}
 	}
 	
-	public void resetButtonState(){
-		if (buttonState != 2){ // If not in the middle of a push
-			buttonState = 0; // Reset the button state
-		}
+	// DEPRECIATED (Does not need to be called)
+	// public void resetButtonState(){
+	// 	if (buttonState != 2){ // If not in the middle of a push
+	// 		buttonState = 0; // Reset the button state
+	// 	}
+	// }
+
+	public bool isAnimating(){
+		return animate;
+	}
+
+	public bool isPushedIn(){
+		return (buttonState == 1) ? true : false;
 	}
 	
 	public void onNextFrame(float tick){
@@ -89,7 +137,7 @@ public class OperatorButton{
 					t = 0.f;
 					deltaCurrent = delta;
 					deltaTarget = -DELTA_MAX;
-					buttonState = 1;
+					buttonState = 0; // used to be 1
 				}
 				else{ // If not a push, leave as is and end animation
 					animate = false;

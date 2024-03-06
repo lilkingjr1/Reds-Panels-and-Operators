@@ -1,0 +1,184 @@
+/**
+	PLC Controller NL2 Script
+	David Wolfe (Red-Thirten)
+	03/03/2024
+	Handles configured coaster's E-Stop state by checking the state of local lights.
+	External E-Stop buttons claim a local indicator light and turn it on when pressed in.
+	E-Stop Reset buttons reference light [1] for when the coaster is ready to be reset.
+	Gratz to Greneey for light controller idea!
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
+
+import com.nolimitscoaster.Script;
+import com.nolimitscoaster.SceneObject;
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.SceneObjectLight;
+import com.nolimitscoaster.Coaster;
+import com.nolimitscoaster.InteractionObject;
+import com.nolimitscoaster.InteractionActionListener;
+
+import obj.OperatorSwitch;
+import obj.IndicatorLight;
+import util.SceneObjectTools;
+
+public class PLCController extends Script implements InteractionActionListener{
+	private static final String SCRIPT_NAME = "PLC Controller";			// Script name for debugging
+	private static final String ESTOP_PILOT_NAME = "estop_pilot";		// Name of the E-Stop Pilot element & light in the SCO/model
+	private static final String RESET_LIGHT_NAME = "reset_ready";		// Name of the Reset Ready internal light in the SCO
+	private static final String SWITCH_ELEMENT_NAME = "switch1";		// Name of the E-Stop Switch element in the SCO/model
+	private static final String INDICATOR_PILOT_PREFIX = "indicator";	// Prefix of the indicator pilot elements & lights in the SCO/model
+	private static final int NUM_INDICATORS = 20;						// Number of E-Stop Indicator lights
+	private static final float SWITCH_TRAVEL_TIME = 0.4f;				// Time, in seconds, for the switch to travel ("speed")
+	private static final float SWITCH_INTERACTION_RADIUS = 0.1f;		// Radius, in meters, of the InteractionObject detection sphere
+
+	private Coaster coaster;
+	private SceneObjectLight resetLight;
+	private SceneObjectLight[] indicatorLights;
+	private InteractionObject iObj;
+	
+	private OperatorSwitch powerSwitch;
+	private IndicatorLight estopLight;
+
+	public bool onLateInit(){ // Run after any/all E-Stop buttons have claimed indicator lights (by turning them off)
+		// Get and assign local sco
+		SceneObject sco = SceneObjectTools.getSceneObjectForEntityId(
+			sim,
+			getParentEntityId(),
+			SCRIPT_NAME
+		);
+		
+		bool invisibleMode = sco.getBooleanParameter("invisible_mode").boolValue();
+
+		/* Prep for possible passive mode */
+		// Turn off all lights
+		for (int i = 0; i < sco.getLightCount(); i++){
+			sco.getLightAt(i).setEnabled(false);
+			if (invisibleMode){
+				sco.getLightAt(i).setColorLinear(0.f, 0.f, 0.f);
+			}
+		}
+		// Turn off all light textures
+		SceneObjectElement estopPilotElement = SceneObjectTools.getElementForName(
+			sco,
+			ESTOP_PILOT_NAME,
+			SCRIPT_NAME
+		);
+		estopPilotElement.setTextureAnimationIndex(0);
+		for (int i = 1; i < NUM_INDICATORS + 1; i++){
+			SceneObjectElement curIndicatorElement = SceneObjectTools.getElementForName(
+				sco,
+				INDICATOR_PILOT_PREFIX + i,
+				SCRIPT_NAME
+			);
+			curIndicatorElement.setTextureAnimationIndex(0);
+		}
+
+		// Get configured coaster
+		coaster = sco.getCoasterParameter("coaster");
+		if (coaster == null) // If none, stop script
+			return false;
+		
+		// Create power OperatorSwitch object
+		powerSwitch = new OperatorSwitch(
+			SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
+			2,
+			0.f,
+			90.f,
+			SWITCH_TRAVEL_TIME
+		);
+		// Start powered on (unless specified otherwise)
+		if (!sco.getBooleanParameter("start_powered_off").boolValue()){
+			powerSwitch.toggleSwitch();
+		}
+		// Setup power switch InteractionObject
+		iObj = InteractionObject.createSimpleButton();
+		iObj.setPosition(powerSwitch.getAbsoluteTranslation());
+		iObj.setRadius(SWITCH_INTERACTION_RADIUS);
+		iObj.addActionListener(this);
+		
+		// Handle invisible mode
+		if (invisibleMode){
+			iObj.setActive(false);
+			sco.setElementsVisible(false);
+		}
+
+		// Create estop IndicatorLight object
+		estopLight = new IndicatorLight(
+			estopPilotElement,
+			SceneObjectTools.getLightForName(sco, ESTOP_PILOT_NAME, SCRIPT_NAME),
+			2.f,
+			true
+		);
+
+		// Get handle for Reset Ready internal light
+		resetLight = SceneObjectTools.getLightForName(
+			sco,
+			RESET_LIGHT_NAME,
+			SCRIPT_NAME
+		);
+
+		// Get handle on all indicator lights
+		indicatorLights = new SceneObjectLight[NUM_INDICATORS];
+		for (int i = 0; i < NUM_INDICATORS; i++){
+			indicatorLights[i] = SceneObjectTools.getLightForName(
+				sco,
+				INDICATOR_PILOT_PREFIX + (i + 1),
+				SCRIPT_NAME
+			);
+		}
+		
+		return true; // Everything's just dandy
+	}
+
+	private void handleSwitch(bool action){
+		if (action){
+			powerSwitch.toggleSwitch();
+			return;
+		}
+
+		if (coaster.canChangeEmergencyStop()){
+			iObj.setEnabled(true);
+		}
+		else{
+			iObj.setEnabled(false);
+		}
+	}
+
+	private bool isAnyIndicatorOn(){
+		/* Is Any Indicator On
+			Returns true if any registered E-Stop button is pressed in.
+		*/
+		for (int i = indicatorLights.length - 1; i >= 0; --i){
+			if (indicatorLights[i].isEnabled()) return true;
+		}
+		return false;
+	}
+
+	public void onNextFrame(float tick){
+		// Handle coaster's E-Stop state
+		if (powerSwitch.getCurrentState() == 0){ // Currently powered off
+			coaster.setEmergencyStop(true);
+			estopLight.lightOff();
+			resetLight.setEnabled(false);
+		}
+		else if (coaster.isEmergencyStop()){ // Currently E-Stopped
+			estopLight.lightOn();
+			resetLight.setEnabled(!isAnyIndicatorOn()); // Turn Reset Ready light on if no indicators on
+		}
+		else if (isAnyIndicatorOn() && coaster.canChangeEmergencyStop()){ // Check if need/able to E-Stop
+			coaster.setEmergencyStop(true);
+		}
+		else{
+			estopLight.lightOff();
+			resetLight.setEnabled(false);
+		}
+
+		// Handle & animate switch
+		handleSwitch(false);
+		powerSwitch.onNextFrame(tick);
+	}
+
+	public void onInteractionAction(InteractionObject obj){
+		handleSwitch(true);
+	}
+}

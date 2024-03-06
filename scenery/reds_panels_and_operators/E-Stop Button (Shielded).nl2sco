@@ -15,7 +15,7 @@
     <usercolor>
       <label>Placard Background</label>
       <index>0</index>
-      <defaultcolor r="1" g="0" b="0"/>
+      <defaultcolor r="0.698039" g="0.133333" b="0.133333"/>
     </usercolor>
     <usercolor>
       <label>Placard Text</label>
@@ -30,7 +30,7 @@
     <usertexture>
       <label>Placard:</label>
       <description>Placard text image to use. Can be custom, but must be black text with white background.</description>
-      <defaultpath>[ Placards ]/Default.png</defaultpath>
+      <defaultpath>[ Placards ]/Emergency Stop.png</defaultpath>
     </usertexture>
     <script>
       <classpath>scripts</classpath>
@@ -40,10 +40,11 @@
     </script>
     <scriptparameter>
       <type>int</type>
-      <defaultvalue>2</defaultvalue>
-      <id>light</id>
-      <description>This setting is ONLY used in Static Mode -- 0 = Light Off, 1 = Light On, 2 = Light Blinking</description>
-      <label>Pilot Light (Hover cursor to see options):</label>
+      <defaultvalue>0</defaultvalue>
+      <enums>None (Light Off),None (Light On),None (Light Blinking),E-Stop (Simple),E-Stop (Advanced)</enums>
+      <id>function</id>
+      <description>How this button will behave during Play Mode.</description>
+      <label>Function:</label>
     </scriptparameter>
     <scriptparameter>
       <type>blocksection</type>
@@ -53,51 +54,9 @@
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>
-      <id>special_track</id>
+      <id>special_track_attach</id>
       <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
       <label>Special Track to Attach To (Optional):</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>mode_instructions</id>
-      <description>How this button will behave during Play Mode. Changing this text does nothing.</description>
-      <label>=========== Operator Mode ===========</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>static</id>
-      <description>Will remain static with no animation or light changes.</description>
-      <label>Static</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>advance</id>
-      <description>Good for location at block brake sections. Will light accordingly.</description>
-      <label>Advance</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>dispatch</id>
-      <description>Only for use in stations. Will light and animate accordingly.</description>
-      <label>Dispatch</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>e_stop</id>
-      <description>Set block to any block on coaster. Will light accordingly to e-stop status.</description>
-      <label>E-Stop (Light)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>e_stop_anim</id>
-      <description>Set block to any block on coaster. Will light and animate accordingly to e-stop status.</description>
-      <label>E-Stop (Light + Animate)</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>Custom label texture for the PLC Controller model.</description>
+    <preview>textures/plc_controller/lsr13.png</preview>
+    <renderpass>
+      <transparency mode="cutout"/>
+      <alphatest function="ge128"/>
+      <linearshading/>
+      <rgbgen mode="lighting"/>
+      <texunit>
+        <map>textures/plc_controller/lsr13.png</map>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+  </material>
+</root>

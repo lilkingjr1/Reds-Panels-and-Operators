@@ -1,351 +1,650 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	7/26/2023
+	03/03/2024
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;
-import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.SceneObjectLight;
 import com.nolimitscoaster.Coaster;
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.Section;
+import com.nolimitscoaster.SpecialTrack;
+import com.nolimitscoaster.InteractionObject;
+import com.nolimitscoaster.InteractionActionListener;
 
-import util.OperatorButton;
+import obj.OperatorButton;
+import obj.IndicatorLight;
+import util.Logger;
+import util.SceneObjectTools;
+import util.CoasterTools;
 import util.SpecialTrackModule;
 
-public class PushButton extends Script{
-	protected String SCRIPT_NAME = "PushButton";		// Script name for debugging
-	protected String BUTTON_ELEMENT_NAME = "button";	// Name of the button element in the SCO/model
-	protected String PLACARD_ELEMENT_NAME = "placard";	// Name of the placard element in the SCO/model
-	protected float BUTTON_TRAVEL_DIST = 0.008f;		// Distance, in meters, the button will travel to be fully "pressed"
-	protected float BUTTON_TRAVEL_TIME = 1.f;			// Time, in seconds, for the button to travel in and out ("speed")
-	protected bool BUTTON_HAS_LIGHT = true;				// True if the button has a pilot light
-	
-	private static final String[] MODES = { // Possible mode parameters
-		"static",
-		"advance",
-		"dispatch",
-		"restraints_open",
-		"restraints_lock",
-		"platform",
-		"e_stop",
-		"e_stop_anim",
-		"e_stop_reset",
-		"automatic_mode",
-		"full_manual_mode",
-		"manual_lift_jog",
-		"manual_brake_release"
+public class PushButton extends Script implements InteractionActionListener{
+	protected String SCRIPT_NAME = "PushButton";						// Script name for debugging
+	protected String BUTTON_ELEMENT_NAME = "button";					// Name of the button element in the SCO/model
+	protected String PLACARD_ELEMENT_NAME = "placard";					// Name of the placard element in the SCO/model
+	protected String PLC_NAME = "PLC Controller";						// Name of the PLC Controller instance expected in the sim
+	private static final String PLC_IND_PREFIX = "indicator";			// Prefix of the E-Stop Indicator elements & lights in the PLC SCO/model
+	private static final String PLC_RESET_LIGHT_NAME = "reset_ready";	// Name of the E-Stop Reset light in the PLC SCO/model
+	protected float BUTTON_TRAVEL_DIST = 0.008f;						// Distance, in meters, the button will travel to be fully "pressed"
+	protected float BUTTON_TRAVEL_TIME = 1.f;							// Time, in seconds, for the button to travel in and out ("speed")
+	protected float BUTTON_INTERACTION_RADIUS = 0.04f;					// Radius, in meters, of the InteractionObject detection sphere
+	protected bool BUTTON_HAS_LIGHT = true;								// True if the button has a pilot light
+
+	// All Button Functions:
+	protected static final int F_STATIC_OFF = 0;
+	protected static final int F_STATIC_ON = 1;
+	protected static final int F_STATIC_BLINK = 2;
+	protected static final int F_BLOCK_FWD = 3;
+	protected static final int F_BLOCK_BWD = 4;
+	protected static final int F_DISPATCH = 5;
+	protected static final int F_RESTRAINTS_OPEN = 6;
+	protected static final int F_RESTRAINTS_LOCK = 7;
+	protected static final int F_PLATFORM_RAISE = 8;
+	protected static final int F_PLATFORM_LOWER = 9;
+	protected static final int F_PLATFORM_TOGGLE = 10;
+	protected static final int F_SEATS_UNLOCK = 11;
+	protected static final int F_SEATS_LOCK = 12;
+	protected static final int F_SEATS_TOGGLE = 13;
+	protected static final int F_SPECIAL_LEFT = 14;
+	protected static final int F_SPECIAL_RIGHT = 15;
+	protected static final int F_AUTO_DISPATCH = 16;
+	protected static final int F_MANUAL_DISPATCH = 17;
+	protected static final int F_AUTOMATIC_OP = 18;
+	protected static final int F_SEMI_MAN_OP = 19;
+	protected static final int F_FULL_MAN_OP = 20;
+	protected static final int F_ESTOP_RESET = 21;
+	protected static final int F_LIFT_JOG_NO_INT = 22;
+	protected static final int F_BRAKE_RELEASE_NO_INT = 23;
+	protected static final int F_ESTOP_SIMPLE = 24;
+	protected static final int F_ESTOP_ADVANCED = 25;
+	private static final int[] NON_INTERACT_MODES = {
+		F_STATIC_OFF,
+		F_STATIC_ON,
+		F_STATIC_BLINK,
+		F_LIFT_JOG_NO_INT,
+		F_BRAKE_RELEASE_NO_INT
 	};
-	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24}; // All platform coaster IDs in NL2, as of this file's creation date
-	// IDs with train states (flyers): 18, 23 -- Not currently able to handle due to NL2 limitations
+
+	private Coaster coaster;
+	private Block block;
+	private Section section;
+	private SpecialTrack specialTrack;
+	private InteractionObject iObj;
+	private SceneObjectLight plcLight;
 	
-    private Coaster coaster;
-    private Block block;
-    private Section section;
-	
-    private OperatorButton button;
+	private Logger log;
+	private OperatorButton button;
 	private SpecialTrackModule specialTrackModule;
+	private IndicatorLight plcIndicatorLight;
 	
-	private int mode = 0;
-	private bool coasterHasPlatform;
+	private int func = F_STATIC_OFF;
 	private float binaryState = 0.f; // Helps determine if a "binary" state starts to change to the other value (ie. restraints start to close, vice-versa, etc)
+	private bool enabled = false;
 	
 	public bool onInit(){ // On initialization of Play simulation
 		// Get and assign local sco
-		SceneObject sco = getScoFromParentEntity();
+		SceneObject sco = SceneObjectTools.getSceneObjectForEntityId(
+			sim,
+			getParentEntityId(),
+			SCRIPT_NAME
+		);
+
+		// Setup Logger
+		log = new Logger(SCRIPT_NAME, sco.getName());
+
+		// Hide placard if configured
+		if ( sco.getBooleanParameter("hide_placard").boolValue() ){
+			SceneObjectTools.getElementForName(sco, PLACARD_ELEMENT_NAME, SCRIPT_NAME).setVisible(false);
+		}
 		
+		// If set to attach to special track, set up the module object for it
+		if (sco.getSpecialTrackParameter("special_track_attach") != null){
+			specialTrackModule = new SpecialTrackModule(sco);
+		}
+		
+		// Get configured function and required parameters
+		func = getFuncFromScoParams(sco);
+		if (func > F_STATIC_BLINK){ // If not static function
+			block = sco.getBlockParameter("block");
+			if (block == null){ // Check for unconfigured block
+				log.err("Block parameter required for any non-static functions.");
+				return false;
+			}
+			
+			// Get ride details based on block parameter
+			coaster = block.getCoaster();
+			if (coaster.isScriptedOperationMode()){
+				log.err("Sorry! Non-static functions do not support Scripted Operation Mode rides at this time.");
+				return false;
+			}
+			section = block.getSection();
+		}
+
 		// Create OperatorButton object
 		button = new OperatorButton(
-			getElementOnScoForName(sco, BUTTON_ELEMENT_NAME),
+			SceneObjectTools.getElementForName(sco, BUTTON_ELEMENT_NAME, SCRIPT_NAME),
 			BUTTON_HAS_LIGHT,
 			BUTTON_TRAVEL_DIST,
 			BUTTON_TRAVEL_TIME
 		);
 
-		// Hide placard if configured
-		if ( sco.getBooleanParameter("hide_placard").boolValue() ){
-			getElementOnScoForName(sco, PLACARD_ELEMENT_NAME).setVisible(false);
-		}
-		
-		// If set to attach to special track, set up the module object for it
-		if (sco.getSpecialTrackParameter("special_track") != null){
-			specialTrackModule = new SpecialTrackModule(sco);
-		}
-		
-		// Get and setup configured mode
-		mode = getModeFromScoParams(sco);
-		if (mode != 0){ // If not static mode
-			block = sco.getBlockParameter("block");
-			if (block != null){ // Get ride details based on block parameter
-				coaster = block.getCoaster();
-				if (coaster.isScriptedOperationMode()){
-					System.err.println(SCRIPT_NAME + ": Sorry! Non-static modes do not support Scripted Operation Mode rides at this time.");
-					return false;
-				}
-				section = block.getSection();
-			}
-			else{
-				if (!sco.getName().equals("")){
-					System.err.println(sco.getName() + ": Block parameter required for any non-static mode.");
-				}
-				else{
-					System.err.println(SCRIPT_NAME + ": Block parameter required for any non-static mode.");
-				}
+		// Function-specific checks and setup
+		SceneObject plc = null;
+		switch (func){
+			// Static functions
+			case F_STATIC_OFF:
+			case F_STATIC_ON:
+			case F_STATIC_BLINK:
+				handleStaticFunc(sco);
 				return false;
+			// Functions that require station section
+			case F_DISPATCH:
+			case F_RESTRAINTS_OPEN:
+			case F_RESTRAINTS_LOCK:
+			case F_PLATFORM_RAISE:
+			case F_PLATFORM_LOWER:
+			case F_PLATFORM_TOGGLE:
+			case F_SEATS_UNLOCK:
+			case F_SEATS_LOCK:
+			case F_SEATS_TOGGLE:
+			case F_AUTO_DISPATCH:
+			case F_MANUAL_DISPATCH:
+				if (!section.isStation()){
+					log.err("The configured function requires the specified block to be a station.");
+					return false;
+				}
+				break;
+			// Functions that require Special Track
+			case F_SPECIAL_LEFT:
+			case F_SPECIAL_RIGHT:
+				specialTrack = sco.getSpecialTrackParameter("special_track");
+				if (specialTrack == null){
+					log.err("The configured function requires the Special Track parameter to be specified.");
+					return false;
+				}
+				break;
+			// Functions that require lift section
+			case F_LIFT_JOG_NO_INT:
+				if (!section.isLift()){
+					log.err("The configured function requires the specified block to be a lift.");
+					return false;
+				}
+				break;
+			// Functions that require PLC Controller handle
+			case F_ESTOP_ADVANCED:
+			case F_ESTOP_RESET:
+				SceneObject[] plcs = sim.getSceneObjectsWithName(PLC_NAME);
+				for (int i = 0; i < plcs.length; i++){
+					if (coaster == plcs[i].getCoasterParameter("coaster")){
+						plc = plcs[i];
+						break;
+					}
+				}
+				if (plc == null){
+					log.err("The configured function requires a single \"PLC Controller\" SCO to be placed and configured to control the \"" + coaster.getName() + "\" coaster.");
+					return false;
+				}
+				if (plc.getElementForName("indicator1") == null){
+					log.err("Please do not have an SCO named \"" + PLC_NAME + "\". It will conflict with the button system.");
+					return false;
+				}
+				break;
+		}
+
+		// Check for platform (if applicable)
+		switch (func){
+			case F_PLATFORM_RAISE:
+			case F_PLATFORM_LOWER:
+			case F_PLATFORM_TOGGLE:
+				if (!CoasterTools.isCoasterWithPlatform(coaster)){
+					log.err("The configured function requires that the coaster have a platform in the station.");
+					return false;
+				}
+		}
+
+		// Check for flyer (if applicable)
+		switch (func){
+			case F_SEATS_UNLOCK:
+			case F_SEATS_LOCK:
+			case F_SEATS_TOGGLE:
+				if (!CoasterTools.isCoasterFlyer(coaster)){
+					log.err("The configured function requires that the coaster be a flyer coaster.");
+					return false;
+				}
+		}
+
+		// Register with PLC Controller if E-Stop (Advanced)
+		if (func == F_ESTOP_ADVANCED){
+			for (int i = 1; i < plc.getLightCount() - 1; i++){
+				SceneObjectLight curLight = SceneObjectTools.getLightForName(
+					plc,
+					PLC_IND_PREFIX + i,
+					SCRIPT_NAME
+				);
+				if (curLight.isEnabled()){
+					// Claim light by making IndicatorLight object (which turns it off)
+					plcIndicatorLight = new IndicatorLight(
+						SceneObjectTools.getElementForName(plc, PLC_IND_PREFIX + i, SCRIPT_NAME),
+						curLight,
+						2.f,
+						true
+					);
+					break;
+				}
+			}
+			if (plcIndicatorLight == null){
+				log.out("Could not register with the PLC Controller because the max amount of E-Stop buttons have already been registered.");
+				System.out.println("\tDefaulting to simple behavior...");
+				func = F_ESTOP_SIMPLE;
 			}
 		}
-		switch (mode){
-			case 0: // Static
-				handleStaticMode(sco);
-				break;
-			case 2: // Dispatch
-			case 3: // Restraints open
-			case 4: // Restraints lock
-			case 5: // Platform
-				if (!section.isStation()){ // Check if the specified block is a station for these modes
-					if (!sco.getName().equals("")){
-						System.err.println(sco.getName() + ": \"" + MODES[mode] + "\" mode requires the specified block to be a station.");
-					}
-					else{
-						System.err.println(SCRIPT_NAME + ": \"" + MODES[mode] + "\" mode requires the specified block to be a station.");
-					}
-					return false;
-				}
-				coasterHasPlatform = isCoasterWithPlatform(coaster);
-				break;
-			case 11: // Manual lift jog
-				if (!section.isLift()){ // Check if the specified block is a lift for this mode
-					if (!sco.getName().equals("")){
-						System.err.println(sco.getName() + ": \"" + MODES[mode] + "\" mode requires the specified block to be a lift.");
-					}
-					else{
-						System.err.println(SCRIPT_NAME + ": \"" + MODES[mode] + "\" mode requires the specified block to be a lift.");
-					}
-					return false;
-				}
-				break;
-			default:
+		// Get PLC Controller reset light handle if E-Stop Reset
+		else if (func == F_ESTOP_RESET){
+			plcLight = SceneObjectTools.getLightForName(
+				plc,
+				PLC_RESET_LIGHT_NAME,
+				SCRIPT_NAME
+			);
+		}
+
+		// Setup InteractionObject (if interactible function)
+		if (isInteractibleFunc(func)){
+			iObj = InteractionObject.createSimpleButton();
+			iObj.setPosition(button.getAbsoluteTranslation());
+			iObj.setRadius(BUTTON_INTERACTION_RADIUS);
+			iObj.setProcessActionEventsWhenDisabled(true);
+			iObj.addActionListener(this);
 		}
 		
 		return true; // Everything's just dandy
 	}
 	
-	private SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling
-        SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
-        if (sco == null){
-            System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
-        }
-        return sco;
-    }
-	
-	private SceneObjectElement getElementOnScoForName(SceneObject sco, String name){ // Basically getElementForName() with error handling - Gratz to bestdani for idea
-        SceneObjectElement element = sco.getElementForName(name);
-        if (element == null){
-            System.throwRuntimeException(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + name + "\" element)");
-        }
-        return element;
-    }
-	
-	private int getModeFromScoParams(SceneObject sco){ // Returns the mode ID, based on the first MODES-based parameter to be found true
-		Boolean curBool = null;
+	protected int getFuncFromScoParams(SceneObject sco){
+		/* Get Function from SCO Parameters
+			Returns the proper function number based on the "function" parameter enumeration.
+		*/
+		if (sco.getIntegerParameter("function") == null) return 0;
 		
-		for (int i = 0; i < MODES.length; i++){ // Traverse the MODES array
-			curBool = sco.getBooleanParameter( MODES[i] ); // Get the corresponding parameter
-			if (curBool != null && curBool.boolValue()){ // Check if it exists, then if it is positive
-				return i;
-			}
+		return sco.getIntegerParameter("function").intValue();
+	}
+
+	private bool isInteractibleFunc(int func){
+		for (int i = 0; i < NON_INTERACT_MODES.length; i++){
+			if (func == NON_INTERACT_MODES[i])
+				return false;
 		}
-		return 0; // Default to static mode if no mode selection found
+		return true;
+	}
+
+	private void enableAction(){
+		enabled = true;
+		iObj.setEnabled(true);
 	}
 	
-	private bool isCoasterWithPlatform(Coaster coaster){ // Returns if the given coaster has a platform station, based on the master PLATFORM_COASTERS list
-		int coasterID = coaster.getCoasterStyleId();
-		for (int i = 0; i < PLATFORM_COASTERS.length; i++){
-			if (PLATFORM_COASTERS[i] == coasterID) return true;
-		}
-		return false;
+	private void disableAction(){
+		enabled = false;
+		iObj.setEnabled(false);
 	}
-	
-	private void handleStaticMode(SceneObject sco){
-		if (BUTTON_HAS_LIGHT){
-			switch (sco.getIntegerParameter("light").intValue()){ // Sets the light's state, based on static parameters
-				case 1:
-					button.lightOn();
-					break;
-				case 2:
-					button.lightBlink();
-					break;
-				default:
-					button.lightOff();
-			}
-		}
-	}
-	
-	private void handleAdvanceMode(){
-		if (coaster.isEmergencyStop()){
-			button.lightOff();
+
+	private void enableActionIf(bool condition){
+		if (condition){
+			enableAction();
 		}
 		else{
-			switch (block.getNormalModeState(Block.PROTOCOL_V1)){
-				case Block.STATE_OCCUPIED:
-				case Block.STATE_IN_STATION:
-					button.lightOn();
-					break;
-				case Block.STATE_APPROACHING_FWD:
-				case Block.STATE_APPROACHING_BWD:
-					button.lightBlink();
-					break;
-				default:
-					button.lightOff();
-			}
+			disableAction();
 		}
 	}
 	
-	private void handleDispatchMode(){
-		if (coaster.isEmergencyStop()){
-			button.lightOff();
-			button.buttonOut();
-		}
-		else{
-			switch (block.getNormalModeState(Block.PROTOCOL_V1)){
-				case Block.STATE_IN_STATION:
-					// If the platform (if applicable) is up, or the harnesses or gates are open, not ready to dispatch (no light)
-					if (coasterHasPlatform && section.getStationPlatformState() != 0.f || section.getTrainOnSection().getSpeed() != 0 ||
-					section.getTrainOnSection().getHarnessState() != 0.f || section.getStationGateState() != 0.f || section.isStationWaitingForClearBlock()){
-						button.lightOff();
-						button.buttonOut();
-					}
-					else{ // Otherwise, ready to dispatch (blink light)
-						button.lightBlink();
-						button.buttonOut();
-					}
-					break;
-				case Block.STATE_OCCUPIED:
-					button.lightOn();
-					button.buttonIn();
-					break;
-				default:
-					button.lightOff();
-					button.buttonOut();
-			}
-		}
-	}
-	
-	private void handleRestraintsMode(){
-		if (coaster.isEmergencyStop() || block.getNormalModeState(Block.PROTOCOL_V1) != Block.STATE_IN_STATION || section.getTrainOnSection().getSpeed() != 0){
-			button.lightOff();
-		}
-		else{
-			if (coasterHasPlatform && section.getStationPlatformState() < 1.f){
+	private void handleStaticFunc(SceneObject sco){
+		switch (func){ // Sets the light's state, based on function
+			case 1:
+				button.lightOn();
+				break;
+			case 2:
+				button.lightBlink();
+				break;
+			default:
 				button.lightOff();
+		}
+	}
+
+	// Interactible Functions //
+	
+	private void handleManualMoveFunc(bool action){
+		if (action){
+			button.buttonPush();
+			if (func == F_BLOCK_FWD){
+				block.doSemiManualMoveForward();
 			}
 			else{
-				if ( (mode == 3 && binaryState == 1.f) || (mode == 4 && binaryState == 0.f) ){ // Open Mode: Harness Open - Lock Mode: Harness Closed
-					button.lightOn();
-				}
-				else if ( (mode == 3 && binaryState == 0.f) || (mode == 4 && binaryState == 1.f) ){ // Open Mode: Harness Closed - Lock Mode: Harness Open
-					button.lightBlink();
-					button.resetButtonState();
-				}
-				else if ( (mode == 3 && section.getTrainOnSection().getHarnessState() > binaryState) || (mode == 4 && section.getTrainOnSection().getHarnessState() < binaryState) ){ // Harness is moving in specific direction
-					button.lightOff();
-					button.buttonPush();
-				}
-				binaryState = section.getTrainOnSection().getHarnessState();
+				block.doSemiManualMoveBackward();
 			}
+			return;
 		}
-	}
-	
-	private void handlePlatformMode(){
-		if (!coasterHasPlatform || coaster.isEmergencyStop()){
-			button.lightOff();
+
+		bool canSemiManualMove = false;
+		if ( (func == F_BLOCK_FWD && block.canSemiManualMoveForward())
+				|| (func == F_BLOCK_BWD && block.canSemiManualMoveBackward()) ){
+			canSemiManualMove = true;
 		}
-		// If a train is in the station, and the harnesses and gates are closed, and the train isn't moving (ie. entering station)
-		else if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_IN_STATION && section.getTrainOnSection().getSpeed() == 0
-		&& section.getTrainOnSection().getHarnessState() == 0.f && section.getStationGateState() == 0.f){
-			if (section.getStationPlatformState() == 1.f || section.getStationPlatformState() == 0.f){ // If the platform is fully up or down, blink to show ready state
-				button.lightBlink();
-				button.resetButtonState();
-			}
-			else{ // If the platform is moving, light on
-				button.lightOn();
-				button.buttonPush();
-			}
-        }
-		else{ // Otherwise, light is off
-			button.lightOff();
+		// Can't Semi-Manual move
+		if (coaster.isEmergencyStop() || !canSemiManualMove){
+			disableAction();
+			button.setLightState(Block.LAMP_OFF);
 		}
-	}
-	
-	private void handleEStopMode(){
-		if (coaster.isEmergencyStop()){
-			button.lightOn();
-        }
+		// Can Semi-Manual move
 		else{
-			button.lightBlink();
-        }
+			enableAction();
+			button.setLightState(block.LAMP_FLASHING);
+		}
 	}
 	
-	private void handleEStopAnimMode(){
+	private void handleDispatchFunc(bool action){
+		if (action){
+			section.doStationManualDispatch();
+			return;
+		}
+
+		// Ready
+		if (section.canStationManualDispatch()){
+			enableActionIf(section.isStationManualDispatchMode());
+			button.setLightState(Block.LAMP_FLASHING);
+		}
+		// Dispatching & approaching
+		else if (section.isTrainOnSection() && section.getTrainOnSection().getSpeed() != 0.0){
+			disableAction();
+			button.setLightState(Block.LAMP_ON);
+			button.buttonIn();
+		}
+		// Not ready
+		else{
+			disableAction();
+			button.setLightState(Block.LAMP_OFF);
+			button.buttonOut();
+		}
+	}
+	
+	private void handleRestraintsFunc(bool action){
+		if (action){
+			if (func == F_RESTRAINTS_OPEN){
+				section.doStationManualOpenHarness();
+			}
+			else{
+				section.doStationManualCloseHarness();
+			}
+			button.buttonPush();
+			return;
+		}
+
+		if ( (func == F_RESTRAINTS_OPEN && section.canStationManualOpenHarness())
+				|| (func == F_RESTRAINTS_LOCK && section.canStationManualCloseHarness()) ){
+			enableActionIf(section.isStationManualDispatchMode());
+			button.lightBlink();
+		}
+		else{
+			disableAction();
+			button.lightOn();
+		}
+	}
+	
+	private void handlePlatformFunc(bool action){
+		if (action){
+			if (section.getStationPlatformState() == 1.f){
+				section.doStationManualDisengagePlatform();
+			}
+			else{
+				section.doStationManualEngagePlatform();
+			}
+			button.buttonPush();
+			return;
+		}
+
+		// Platform moving
+		if (section.getStationPlatformState() != 0.f
+				&& section.getStationPlatformState() != 1.f){
+			disableAction();
+			button.lightOn();
+			return;
+		}
+		bool canDisengage = section.canStationManualDisengagePlatform();
+		bool canEngage = section.canStationManualEngagePlatform();
+		// Platform ready to move
+		if ( (func == F_PLATFORM_RAISE && canEngage)
+				|| (func == F_PLATFORM_LOWER && canDisengage)
+				|| (func == F_PLATFORM_TOGGLE && (canEngage || canDisengage)) ){
+			enableActionIf(section.isStationManualDispatchMode());
+			button.lightBlink();
+			return;
+		}
+		// Platform not ready to move
+		disableAction();
+		button.lightOff();
+	}
+	
+	private void handleSeatsFunc(bool action){
+		if (action){
+			if (section.isStationManualLockedSeats()){
+				section.doStationManualUnlockSeats();
+			}
+			else{
+				section.doStationManualLockSeats();
+			}
+			button.buttonPush();
+			return;
+		}
+		
+		// E-Stopped
+		if (coaster.isEmergencyStop()){
+			disableAction();
+			button.lightOff();
+			return;
+		}
+		// Seats moving
+		if (!section.isStationManualLockedSeats()
+				&& !section.isStationManualUnlockedSeats()){
+			disableAction();
+			button.lightOn();
+			return;
+		}
+		bool canUnlock = section.canStationManualUnlockSeats();
+		bool canLock = section.canStationManualLockSeats();
+		// Seats ready to move
+		if ( (func == F_SEATS_UNLOCK && canUnlock)
+				|| (func == F_SEATS_LOCK && canLock)
+				|| (func == F_SEATS_TOGGLE && (canUnlock || canLock)) ){
+			enableActionIf(section.isStationManualDispatchMode());
+			button.lightBlink();
+			return;
+		}
+		// Seats not ready to move
+		disableAction();
+		button.lightOff();
+	}
+
+	private void handleSpecialTrackFunc(bool action){
+		if (action){
+			int curSetPos = specialTrack.getSetSwitchDirection();
+			if (func == F_SPECIAL_LEFT){
+				specialTrack.setManualSwitchDirection(
+					specialTrack.getSetSwitchDirection() - 1
+				);
+			}
+			else{
+				specialTrack.setManualSwitchDirection(
+					specialTrack.getSetSwitchDirection() + 1
+				);
+			}
+			button.buttonPush();
+			return;
+		}
+		
+		// Track is moving
+		if (specialTrack.getVisibleSwitchState() % 1.f != 0.f && !coaster.isEmergencyStop()){
+			disableAction();
+			button.lightOn();
+		}
+		// Track ready to move to new position
+		else if ( !coaster.isEmergencyStop()
+				&& specialTrack.canChangeManualSwitchDirection() 
+				&& ( (func == F_SPECIAL_LEFT && specialTrack.getSetSwitchDirection() - 1 > 0) 
+					|| (func == F_SPECIAL_RIGHT && specialTrack.getSetSwitchDirection() + 1 < specialTrack.getNumberOfSwitchDirections()) ) ){
+			enableAction();
+			button.lightBlink();
+		}
+		else{
+			disableAction();
+			button.lightOff();
+		}
+	}
+
+	private void handleDispatchModeFunc(bool action){
+		if (action){
+			section.setStationManualDispatchMode(
+				!section.isStationManualDispatchMode()
+			);
+			button.buttonPush();
+			return;
+		}
+		
+		if (coaster.isEmergencyStop()){
+			disableAction();
+			button.lightOff();
+		}
+		else if ( (func == F_AUTO_DISPATCH && section.isStationManualDispatchMode())
+				|| (func == F_MANUAL_DISPATCH && !section.isStationManualDispatchMode()) ){
+			enableAction();
+			button.lightBlink();
+		}
+		else{
+			disableAction();
+			button.lightOn();
+		}
+	}
+	
+	private void handleBlockSystemModeFunc(bool action){
+		if (action){
+			switch (func){
+				case F_AUTOMATIC_OP:
+					coaster.setBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC);
+					break;
+				case F_SEMI_MAN_OP:
+					coaster.setBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL);
+					break;
+				case F_FULL_MAN_OP:
+					coaster.setBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL);
+					break;
+			}
+			button.buttonPush();
+			return;
+		}
+		
+		int targetMode = 0;
+		switch (func){
+			case F_AUTOMATIC_OP:
+				targetMode = Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC;
+				break;
+			case F_SEMI_MAN_OP:
+				targetMode = Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL;
+				break;
+			case F_FULL_MAN_OP:
+				targetMode = Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL;
+				break;
+		}
+		if (coaster.getBlockSystemMode() == targetMode){
+			disableAction();
+			button.lightOn();
+		}
+		else if (coaster.canSetBlockSystemMode(targetMode)){
+			enableAction();
+			button.lightBlink();
+		}
+		else{
+			disableAction();
+			button.lightOff();
+		}
+	}
+	
+	// E-Stop Functions //
+	
+	private void handleEStopSimpleFunc(bool action){
+		if (action){
+			coaster.setEmergencyStop(!coaster.isEmergencyStop());
+			return;
+		}
+		
+		enableActionIf(coaster.canChangeEmergencyStop());
 		if (coaster.isEmergencyStop()){
 			button.lightOn();
 			button.buttonIn();
-        }
+		}
 		else{
 			button.lightBlink();
 			button.buttonOut();
-        }
+		}
 	}
 	
-	private void handleEStopResetMode(){
-		if (coaster.isEmergencyStop()){
-			button.lightBlink();
-			button.resetButtonState();
-        }
-		else{
-			button.lightOff();
+	private void handleEStopAdvancedFunc(bool action){
+		if (action){
+			if (button.isPushedIn()){	// Pull out
+				button.buttonOut();
+				button.lightOff();
+				plcIndicatorLight.lightOff();
+			}
+			else{						// Push in
+				button.buttonIn();
+				button.lightOn();
+				plcIndicatorLight.lightOn();
+			}
+			disableAction();
+			return;
+		}
+		
+		enableActionIf(!button.isAnimating());
+		if (!button.isPushedIn()){
+			if (coaster.isEmergencyStop()){
+				button.lightOff();
+			}
+			else{
+				button.lightBlink();
+			}
+		}
+	}
+	
+	private void handleEStopResetFunc(bool action){
+		if (action){
 			button.buttonPush();
-        }
-	}
-	
-	private void handleAutomaticModeMode(){
-		if (coaster.isEmergencyStop()){
+			button.lightOff();
+			iObj.setEnabled(false);
+			coaster.setEmergencyStop(false);
+			plcLight.setEnabled(false);
+			return;
+		}
+
+		if (plcLight.isEnabled() && coaster.canChangeEmergencyStop()){
+			enableAction();
+			button.lightBlink();
+		}
+		else{
+			disableAction();
 			button.lightOff();
 		}
-		else if (block.getNormalModeState(Block.PROTOCOL_V1) != Block.STATE_FULL_MANUAL_MODE){
-			button.lightOff();
-			button.buttonPush();
-        }
-		else{
-			button.lightBlink();
-			button.resetButtonState();
-        }
 	}
 	
-	private void handleFullManualModeMode(){
-		if (coaster.isEmergencyStop()){
-			button.lightOff();
-		}
-		else if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE){
-			button.lightOff();
-			button.buttonPush();
-        }
-		else{
-			button.lightBlink();
-			button.resetButtonState();
-        }
-	}
+	// Non-Interactible Functions //
 	
-	private void handleManualLiftJogMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) != Block.STATE_FULL_MANUAL_MODE || coaster.isEmergencyStop()){
+	private void handleLiftJogFunc(){
+		if (coaster.getBlockSystemMode() != Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL || coaster.isEmergencyStop()){
 			button.lightOff();
 			button.buttonOut();
 		}
 		else{
 			float liftSpeed = (float) section.getLiftCurrentSpeed();
+			// Only activated if chain speeding up (either direction); not slowing down
 			if ( (liftSpeed < 0.f && liftSpeed <= binaryState) || (liftSpeed > 0.f && liftSpeed >= binaryState) ){
 				button.lightOn();
 				button.buttonIn();
@@ -358,18 +657,72 @@ public class PushButton extends Script{
 		}
 	}
 	
-	private void handleManualBrakeReleaseMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) != Block.STATE_FULL_MANUAL_MODE || coaster.isEmergencyStop()){
+	private void handleManualBrakeReleaseFunc(){
+		if (coaster.getBlockSystemMode() != Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL || coaster.isEmergencyStop()){
 			button.lightOff();
 			button.buttonOut();
 		}
-		else if (!section.isBrakesOn()){
+		else if (section.isBrakesOn()){
+			button.lightBlink();
+			button.buttonOut();
+		}
+		else{
 			button.lightOn();
 			button.buttonIn();
 		}
-		else{
-			button.lightBlink();
-			button.buttonOut();
+	}
+
+	private void handleFunc(bool action){
+		switch (func){
+			case F_BLOCK_FWD:
+			case F_BLOCK_BWD:
+				handleManualMoveFunc(action);
+				break;
+			case F_DISPATCH:
+				handleDispatchFunc(action);
+				break;
+			case F_RESTRAINTS_OPEN:
+			case F_RESTRAINTS_LOCK:
+				handleRestraintsFunc(action);
+				break;
+			case F_PLATFORM_RAISE:
+			case F_PLATFORM_LOWER:
+			case F_PLATFORM_TOGGLE:
+				handlePlatformFunc(action);
+				break;
+			case F_SEATS_UNLOCK:
+			case F_SEATS_LOCK:
+			case F_SEATS_TOGGLE:
+				handleSeatsFunc(action);
+				break;
+			case F_SPECIAL_LEFT:
+			case F_SPECIAL_RIGHT:
+				handleSpecialTrackFunc(action);
+				break;
+			case F_AUTO_DISPATCH:
+			case F_MANUAL_DISPATCH:
+				handleDispatchModeFunc(action);
+				break;
+			case F_AUTOMATIC_OP:
+			case F_SEMI_MAN_OP:
+			case F_FULL_MAN_OP:
+				handleBlockSystemModeFunc(action);
+				break;
+			case F_ESTOP_SIMPLE:
+				handleEStopSimpleFunc(action);
+				break;
+			case F_ESTOP_ADVANCED:
+				handleEStopAdvancedFunc(action);
+				break;
+			case F_ESTOP_RESET:
+				handleEStopResetFunc(action);
+				break;
+			case F_LIFT_JOG_NO_INT:
+				handleLiftJogFunc();
+				break;
+			case F_BRAKE_RELEASE_NO_INT:
+				handleManualBrakeReleaseFunc();
+				break;
 		}
 	}
 
@@ -380,49 +733,28 @@ public class PushButton extends Script{
 		if (Button.isPressed(Button.FLY_SLOWER)){ //DEBUGGING
 			button.buttonOut();
 		}*/
+		handleFunc(false);
 		
-		switch (mode){
-			case 0:
-				break;
-			case 1:
-				handleAdvanceMode();
-				break;
-			case 2:
-				handleDispatchMode();
-				break;
-			case 3:
-			case 4:
-				handleRestraintsMode();
-				break;
-			case 5:
-				handlePlatformMode();
-				break;
-			case 6:
-				handleEStopMode();
-				break;
-			case 7:
-				handleEStopAnimMode();
-				break;
-			case 8:
-				handleEStopResetMode();
-				break;
-			case 9:
-				handleAutomaticModeMode();
-				break;
-			case 10:
-				handleFullManualModeMode();
-				break;
-			case 11:
-				handleManualLiftJogMode();
-				break;
-			case 12:
-				handleManualBrakeReleaseMode();
-				break;
-			default:
+		// Run button object's onNextFrame() as well to animate
+		button.onNextFrame(tick);
+		
+		// If set to attach to special track, update translation of SCO
+		if (specialTrackModule != null)
+			specialTrackModule.updateTranslation();
+	}
+
+	public void onInteractionAction(InteractionObject obj){
+		if (enabled){
+			handleFunc(true);
 		}
-		
-		button.onNextFrame(tick); // Run button object's onNextFrame() as well to animate
-		
-		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
+		else{
+			switch (func){
+				case F_ESTOP_SIMPLE:
+				case F_ESTOP_ADVANCED:
+					break;
+				default:
+					button.buttonPush();
+			}
+		}
 	}
 }

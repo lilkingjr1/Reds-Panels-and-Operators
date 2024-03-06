@@ -1,7 +1,7 @@
 /**
 	Light Stack NL2 Script
 	David Wolfe (Red-Thirten)
-	7/27/2023
+	03/03/2024
 	Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -33,11 +33,11 @@ public class LightStack extends Script{
 	};
 	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24}; // All platform coaster IDs in NL2, as of this file's creation date
 	
-    private Coaster coaster;
-    private Block block;
-    private Section section;
+	private Coaster coaster;
+	private Block block;
+	private Section section;
 	private SpecialTrack specialTrack;
-    private StaticSound soundEmergency;
+	private StaticSound soundEmergency;
 	private Vector lightElements;
 	
 	private SpecialTrackModule specialTrackModule;
@@ -84,30 +84,30 @@ public class LightStack extends Script{
 	}
 	
 	private SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling
-        SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
-        if (sco == null){
-            System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
-        }
-        return sco;
-    }
+		SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
+		if (sco == null){
+			System.throwRuntimeException(SCRIPT_NAME + ": This script only works with NL2 scene objects");
+		}
+		return sco;
+	}
 	
 	private Vector getLightElementsOnSco(SceneObject sco){ // Returns a dynamic array of all the light elements in the model/SCO (can be any amount)
-        int elementCount = 0;
-        Vector elements = new Vector();
+		int elementCount = 0;
+		Vector elements = new Vector();
 		
-        SceneObjectElement element = sco.getElementForName(ELEMENT_PREFIX + elementCount); // Check if at least one element exists using the provided prefix
-        if (element == null){
-            System.err.println(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + ELEMENT_PREFIX + elementCount + "\" element)");
-        }
+		SceneObjectElement element = sco.getElementForName(ELEMENT_PREFIX + elementCount); // Check if at least one element exists using the provided prefix
+		if (element == null){
+			System.err.println(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + ELEMENT_PREFIX + elementCount + "\" element)");
+		}
 
-        while (element != null){ // Add all the elements to the array
-            elementCount++;
-            elements.addElement(element);
-            element = sco.getElementForName(ELEMENT_PREFIX + elementCount);
-        }
+		while (element != null){ // Add all the elements to the array
+			elementCount++;
+			elements.addElement(element);
+			element = sco.getElementForName(ELEMENT_PREFIX + elementCount);
+		}
 
-        return elements;
-    }
+		return elements;
+	}
 	
 	private int getModeFromScoParams(SceneObject sco){ // Returns the mode ID, based on the first MODES-based parameter to be found true
 		Boolean curBool = null;
@@ -313,6 +313,8 @@ public class LightStack extends Script{
 			default:
 		}
 		
-		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
+		// If set to attach to special track, update translation of SCO
+		if (specialTrackModule != null)
+			specialTrackModule.updateTranslation();
 	}
 }
