@@ -76,8 +76,8 @@
       <type>bool</type>
       <defaultvalue>true</defaultvalue>
       <id>hide_key</id>
-      <description>Will hide the key during play. Only works with static mode.</description>
-      <label>Hide Key (Static Mode Only)</label>
+      <description>Will hide the key during simulation. Only works with the &quot;None&quot; Function.</description>
+      <label>Hide Key (None Function Only)</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>

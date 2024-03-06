@@ -301,11 +301,12 @@ public class PushButton extends Script implements InteractionActionListener{
 	}
 	
 	private void handleStaticFunc(SceneObject sco){
-		switch (func){ // Sets the light's state, based on function
-			case 1:
+		// Sets the light's state, based on function
+		switch (func){
+			case F_STATIC_ON:
 				button.lightOn();
 				break;
-			case 2:
+			case F_STATIC_BLINK:
 				button.lightBlink();
 				break;
 			default:
@@ -543,6 +544,12 @@ public class PushButton extends Script implements InteractionActionListener{
 			return;
 		}
 		
+		if (coaster.isEmergencyStop()){
+			disableAction();
+			button.lightOff();
+			return;
+		}
+
 		int targetMode = 0;
 		switch (func){
 			case F_AUTOMATIC_OP:

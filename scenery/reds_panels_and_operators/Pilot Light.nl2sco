@@ -39,78 +39,23 @@
     </script>
     <scriptparameter>
       <type>int</type>
-      <defaultvalue>2</defaultvalue>
-      <id>light</id>
-      <description>This setting is ONLY used in Static Mode -- 0 = Light Off, 1 = Light On, 2 = Light Blinking</description>
-      <label>Pilot Light (Hover cursor to see options):</label>
+      <defaultvalue>0</defaultvalue>
+      <enums>None (Light Off),None (Light On),None (Light Blinking),Block Status (Only Non-Scripted Coasters),Station Status,Platform (Engaged),E-Stopped,Automatic Operation,Manual Block Operation,Full Manual Operation</enums>
+      <id>function</id>
+      <description>How this button will behave during Play Mode.</description>
+      <label>Function:</label>
     </scriptparameter>
     <scriptparameter>
       <type>blocksection</type>
       <id>block</id>
-      <description>This is the block that this operator will be assigned to for all Non-Static Modes.</description>
-      <label>Block Location (for all Non-Static Modes):</label>
+      <description>This is the block that this operator will be assigned to for all Non-Static Functions.</description>
+      <label>Block Location (for all Non-Static Functions):</label>
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>
       <id>special_track_attach</id>
-      <description>Select the special track of a ride you want this light to move with during simulation. Set to &lt;None&gt; to disable.</description>
+      <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
       <label>Special Track to Attach To (Optional):</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>mode_instructions</id>
-      <description>How this button will behave during Play Mode. Changing this text does nothing.</description>
-      <label>=========== Operator Mode ===========</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>static</id>
-      <description>Will remain static with no animation or light changes.</description>
-      <label>Static</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>advance</id>
-      <description>Good for indicating block section status. Will light accordingly.</description>
-      <label>Advance</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>dispatch</id>
-      <description>Only for use in stations. Will light accordingly.</description>
-      <label>Dispatch</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>platform</id>
-      <description>Only for use in stations with moving platforms/floors. Will light accordingly.</description>
-      <label>Platform</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>e_stop_reset</id>
-      <description>Will light like an E-Stop Reset button.</description>
-      <label>E-Stop Reset</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>automatic_mode</id>
-      <description>Will light when ride is in Automatic Mode. (No, this is not a magical auto-mode setting)</description>
-      <label>Automatic Mode</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>full_manual_mode</id>
-      <description>Will light when ride is in Full Manual Mode. (No, it cannot be &quot;changed manually&quot; during play)</description>
-      <label>Full Manual Mode</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
