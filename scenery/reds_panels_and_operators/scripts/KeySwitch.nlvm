@@ -1,7 +1,7 @@
 /**
 	Key Switch NL2 Script
 	David Wolfe (Red-Thirten)
-	03/03/2024
+	03/05/2024
 	Extends Switch Operator. Animates the switch & key during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -19,10 +19,39 @@ public class KeySwitch extends SwitchOperator{
 	public bool onInit(){ // On initialization of Play simulation		
 		super.SCRIPT_NAME = "KeySwitch";		// Script name for debugging
 		super.SWITCH_ELEMENT_NAME = "key_core";	// Name of the switch element in the SCO/model
-		super.PLACARD_ELEMENT_NAME = "placard";	// Name of the placard element in the SCO/model
 		super.SWITCH_TRAVEL_TIME = 0.6f;		// Time, in seconds, for the switch to travel ("speed")
 		
         return super.onInit();					// Run the rest of the init code in SwitchOperator
+	}
+
+	protected int getFuncFromScoParams(SceneObject sco){
+		/* Get Function from SCO Parameters
+			Returns the proper function number based on the "function" parameter enumeration.
+		*/
+		if (sco.getIntegerParameter("function") == null) return 0;
+
+		int funcVal = sco.getIntegerParameter("function").intValue();
+		switch (funcVal){
+			case 1: // Special Track (Toggle Only)
+				return F_SPECIAL_TRACK;
+			case 2: // Dispatch Mode
+				return F_DISPATCH_MODE;
+			case 3: // Operation Mode
+				return F_OP_MODE;
+			case 4: // Trains In Service (No Interaction)
+				return F_NUM_TRAINS_NO_INT;
+			case 5: // Lift Jog (No Interaction)
+				return F_LIFT_JOG_NO_INT;
+			case 6: // Transports (No Interaction)
+				return F_TRANSPORTS_NO_INT;
+			case 7: // Special Track (No Interaction)
+				return F_SPECIAL_TRACK_NO_INT;
+			case 8: // Coaster Lights (No Interaction)
+				return F_COASTER_LIGHTS_NO_INT;
+			default:
+				return F_STATIC;
+		}
+		return funcVal;
 	}
 	
 	protected void createSwitchObject(SceneObject sco, int func){
@@ -30,10 +59,10 @@ public class KeySwitch extends SwitchOperator{
 			Overrides the base method to handle the key when creating the operatorSwitch object.
 		*/
 		switch (func){
-			case 4: // Trains in Service mode
+			case F_NUM_TRAINS_NO_INT:
 				operatorSwitch = new OperatorSwitch(
 					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
-					coaster.getTrainCount(), // States = # of Trains on Track
+					trainCount, // States = # of Trains on Track
 					sco.getDoubleParameter("start_angle").floatValue(),
 					sco.getDoubleParameter("end_angle").floatValue(),
 					SWITCH_TRAVEL_TIME,
@@ -42,9 +71,10 @@ public class KeySwitch extends SwitchOperator{
 					false
 				);
 				break;
-			case 5: // Transports mode
-			case 6: // Special Track mode
-			case 9: // Manual Lift Jog mode
+			case F_OP_MODE:
+			case F_LIFT_JOG_NO_INT:
+			case F_TRANSPORTS_NO_INT:
+			case F_SPECIAL_TRACK_NO_INT:
 				operatorSwitch = new OperatorSwitch(
 					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
 					3, // States = BWD/N/FWD or Left/N/Right
@@ -56,19 +86,7 @@ public class KeySwitch extends SwitchOperator{
 					true
 				);
 				break;
-			case 7: // Maintenance mode
-				operatorSwitch = new OperatorSwitch(
-					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
-					2,
-					sco.getDoubleParameter("start_angle").floatValue(),
-					sco.getDoubleParameter("end_angle").floatValue(),
-					SWITCH_TRAVEL_TIME,
-					SceneObjectTools.getElementForName(sco, KEY_ELEMENT_NAME, SCRIPT_NAME),
-					KEY_TRAVEL_DIST,
-					true
-				);
-				break;
-			case 8: //Lights mode
+			case F_COASTER_LIGHTS_NO_INT:
 				operatorSwitch = new OperatorSwitch(
 					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
 					3, // States = Off/Running/Emergency
@@ -80,7 +98,7 @@ public class KeySwitch extends SwitchOperator{
 					false
 				);
 				break;
-			default: // Static mode, or other
+			default: // Every other function just has two states & key stays out
 				operatorSwitch = new OperatorSwitch(
 					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
 					2,

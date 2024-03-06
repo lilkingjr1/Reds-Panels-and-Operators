@@ -52,7 +52,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 		F_COASTER_LIGHTS_NO_INT
 	};
 	
-	protected Coaster coaster;
+	private Coaster coaster;
 	private Block block;
 	private Section section;
 	private SpecialTrack specialTrack;
@@ -63,7 +63,8 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 	private SpecialTrackModule specialTrackModule;
 	
 	private int func = F_STATIC;
-	private int trainCount, trainsLashedToTrack;
+	protected int trainCount;
+	private int trainsLashedToTrack;
 	private float binaryState = 0.f; // Helps determine if a "binary" state starts to change to the other value (ie. gates start to close, vice-versa, etc)
 	
 	public bool onInit(){ // On initialization of Play simulation
@@ -119,6 +120,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 					operatorSwitch.setSwitchState((int) train.getHarnessState());
 			case F_GATES:
 			case F_PLATFORM:
+			case F_DISPATCH_MODE:
 				if (!section.isStation()){
 					log.err("The configured function requires the specified block to be a station.");
 					return false;
@@ -162,7 +164,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 	
 	protected void createSwitchObject(SceneObject sco, int func){
 		/* Create Switch Object
-			Creates a new OperatorSwitch object, based on the selected mode.
+			Creates a new OperatorSwitch object, based on the selected function.
 		*/
 		switch (func){
 			case F_NUM_TRAINS_NO_INT:
@@ -187,7 +189,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 					SWITCH_TRAVEL_TIME
 				);
 				break;
-			default: // Every other mode just has two states
+			default: // Every other function just has two states
 				operatorSwitch = new OperatorSwitch(
 					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
 					2,
@@ -198,7 +200,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 		}
 	}
 	
-	private int getFuncFromScoParams(SceneObject sco){
+	protected int getFuncFromScoParams(SceneObject sco){
 		/* Get Function from SCO Parameters
 			Returns the proper function number based on the "function" parameter enumeration.
 		*/
