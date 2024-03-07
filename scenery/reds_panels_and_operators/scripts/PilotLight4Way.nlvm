@@ -1,7 +1,7 @@
 /**
-	Pilot Light 4Way NL2 Script
+	Pilot Light 4-Way NL2 Script
 	David Wolfe (Red-Thirten)
-	03/05/2024
+	03/06/2024
 	Extends Pilot Light. Handles additional lights' functionality.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -21,93 +21,116 @@ public class PilotLight4Way extends PilotLight{
 	private SceneObjectElement light3;
 	private SceneObjectElement light4;
 	
-	private PilotLight4Way(){ // Idk why I had to do this, or why it works. Was the only way to overload an array.
-		super();
-		MODES = new String[]{"static", "four_way"}; // Possible mode parameters
-	}
-	
 	public bool onInit(){
 		super.SCRIPT_NAME = "PilotLight4Way";		// Script name for debugging
 		super.LIGHT_ELEMENT_NAME = "light1";		// Name of the top pilot light element in the SCO/model
-		super.PLACARD_ELEMENT_NAME = "placard";		// Name of the placard element in the SCO/model
 		
-		if(super.onInit()){ // If PilotLight initialization succeeds, continue with self-initialization
+		// If PilotLight initialization succeeds, continue with self-initialization
+		if(super.onInit()){
 			// Get/assign other light elements
 			light2 = SceneObjectTools.getElementForName(super.sco, LIGHT2_ELEMENT_NAME, SCRIPT_NAME);
 			light3 = SceneObjectTools.getElementForName(super.sco, LIGHT3_ELEMENT_NAME, SCRIPT_NAME);
 			light4 = SceneObjectTools.getElementForName(super.sco, LIGHT4_ELEMENT_NAME, SCRIPT_NAME);
-			if (light2 == null || light3 == null || light4 == null) return false; // Missing element check
+			// Missing element check
+			if (light2 == null || light3 == null || light4 == null) return false;
 			
-			if (mode == 0){ // Static mode
-				handleStaticMode(super.sco, light2, "light2");
-				handleStaticMode(super.sco, light3, "light3");
-				handleStaticMode(super.sco, light4, "light4");
+			// Function-specific checks and setup
+			switch (func){
+				case F_STATIC_OFF:
+					handleStaticFunc(super.sco, light, "light1");
+					handleStaticFunc(super.sco, light2, "light2");
+					handleStaticFunc(super.sco, light3, "light3");
+					handleStaticFunc(super.sco, light4, "light4");
+					return false;
+				case 3: // Block Indicator (4-Way)
+					if (coaster.isScriptedOperationMode()){
+						System.err.println(SCRIPT_NAME + ": Sorry! The Block Status (4-Way) function does not support Scripted Operation Mode rides at this time.");
+						return false;
+					}
 			}
 			
 			return true; // Everything's just dandy
 		}
 		else return false; // Oh noes! Everything's not dandy!
 	}
+
+	protected int getFuncFromScoParams(SceneObject sco){
+		/* Get Function from SCO Parameters
+			Returns the proper function number based on the "function" parameter enumeration.
+		*/
+		if (sco.getIntegerParameter("function") == null) return 0;
+
+		int funcVal = sco.getIntegerParameter("function").intValue();
+		switch (funcVal){
+			case 1: // Block Indicator (4-Way)
+				return 3;
+			default:
+				return F_STATIC_OFF;
+		}
+		return funcVal;
+	}
 	
-	private void handleStaticMode(SceneObject sco, SceneObjectElement element, String paramName){
-		switch (sco.getIntegerParameter(paramName).intValue()){ // Sets the light's state, based on static parameters
+	private void handleStaticFunc(SceneObject sco, SceneObjectElement element, String paramName){
+		// Sets the light's state, based on static parameters
+		switch (sco.getIntegerParameter(paramName).intValue()){
 			case 1:
-				element.setTextureAnimationIndex(1);
+				element.setTextureAnimationIndex(L_TEX_ON);
 				break;
 			case 2:
-				element.setTextureAnimationIndex(-1);
+				element.setTextureAnimationIndex(L_TEX_BLINK);
 				break;
 			default:
-				element.setTextureAnimationIndex(0);
+				element.setTextureAnimationIndex(L_TEX_OFF);
 		}
 	}
 	
-	private final void handle4WayMode(){
+	private final void handleBlockIndicator4WayFunc(){
 		if (coaster.isEmergencyStop()){
-			light.setTextureAnimationIndex(0);
-			light2.setTextureAnimationIndex(1);
-			light3.setTextureAnimationIndex(0);
-			light4.setTextureAnimationIndex(0);
+			light.setTextureAnimationIndex(L_TEX_OFF);
+			light2.setTextureAnimationIndex(L_TEX_ON);
+			light3.setTextureAnimationIndex(L_TEX_OFF);
+			light4.setTextureAnimationIndex(L_TEX_OFF);
 		}
 		else{
 			switch (block.getNormalModeState(Block.PROTOCOL_V1)){
 				case Block.STATE_OCCUPIED:
 				case Block.STATE_IN_STATION:
-					light.setTextureAnimationIndex(1);
-					light2.setTextureAnimationIndex(0);
-					light3.setTextureAnimationIndex(0);
-					light4.setTextureAnimationIndex(0);
+					light.setTextureAnimationIndex(L_TEX_ON);
+					light2.setTextureAnimationIndex(L_TEX_OFF);
+					light3.setTextureAnimationIndex(L_TEX_OFF);
+					light4.setTextureAnimationIndex(L_TEX_OFF);
 					break;
 				case Block.STATE_APPROACHING_FWD:
 				case Block.STATE_APPROACHING_BWD:
-					light.setTextureAnimationIndex(0);
-					light2.setTextureAnimationIndex(0);
-					light3.setTextureAnimationIndex(-1);
-					light4.setTextureAnimationIndex(0);
+					light.setTextureAnimationIndex(L_TEX_OFF);
+					light2.setTextureAnimationIndex(L_TEX_OFF);
+					light3.setTextureAnimationIndex(L_TEX_BLINK);
+					light4.setTextureAnimationIndex(L_TEX_OFF);
 					break;
 				case Block.STATE_IDLE:
-					light.setTextureAnimationIndex(0);
-					light2.setTextureAnimationIndex(0);
-					light3.setTextureAnimationIndex(0);
-					light4.setTextureAnimationIndex(1);
+					light.setTextureAnimationIndex(L_TEX_OFF);
+					light2.setTextureAnimationIndex(L_TEX_OFF);
+					light3.setTextureAnimationIndex(L_TEX_OFF);
+					light4.setTextureAnimationIndex(L_TEX_ON);
 					break;
 				default:
-					light.setTextureAnimationIndex(0);
-					light2.setTextureAnimationIndex(-1);
-					light3.setTextureAnimationIndex(0);
-					light4.setTextureAnimationIndex(0);
+					light.setTextureAnimationIndex(L_TEX_OFF);
+					light2.setTextureAnimationIndex(L_TEX_BLINK);
+					light3.setTextureAnimationIndex(L_TEX_OFF);
+					light4.setTextureAnimationIndex(L_TEX_OFF);
 			}
 		}
 	}
 	
 	public void onNextFrame(float tick){
-		switch (mode){
-			case 0:
+		switch (func){
+			case 3: // Block Indicator (4-Way)
+				handleBlockIndicator4WayFunc();
 				break;
-			case 1:
-				handle4WayMode();
-				break;
-			default:
 		}
+		
+		// If set to attach to special track, update translation of SCO
+		if (specialTrackModule != null)
+			specialTrackModule.updateTranslation();
 	}
 }
