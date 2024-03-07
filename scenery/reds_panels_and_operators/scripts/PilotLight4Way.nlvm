@@ -64,8 +64,6 @@ public class PilotLight4Way extends PilotLight{
 		switch (funcVal){
 			case 1: // Block Indicator (4-Way)
 				return 3;
-			default:
-				return F_STATIC_OFF;
 		}
 		return funcVal;
 	}

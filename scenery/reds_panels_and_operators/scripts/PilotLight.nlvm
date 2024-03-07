@@ -47,7 +47,7 @@ public class PilotLight extends Script{
 	protected Block block;
 	private Section section;
 	
-	protected Logger log;
+	private Logger log;
 	protected SpecialTrackModule specialTrackModule;
 	
 	protected int func = F_STATIC_OFF;

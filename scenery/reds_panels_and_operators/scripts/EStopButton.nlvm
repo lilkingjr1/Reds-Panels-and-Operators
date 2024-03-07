@@ -1,7 +1,7 @@
 /**
 	Emergency Stop Button NL2 Script
 	David Wolfe (Red-Thirten)
-	03/05/2024
+	03/06/2024
 	Extends Push Button.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -30,8 +30,6 @@ public class EStopButton extends PushButton{
 				return F_ESTOP_SIMPLE;
 			case 4: // E-Stop (Advanced)
 				return F_ESTOP_ADVANCED;
-			default:
-				return F_STATIC_OFF;
 		}
 		return funcVal;
 	}
