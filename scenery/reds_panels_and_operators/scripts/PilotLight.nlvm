@@ -1,19 +1,19 @@
 /**
 	Pilot Light NL2 Script
 	David Wolfe (Red-Thirten)
-	03/06/2024
+	03/08/2024
 	Animates the pilot light during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;
-import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Coaster;
 import com.nolimitscoaster.Train;
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.Section;
 
+import obj.IndicatorLight;
 import util.Logger;
 import util.SceneObjectTools;
 import util.CoasterTools;
@@ -22,32 +22,28 @@ import util.SpecialTrackModule;
 public class PilotLight extends Script{
 	protected String SCRIPT_NAME = "PilotLight";		// Script name for debugging
 	protected String LIGHT_ELEMENT_NAME = "pilot";		// Name of the pilot light element in the SCO/model
+	protected String LIGHT_OBJECT_NAME = "light";		// Name of the Scene Object Light
 	protected String PLACARD_ELEMENT_NAME = "placard";	// Name of the placard element in the SCO/model
 	
 	// All Pilot Light Functions:
-	protected static final int F_STATIC_OFF = 0;
+	private static final int F_STATIC_OFF = 0;
 	private static final int F_STATIC_ON = 1;
-	private static final int F_STATIC_BLINK = 2;
-	private static final int F_BLOCK_IND = 3; // Non-Scripted Coasters Only
-	private static final int F_DISPATCH = 4;
+	protected static final int F_STATIC_BLINK = 2;
+	protected static final int F_BLOCK_IND = 3; // Non-Scripted Coasters Only
+	protected static final int F_DISPATCH = 4;
 	private static final int F_PLATFORM = 5;
 	private static final int F_ESTOP = 6;
 	private static final int F_AUTOMATIC_OP = 7;
 	private static final int F_SEMI_MAN_OP = 8;
 	private static final int F_FULL_MAN_OP = 9;
-
-	// All Light Texture States:
-	protected static final int L_TEX_OFF = 0;
-	protected static final int L_TEX_ON = 1;
-	protected static final int L_TEX_BLINK = -1;
 	
 	protected SceneObject sco;
-	protected SceneObjectElement light;
 	protected Coaster coaster;
 	protected Block block;
-	private Section section;
+	protected Section section;
 	
-	private Logger log;
+	protected Logger log;
+	protected IndicatorLight light;
 	protected SpecialTrackModule specialTrackModule;
 	
 	protected int func = F_STATIC_OFF;
@@ -63,15 +59,9 @@ public class PilotLight extends Script{
 		// Setup Logger
 		log = new Logger(SCRIPT_NAME, sco.getName());
 
-		// Get and assign light element
-		light = SceneObjectTools.getElementForName(
-			sco,
-			LIGHT_ELEMENT_NAME,
-			SCRIPT_NAME
-		);
-
 		// Hide placard if configured
-		if ( sco.getBooleanParameter("hide_placard").boolValue() ){
+		if ( sco.getBooleanParameter("hide_placard") != null
+				&& sco.getBooleanParameter("hide_placard").boolValue() ){
 			SceneObjectTools.getElementForName(sco, PLACARD_ELEMENT_NAME, SCRIPT_NAME).setVisible(false);
 		}
 		
@@ -98,14 +88,23 @@ public class PilotLight extends Script{
 			section = block.getSection();
 		}
 
+		// Create IndicatorLight object
+		light = new IndicatorLight(
+			SceneObjectTools.getElementForName(sco, LIGHT_ELEMENT_NAME, SCRIPT_NAME),
+			SceneObjectTools.getLightForName(sco, LIGHT_OBJECT_NAME, SCRIPT_NAME),
+			0.5f,
+			!sco.getBooleanParameter("disable_light").boolValue()
+		);
+
 		// Function-specific checks and setup
 		switch (func){
 			// Static functions
 			case F_STATIC_OFF:
 			case F_STATIC_ON:
+				handleStaticFunc(sco);
+				return false;
 			case F_STATIC_BLINK:
 				handleStaticFunc(sco);
-				// return false; // Can't do this or else PilotLight4Way won't run
 				break;
 			// Functions that require station section
 			case F_PLATFORM:
@@ -138,32 +137,32 @@ public class PilotLight extends Script{
 		// Sets the light's state, based on function
 		switch (func){
 			case F_STATIC_ON:
-				light.setTextureAnimationIndex(L_TEX_ON);
+				light.lightOn();
 				break;
 			case F_STATIC_BLINK:
-				light.setTextureAnimationIndex(L_TEX_BLINK);
+				light.lightBlink();
 				break;
 			default:
-				light.setTextureAnimationIndex(L_TEX_OFF);
+				light.lightOff();
 		}
 	}
 	
 	private void handleBlockIndicatorFunc(){
 		if (coaster.isEmergencyStop()){
-			light.setTextureAnimationIndex(L_TEX_OFF);
+			light.lightOff();
 		}
 		else{
 			switch (block.getNormalModeState(Block.PROTOCOL_V1)){
 				case Block.STATE_OCCUPIED:
 				case Block.STATE_IN_STATION:
-					light.setTextureAnimationIndex(L_TEX_ON);
+					light.lightOn();
 					break;
 				case Block.STATE_APPROACHING_FWD:
 				case Block.STATE_APPROACHING_BWD:
-					light.setTextureAnimationIndex(L_TEX_BLINK);
+					light.lightBlink();
 					break;
 				default:
-					light.setTextureAnimationIndex(L_TEX_OFF);
+					light.lightOff();
 			}
 		}
 	}
@@ -174,23 +173,23 @@ public class PilotLight extends Script{
 		if (!coaster.isEmergencyStop() && train != null){
 			// Train is moving
 			if (train.getSpeed() != 0.0){
-				light.setTextureAnimationIndex(L_TEX_ON);
+				light.lightOn();
 			}
 			// Train is not ready to dispatch
 			else if ( (CoasterTools.isCoasterWithPlatform(coaster) && section.getStationPlatformState() != 0.f)
 					|| train.getHarnessState() != 0.f
 					|| section.getStationGateState() != 0.f
 					|| section.isStationWaitingForClearBlock() ){
-				light.setTextureAnimationIndex(L_TEX_OFF);
+				light.lightOff();
 			}
 			// Train is ready to dispatch
 			else{
-				light.setTextureAnimationIndex(L_TEX_BLINK);
+				light.lightBlink();
 			}
 		}
 		// Train not on section or E-Stopped
 		else{
-			light.setTextureAnimationIndex(L_TEX_OFF);
+			light.lightOff();
 		}
 	}
 	
@@ -202,29 +201,29 @@ public class PilotLight extends Script{
 				&& train.getSpeed() == 0.0 ){
 			// Platform is engaged
 			if (section.getStationPlatformState() == 1.f){
-				light.setTextureAnimationIndex(L_TEX_ON);
+				light.lightOn();
 			}
 			// Platform is disengaged
 			else if (section.getStationPlatformState() == 0.f){
-				light.setTextureAnimationIndex(L_TEX_OFF);
+				light.lightOff();
 			}
 			// Platform is moving
 			else{
-				light.setTextureAnimationIndex(L_TEX_BLINK);
+				light.lightBlink();
 			}
 		}
 		// Train not in station or E-Stopped
 		else{
-			light.setTextureAnimationIndex(L_TEX_OFF);
+			light.lightOff();
 		}
 	}
 	
 	private void handleEStopFunc(){
 		if (coaster.isEmergencyStop()){
-			light.setTextureAnimationIndex(L_TEX_BLINK);
+			light.lightBlink();
 		}
 		else{
-			light.setTextureAnimationIndex(L_TEX_OFF);
+			light.lightOff();
 		}
 	}
 	
@@ -243,10 +242,10 @@ public class PilotLight extends Script{
 		}
 		if ( coaster.getBlockSystemMode() == targetMode
 				&& !coaster.isEmergencyStop() ){
-			light.setTextureAnimationIndex(L_TEX_ON);
+			light.lightOn();
 		}
 		else{
-			light.setTextureAnimationIndex(L_TEX_OFF);
+			light.lightOff();
 		}
 	}
 
@@ -270,6 +269,9 @@ public class PilotLight extends Script{
 				handleBlockSystemModeFunc();
 				break;
 		}
+
+		// Run IndicatorLight object's onNextFrame() as well to animate
+		light.onNextFrame(tick);
 		
 		// If set to attach to special track, update translation of SCO
 		if (specialTrackModule != null)

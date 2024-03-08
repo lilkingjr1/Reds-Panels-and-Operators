@@ -231,7 +231,7 @@ public class PushButton extends Script implements InteractionActionListener{
 					plcIndicatorLight = new IndicatorLight(
 						SceneObjectTools.getElementForName(plc, PLC_IND_PREFIX + i, SCRIPT_NAME),
 						curLight,
-						2.f,
+						1.f,
 						true
 					);
 					break;

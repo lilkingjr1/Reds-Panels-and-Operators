@@ -27,21 +27,25 @@
     <usercolor>
       <label>Pilot Light (Top)</label>
       <index>2</index>
+      <lightsources>light1</lightsources>
       <defaultcolor r="0.996078" g="1" b="0.623529"/>
     </usercolor>
     <usercolor>
       <label>Pilot Light (Right)</label>
       <index>3</index>
+      <lightsources>light2</lightsources>
       <defaultcolor r="1" g="0" b="0"/>
     </usercolor>
     <usercolor>
       <label>Pilot Light (Bottom)</label>
       <index>4</index>
+      <lightsources>light3</lightsources>
       <defaultcolor r="0" g="0" b="1"/>
     </usercolor>
     <usercolor>
       <label>Pilot Light (Left)</label>
       <index>5</index>
+      <lightsources>light4</lightsources>
       <defaultcolor r="0" g="1" b="0"/>
     </usercolor>
     <usertexture>
@@ -58,9 +62,9 @@
     <scriptparameter>
       <type>int</type>
       <defaultvalue>0</defaultvalue>
-      <enums>None (See Options Below),4-Way Block Indicator</enums>
+      <enums>None (See Options Below),Block Indicator (Only Non-Scripted Coasters)</enums>
       <id>function</id>
-      <description>How this button will behave during Play Mode.</description>
+      <description>How this light will behave during Play Mode.</description>
       <label>Function:</label>
     </scriptparameter>
     <scriptparameter>
@@ -98,7 +102,7 @@
     <scriptparameter>
       <type>blocksection</type>
       <id>block</id>
-      <description>This is the block that this operator will be assigned to for all Non-Static Functions.</description>
+      <description>This is the block that this light will be assigned to for all Non-Static Functions.</description>
       <label>Block Location (for all Non-Static Functions):</label>
     </scriptparameter>
     <scriptparameter>
@@ -106,6 +110,13 @@
       <id>special_track_attach</id>
       <description>Select the special track of a ride you want this light to move with during simulation. Set to &lt;None&gt; to disable.</description>
       <label>Special Track to Attach To (Optional):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>disable_light</id>
+      <description>Disables the &quot;real&quot; light during simulation, possibly leading to better performance. Pilot light will still have a basic &quot;glow&quot;.</description>
+      <label>Disable Volumetric Light</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
@@ -126,5 +137,33 @@
     <materialpath name="pilot_side_4_color">materials/button_side_user5.nl2mat</materialpath>
     <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
     <materialpath name="ribbed_height">materials/metal_ribbed.nl2mat</materialpath>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>light1</name>
+      <parent>light1</parent>
+      <position x="0.025" y="0.0283" z="0.0285"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>light2</name>
+      <parent>light2</parent>
+      <position x="0.0295" y="0.0237" z="0.0285"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>light3</name>
+      <parent>light3</parent>
+      <position x="0.025" y="0.0192" z="0.0285"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>light4</name>
+      <parent>light4</parent>
+      <position x="0.0205" y="0.0237" z="0.0285"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
   </sceneobject>
 </root>

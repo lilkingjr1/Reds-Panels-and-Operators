@@ -106,7 +106,7 @@ public class PLCController extends Script implements InteractionActionListener{
 		estopLight = new IndicatorLight(
 			estopPilotElement,
 			SceneObjectTools.getLightForName(sco, ESTOP_PILOT_NAME, SCRIPT_NAME),
-			2.f,
+			1.f,
 			true
 		);
 

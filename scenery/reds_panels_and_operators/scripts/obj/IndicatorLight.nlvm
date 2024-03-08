@@ -1,7 +1,7 @@
 /**
 	Indicator Light Object NL2 Class
 	David Wolfe (Red-Thirten)
-	03/03/2024
+	03/08/2024
 	A Java object representing an indicator/pilot light that can manage the indicator's light and texture animation.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -24,6 +24,10 @@ import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.SceneObjectLight;
 
 public class IndicatorLight{
+	// All Light Texture States:
+	private static final int L_TEX_OFF = 0;
+	private static final int L_TEX_ON = 1;
+
 	private SceneObjectElement element;
 	private SceneObjectLight light;
     private float t, blinkInterval = 0.f;
@@ -34,20 +38,20 @@ public class IndicatorLight{
         this.light = light;
         this.blinkInterval = blinkInterval;
         this.hasLight = hasLight;
-        element.setTextureAnimationIndex(0);
-        if (this.hasLight) light.setEnabled(false);
+        element.setTextureAnimationIndex(L_TEX_OFF);
+        if (!this.hasLight) light.setEnabled(false);
 	}
 
 	public void lightOff(){
         blink = false;
-        element.setTextureAnimationIndex(0);
+        element.setTextureAnimationIndex(L_TEX_OFF);
 		if (hasLight) light.setEnabled(false);
         indicatorOn = false;
 	}
 
 	public void lightOn(){
         blink = false;
-        element.setTextureAnimationIndex(1);
+        element.setTextureAnimationIndex(L_TEX_ON);
 		if (hasLight) light.setEnabled(true);
         indicatorOn = true;
 	}
@@ -79,12 +83,12 @@ public class IndicatorLight{
             t = 0.f;
             if (blink){
                 if (indicatorOn){
-                    element.setTextureAnimationIndex(0);
+                    element.setTextureAnimationIndex(L_TEX_OFF);
                     if (hasLight) light.setEnabled(false);
                     indicatorOn = false;
                 }
                 else{
-                    element.setTextureAnimationIndex(1);
+                    element.setTextureAnimationIndex(L_TEX_ON);
                     if (hasLight) light.setEnabled(true);
                     indicatorOn = true;
                 }
