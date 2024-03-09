@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Delete existing tag and release
-        uses: dev-drprasad/delete-tag-and-release@v1
+        uses: dev-drprasad/delete-tag-and-release@v1.0
         with:
           tag_name: v.${{ github.ref_name }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           delete_release: true
         continue-on-error: true
       - name: Create release
-        uses: softprops/action-gh-release@latest
+        uses: softprops/action-gh-release@master
         with:
           tag_name: v.${{ github.ref_name }} # Tag name CANNOT equal branch name
           name: Development Build (Unpackaged)
