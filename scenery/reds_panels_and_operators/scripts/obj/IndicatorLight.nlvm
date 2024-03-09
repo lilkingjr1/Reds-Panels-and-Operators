@@ -12,9 +12,8 @@
 		void lightOff() - Turns the indicator off.
 		void lightOn() - Turns the indicator on.
 		void lightBlink() - Sets the indicator to blink (onNextFrame calls req.).
-        void setLightState(int state) - Sets the indicator's state given a com.nolimitscoaster.block LAMP constant.
-        bool isOn() - Returns if the light is currently on (blinking may be on or off).
-        void onNextFrame(float tick) - Called every frame to handle light and texture blink sync. Don't call if blink state unused.
+		void setLightState(int state) - Sets the indicator's state given a com.nolimitscoaster.block LAMP constant.
+		void onNextFrame(float tick) - Called every frame to handle light and texture blink sync. Don't call if blink state unused.
 */
 
 package obj;
@@ -30,34 +29,41 @@ public class IndicatorLight{
 
 	private SceneObjectElement element;
 	private SceneObjectLight light;
-    private float t, blinkInterval = 0.f;
-    private bool hasLight, indicatorOn, blink = false;
+
+	private bool hasLight, blink, blinkState = false;
+	private float lightT, blinkInterval = 0.f;
 
 	public IndicatorLight(SceneObjectElement element, SceneObjectLight light, float blinkInterval, bool hasLight){ // Default object constructor
 		this.element = element;
-        this.light = light;
-        this.blinkInterval = blinkInterval;
-        this.hasLight = hasLight;
-        element.setTextureAnimationIndex(L_TEX_OFF);
-        if (!this.hasLight) light.setEnabled(false);
+		this.light = light;
+		this.blinkInterval = blinkInterval;
+		this.hasLight = hasLight;
+		element.setTextureAnimationIndex(L_TEX_OFF);
+		if (!this.hasLight) light.setEnabled(false);
+	}
+
+	private void lightSourcesOff(){
+		element.setTextureAnimationIndex(L_TEX_OFF);
+		if (hasLight) light.setEnabled(false);
 	}
 
 	public void lightOff(){
-        blink = false;
-        element.setTextureAnimationIndex(L_TEX_OFF);
-		if (hasLight) light.setEnabled(false);
-        indicatorOn = false;
+		blink = false;
+		lightSourcesOff();
+	}
+
+	private void lightSourcesOn(){
+		element.setTextureAnimationIndex(L_TEX_ON);
+		if (hasLight) light.setEnabled(true);
 	}
 
 	public void lightOn(){
-        blink = false;
-        element.setTextureAnimationIndex(L_TEX_ON);
-		if (hasLight) light.setEnabled(true);
-        indicatorOn = true;
+		blink = false;
+		lightSourcesOn();
 	}
 
 	public void lightBlink(){
-        blink = true;
+		blink = true;
 	}
 
 	public void setLightState(int state){
@@ -73,28 +79,21 @@ public class IndicatorLight{
 		}
 	}
 
-    public bool isOn(){
-        return indicatorOn;
-    }
+	public void onNextFrame(float tick){
+		// Handle light and texture blink sync
+		if (lightT >= blinkInterval){
+			lightT = 0.f;
+			blinkState = !blinkState;
+			if (blink){
+				if (blinkState){
+					lightSourcesOff();
+				}
+				else{
+					lightSourcesOn();
+				}
+			}
+		}
 
-    public void onNextFrame(float tick){
-        // Handle light and texture blink sync
-        if (t >= blinkInterval){
-            t = 0.f;
-            if (blink){
-                if (indicatorOn){
-                    element.setTextureAnimationIndex(L_TEX_OFF);
-                    if (hasLight) light.setEnabled(false);
-                    indicatorOn = false;
-                }
-                else{
-                    element.setTextureAnimationIndex(L_TEX_ON);
-                    if (hasLight) light.setEnabled(true);
-                    indicatorOn = true;
-                }
-            }
-        }
-
-        t += tick;
-    }
+		lightT += tick;
+	}
 }

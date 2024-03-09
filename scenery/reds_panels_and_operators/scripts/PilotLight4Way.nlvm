@@ -36,19 +36,19 @@ public class PilotLight4Way extends PilotLight{
 			light2 = new IndicatorLight(
 				SceneObjectTools.getElementForName(sco, LIGHT2_ELEMENT_NAME, SCRIPT_NAME),
 				SceneObjectTools.getLightForName(sco, LIGHT2_ELEMENT_NAME, SCRIPT_NAME),
-				0.5f,
+				BLINK_INTERVAL,
 				!sco.getBooleanParameter("disable_light").boolValue()
 			);
 			light3 = new IndicatorLight(
 				SceneObjectTools.getElementForName(sco, LIGHT3_ELEMENT_NAME, SCRIPT_NAME),
 				SceneObjectTools.getLightForName(sco, LIGHT3_ELEMENT_NAME, SCRIPT_NAME),
-				0.5f,
+				BLINK_INTERVAL,
 				!sco.getBooleanParameter("disable_light").boolValue()
 			);
 			light4 = new IndicatorLight(
 				SceneObjectTools.getElementForName(sco, LIGHT4_ELEMENT_NAME, SCRIPT_NAME),
 				SceneObjectTools.getLightForName(sco, LIGHT4_ELEMENT_NAME, SCRIPT_NAME),
-				0.5f,
+				BLINK_INTERVAL,
 				!sco.getBooleanParameter("disable_light").boolValue()
 			);
 			

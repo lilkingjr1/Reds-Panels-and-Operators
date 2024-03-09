@@ -24,6 +24,7 @@ public class PilotLight extends Script{
 	protected String LIGHT_ELEMENT_NAME = "pilot";		// Name of the pilot light element in the SCO/model
 	protected String LIGHT_OBJECT_NAME = "light";		// Name of the Scene Object Light
 	protected String PLACARD_ELEMENT_NAME = "placard";	// Name of the placard element in the SCO/model
+	protected float BLINK_INTERVAL = 0.5f;				// Interval, in seconds, of the pilot light changing states when blinking
 	
 	// All Pilot Light Functions:
 	private static final int F_STATIC_OFF = 0;
@@ -92,7 +93,7 @@ public class PilotLight extends Script{
 		light = new IndicatorLight(
 			SceneObjectTools.getElementForName(sco, LIGHT_ELEMENT_NAME, SCRIPT_NAME),
 			SceneObjectTools.getLightForName(sco, LIGHT_OBJECT_NAME, SCRIPT_NAME),
-			0.5f,
+			BLINK_INTERVAL,
 			!sco.getBooleanParameter("disable_light").boolValue()
 		);
 

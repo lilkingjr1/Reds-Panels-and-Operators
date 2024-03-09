@@ -24,6 +24,7 @@
     <usercolor>
       <label>Button</label>
       <index>2</index>
+      <lightsources>light</lightsources>
       <defaultcolor r="0" g="1" b="0"/>
     </usercolor>
     <usertexture>
@@ -66,6 +67,13 @@
     <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
+      <id>disable_light</id>
+      <description>Disables the &quot;real&quot; light during simulation, possibly leading to better performance. Pilot light will still have a basic &quot;glow&quot;.</description>
+      <label>Disable Volumetric Light</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
       <id>hide_placard</id>
       <description>Hides the placard during Play Mode.</description>
       <label>Hide Placard</label>
@@ -76,5 +84,12 @@
     <materialpath name="button_side_on_color">materials/estop_side_user2.nl2mat</materialpath>
     <materialpath name="metal">materials/metal.nl2mat</materialpath>
     <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>light</name>
+      <parent>button</parent>
+      <position x="0.025" y="0.0215" z="0.0355"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
   </sceneobject>
 </root>

@@ -1,12 +1,20 @@
 /**
 	Operator Button Object NL2 Script
 	David Wolfe (Red-Thirten)
-	03/03/2024
+	03/08/2024
 	A Java object representing a button that can be animated to be pushed, or even lit differently if it has a pilot light.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 
 	Constructors:
-		OperatorButton(SceneObjectElement element, bool hasLight, float maxDistance, float travelTime)
+		public OperatorButton(
+			SceneObjectElement element,
+			bool hasLight,
+			float blinkInterval,
+			float travelDistance,
+			float travelTime,
+			SceneObjectLight light,
+			bool enableLightSource
+		)
 
 	Methods:
 		Vector3f getAbsoluteTranslation() - Returns the absolute translation of the button element.
@@ -26,21 +34,48 @@ package obj;
 
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.SceneObjectLight;
 import com.nolimitscoaster.Tools;
 import nlvm.math3d.Vector3f;
 
 public class OperatorButton{
+	// All Light Texture States:
+	private static final int L_TEX_OFF = 0;
+	private static final int L_TEX_ON = 1;
+
 	private SceneObjectElement button;
-	private bool hasLight, animate = false;
+	private SceneObjectLight light;
+	
+	private bool hasLight, animate, enableLightSource, blink, blinkState = false;
 	private int buttonState = 0;
-	private float t, delta, deltaCurrent, deltaTarget;
+	private float t, delta, deltaCurrent, deltaTarget, lightT, blinkInterval = 0.f;
 	private float DELTA_MAX, DELTA_T, DELTA_Ta; // Semi-static (set only once during init)
 
-	public OperatorButton(SceneObjectElement element, bool hasLight, float maxDistance, float travelTime){ // Default object constructor
+	public OperatorButton(
+			SceneObjectElement element,
+			bool hasLight,
+			float blinkInterval,
+			float travelDistance,
+			float travelTime,
+			SceneObjectLight light,
+			bool enableLightSource
+	){ // Default object constructor
 		button = element; // Assign element
 		this.hasLight = hasLight;
-		if (this.hasLight) button.setTextureAnimationIndex(0); // If it has a light, set it to off
-		DELTA_MAX = maxDistance;
+		// Has a pilot light
+		if (this.hasLight){
+			button.setTextureAnimationIndex(L_TEX_OFF);
+			this.blinkInterval = blinkInterval;
+			this.light = light;
+			this.enableLightSource = enableLightSource;
+			if (!this.enableLightSource) light.setEnabled(false);
+		}
+		// Does not have pilot light
+		else{
+			// Force disable light source
+			this.enableLightSource = false;
+		}
+		DELTA_MAX = travelDistance;
 		DELTA_T = travelTime/2; // DELTA_T is the time to do half a full "push"
 		DELTA_Ta = DELTA_T/3.f; // (De)Acceleration window is the first and last 3rd of the animation
 	}
@@ -49,22 +84,32 @@ public class OperatorButton{
 		return button.getAbsoluteTranslation();
 	}
 
+	private void lightSourcesOff(){
+		button.setTextureAnimationIndex(L_TEX_OFF);
+		if (enableLightSource) light.setEnabled(false);
+	}
+
 	public void lightOff(){
 		if (hasLight){
-			button.setTextureAnimationIndex(0);
+			blink = false;
+			lightSourcesOff();
 		}
+	}
+
+	private void lightSourcesOn(){
+		button.setTextureAnimationIndex(L_TEX_ON);
+		if (enableLightSource) light.setEnabled(true);
 	}
 
 	public void lightOn(){
 		if (hasLight){
-			button.setTextureAnimationIndex(1);
+			blink = false;
+			lightSourcesOn();
 		}
 	}
 
 	public void lightBlink(){
-		if (hasLight){
-			button.setTextureAnimationIndex(-1);
-		}
+		blink = true;
 	}
 
 	public void setLightState(int state){
@@ -72,13 +117,13 @@ public class OperatorButton{
 
 		switch(state){
 			case Block.LAMP_ON:
-				button.setTextureAnimationIndex(1);
+				lightOn();
 				break;
 			case Block.LAMP_FLASHING:
-				button.setTextureAnimationIndex(-1);
+				lightBlink();
 				break;
 			default:
-				button.setTextureAnimationIndex(0);
+				lightOff();
 		}
 	}
 	
@@ -145,6 +190,23 @@ public class OperatorButton{
 			}
 			
 			t += tick; // Increment time based on time passed
+		}
+		
+		// Handle light and texture blink sync
+		if (hasLight){
+			if (lightT >= blinkInterval){
+				lightT = 0.f;
+				blinkState = !blinkState;
+				if (blink){
+					if (blinkState){
+						lightSourcesOff();
+					}
+					else{
+						lightSourcesOn();
+					}
+				}
+			}
+			lightT += tick;
 		}
 	}
 }

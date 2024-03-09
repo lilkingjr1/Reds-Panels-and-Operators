@@ -27,6 +27,7 @@ import nlvm.math3d.Vector3f;
 
 public class OperatorSwitch{
 	private SceneObjectElement switchElement, keyElement;
+	
 	private bool animate, hasKey, keyIn, keyStaysIn = false;
 	private int currentState = 0;
 	private int TOTAL_STATES = 2; // Semi-static (set only once during init)

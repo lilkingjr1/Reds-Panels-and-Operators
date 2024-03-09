@@ -1,7 +1,7 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	03/03/2024
+	03/08/2024
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -27,12 +27,14 @@ public class PushButton extends Script implements InteractionActionListener{
 	protected String SCRIPT_NAME = "PushButton";						// Script name for debugging
 	protected String BUTTON_ELEMENT_NAME = "button";					// Name of the button element in the SCO/model
 	protected String PLACARD_ELEMENT_NAME = "placard";					// Name of the placard element in the SCO/model
+	protected String LIGHT_OBJECT_NAME = "light";						// Name of the Scene Object Light
 	protected String PLC_NAME = "PLC Controller";						// Name of the PLC Controller instance expected in the sim
 	private static final String PLC_IND_PREFIX = "indicator";			// Prefix of the E-Stop Indicator elements & lights in the PLC SCO/model
 	private static final String PLC_RESET_LIGHT_NAME = "reset_ready";	// Name of the E-Stop Reset light in the PLC SCO/model
 	protected float BUTTON_TRAVEL_DIST = 0.008f;						// Distance, in meters, the button will travel to be fully "pressed"
 	protected float BUTTON_TRAVEL_TIME = 1.f;							// Time, in seconds, for the button to travel in and out ("speed")
 	protected float BUTTON_INTERACTION_RADIUS = 0.04f;					// Radius, in meters, of the InteractionObject detection sphere
+	protected float BLINK_INTERVAL = 0.5f;								// Interval, in seconds, of the pilot light changing states when blinking
 	protected bool BUTTON_HAS_LIGHT = true;								// True if the button has a pilot light
 
 	// All Button Functions:
@@ -126,11 +128,18 @@ public class PushButton extends Script implements InteractionActionListener{
 		}
 
 		// Create OperatorButton object
+		Boolean booleanDisableLight = sco.getBooleanParameter("disable_light");
+		bool disableLight = true;
+		if (booleanDisableLight != null)
+			disableLight = booleanDisableLight.boolValue();
 		button = new OperatorButton(
 			SceneObjectTools.getElementForName(sco, BUTTON_ELEMENT_NAME, SCRIPT_NAME),
 			BUTTON_HAS_LIGHT,
+			BLINK_INTERVAL,
 			BUTTON_TRAVEL_DIST,
-			BUTTON_TRAVEL_TIME
+			BUTTON_TRAVEL_TIME,
+			sco.getLightForName(LIGHT_OBJECT_NAME),
+			!disableLight
 		);
 
 		// Function-specific checks and setup
@@ -139,9 +148,11 @@ public class PushButton extends Script implements InteractionActionListener{
 			// Static functions
 			case F_STATIC_OFF:
 			case F_STATIC_ON:
-			case F_STATIC_BLINK:
 				handleStaticFunc(sco);
 				return false;
+			case F_STATIC_BLINK:
+				handleStaticFunc(sco);
+				break;
 			// Functions that require station section
 			case F_DISPATCH:
 			case F_RESTRAINTS_OPEN:
