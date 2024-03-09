@@ -23,5 +23,5 @@ jobs:
         with:
           tag_name: v.${{ github.ref_name }} # Tag name CANNOT equal branch name
           name: Development Build (Unpackaged)
+          target_commitish: "dev"
           prerelease: true
-          draft: false
