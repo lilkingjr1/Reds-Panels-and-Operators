@@ -22,7 +22,7 @@
       <defaultcolor r="0" g="0" b="0"/>
     </usercolor>
     <usercolor>
-      <label>Switch Color</label>
+      <label>Switch Accent Color</label>
       <index>2</index>
       <defaultcolor r="1" g="0.968628" b="0.823529"/>
     </usercolor>
@@ -63,7 +63,7 @@
       <type>blocksection</type>
       <id>block</id>
       <description>This is the block that this operator will be assigned to for all Non-Static Functions.</description>
-      <label>Block Location (for all Non-Static Functions):</label>
+      <label>Block Location:</label>
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>
