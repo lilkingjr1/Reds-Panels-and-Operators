@@ -37,6 +37,8 @@
       <class>EStopButton</class>
       <sharedvm>true</sharedvm>
       <resource id="LICENSE">LICENSE</resource>
+      <resource id="sound_off">sounds/estop_out.ogg</resource>
+      <resource id="sound_on">sounds/estop_in.ogg</resource>
     </script>
     <scriptparameter>
       <type>int</type>

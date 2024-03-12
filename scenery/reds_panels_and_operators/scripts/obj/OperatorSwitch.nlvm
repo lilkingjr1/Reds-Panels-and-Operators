@@ -1,13 +1,13 @@
 /**
 	Operator Switch Object NL2 Script
 	David Wolfe (Red-Thirten)
-	03/03/2024
+	03/10/2024
 	A Java object representing a switch, with optional key component, that can animate to any given state position.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 
 	Constructors:
-		OperatorSwitch(SceneObjectElement switchElement, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime)
-		OperatorSwitch(SceneObjectElement switchElement, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime,
+		OperatorSwitch(SceneObjectElement switchElement, ResourcePath[] soundPaths, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime)
+		OperatorSwitch(SceneObjectElement switchElement, ResourcePath[] soundPaths, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime,
 			SceneObjectElement keyElement, float keyTravelDistance, bool keyStaysIn)
 
 	Methods:
@@ -22,11 +22,14 @@
 package obj;
 
 import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.StaticSound;
+import com.nolimitscoaster.ResourcePath;
 import com.nolimitscoaster.Tools;
 import nlvm.math3d.Vector3f;
 
 public class OperatorSwitch{
 	private SceneObjectElement switchElement, keyElement;
+	private StaticSound soundOn, soundOff;
 	
 	private bool animate, hasKey, keyIn, keyStaysIn = false;
 	private int currentState = 0;
@@ -36,7 +39,7 @@ public class OperatorSwitch{
 	private float START_ANGLE = -45.f; // Semi-static (set only once during init)
 	private float END_ANGLE = 45.f; // Semi-static (set only once during init)
 
-	public OperatorSwitch(SceneObjectElement switchElement, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime){ // Default object constructor
+	public OperatorSwitch(SceneObjectElement switchElement, ResourcePath[] soundPaths, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime){ // Default object constructor
 		this.switchElement = switchElement; // Assign element
 		TOTAL_STATES = totalStates; // Assign static number of states
 		START_ANGLE = (float) Math.toRadians(startAngleDeg); // Assign static start and end angles
@@ -47,9 +50,10 @@ public class OperatorSwitch{
 		theta = START_ANGLE;
 		thetaCurrent = START_ANGLE;
 		switchElement.setRotation(0.f, 0.f, -START_ANGLE); // Set switch to start angle (and negate because angles are backwards in NL2?)
+		setupSounds(soundPaths);
 	}
 	
-	public OperatorSwitch(SceneObjectElement switchElement, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime,
+	public OperatorSwitch(SceneObjectElement switchElement, ResourcePath[] soundPaths, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime,
 			SceneObjectElement keyElement, float keyTravelDistance, bool keyStaysIn){ // Alternate object constructor, to support a key switch
 		hasKey = true;
 		this.switchElement = switchElement;
@@ -67,6 +71,36 @@ public class OperatorSwitch{
 		this.switchElement.setRotation(0.f, 0.f, -START_ANGLE);
 		this.keyElement.setRotation(0.f, 0.f, -START_ANGLE);
 		this.keyElement.setVisible(false);
+		setupSounds(soundPaths);
+	}
+
+	private void setupSounds(ResourcePath[] soundPaths){
+		if (soundPaths[0] == null || soundPaths[1] == null)
+			System.throwRuntimeException("[OperatorSwitch] Missing sound Resource Path(s) during instantiation!");
+		soundOn = StaticSound.loadFromResource(
+			soundPaths[0],
+			StaticSound.FLAG_MIXDOWN_MONO
+		);
+		soundOff = StaticSound.loadFromResource(
+			soundPaths[1],
+			StaticSound.FLAG_MIXDOWN_MONO
+		);
+		if (soundOn == null || soundOff == null)
+			System.throwRuntimeException("[OperatorSwitch] Failed to load sound files!");
+		
+		soundOn.setPosition(this.getAbsoluteTranslation());
+		soundOn.setDistanceParameters(1.f, 1.f);
+		soundOn.setGain(1.f);
+		soundOn.setPitch(1.f);
+		soundOn.setDopplerMode(false);
+		soundOn.setEnvironmentMode(StaticSound.E_ENVMODE_LOCAL);
+		
+		soundOff.setPosition(this.getAbsoluteTranslation());
+		soundOff.setDistanceParameters(1.f, 1.f);
+		soundOff.setGain(1.f);
+		soundOff.setPitch(1.f);
+		soundOff.setDopplerMode(false);
+		soundOff.setEnvironmentMode(StaticSound.E_ENVMODE_LOCAL);
 	}
 
 	public Vector3f getAbsoluteTranslation(){
@@ -88,6 +122,10 @@ public class OperatorSwitch{
 			t = 0.f;
 			thetaTarget = SLOPE * newState + START_ANGLE - theta; // Equation to calculate the angle target, based on the pre-calculated slope and current angle position
 			thetaCurrent = theta;
+			if (newState > currentState)
+				soundOn.play();
+			else
+				soundOff.play();
 			currentState = newState;
 			animate = true;
 		}

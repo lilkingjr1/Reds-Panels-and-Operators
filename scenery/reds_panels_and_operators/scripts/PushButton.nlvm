@@ -1,7 +1,7 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	03/08/2024
+	03/11/2024
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -15,6 +15,7 @@ import com.nolimitscoaster.Section;
 import com.nolimitscoaster.SpecialTrack;
 import com.nolimitscoaster.InteractionObject;
 import com.nolimitscoaster.InteractionActionListener;
+import com.nolimitscoaster.ResourcePath;
 
 import obj.OperatorButton;
 import obj.IndicatorLight;
@@ -32,7 +33,7 @@ public class PushButton extends Script implements InteractionActionListener{
 	private static final String PLC_IND_PREFIX = "indicator";			// Prefix of the E-Stop Indicator elements & lights in the PLC SCO/model
 	private static final String PLC_RESET_LIGHT_NAME = "reset_ready";	// Name of the E-Stop Reset light in the PLC SCO/model
 	protected float BUTTON_TRAVEL_DIST = 0.008f;						// Distance, in meters, the button will travel to be fully "pressed"
-	protected float BUTTON_TRAVEL_TIME = 1.f;							// Time, in seconds, for the button to travel in and out ("speed")
+	protected float BUTTON_TRAVEL_TIME = 0.8f;							// Time, in seconds, for the button to travel in and out ("speed")
 	protected float BUTTON_INTERACTION_RADIUS = 0.04f;					// Radius, in meters, of the InteractionObject detection sphere
 	protected float BLINK_INTERVAL = 0.5f;								// Interval, in seconds, of the pilot light changing states when blinking
 	protected bool BUTTON_HAS_LIGHT = true;								// True if the button has a pilot light
@@ -65,9 +66,6 @@ public class PushButton extends Script implements InteractionActionListener{
 	protected static final int F_ESTOP_SIMPLE = 24;
 	protected static final int F_ESTOP_ADVANCED = 25;
 	private static final int[] NON_INTERACT_MODES = {
-		F_STATIC_OFF,
-		F_STATIC_ON,
-		F_STATIC_BLINK,
 		F_LIFT_JOG_NO_INT,
 		F_BRAKE_RELEASE_NO_INT
 	};
@@ -130,10 +128,15 @@ public class PushButton extends Script implements InteractionActionListener{
 		// Create OperatorButton object
 		Boolean booleanDisableLight = sco.getBooleanParameter("disable_light");
 		bool disableLight = true;
-		if (booleanDisableLight != null)
+		if (booleanDisableLight != null) // Check if-null special case for buttons without lights
 			disableLight = booleanDisableLight.boolValue();
+		ResourcePath[] soundPaths = new ResourcePath[]{
+			this.getResourcePathForId("sound_on"),
+			this.getResourcePathForId("sound_off")
+		};
 		button = new OperatorButton(
 			SceneObjectTools.getElementForName(sco, BUTTON_ELEMENT_NAME, SCRIPT_NAME),
+			soundPaths,
 			BUTTON_HAS_LIGHT,
 			BLINK_INTERVAL,
 			BUTTON_TRAVEL_DIST,
@@ -147,11 +150,13 @@ public class PushButton extends Script implements InteractionActionListener{
 		switch (func){
 			// Static functions
 			case F_STATIC_OFF:
+				button.lightOff();
+				break;
 			case F_STATIC_ON:
-				handleStaticFunc(sco);
-				return false;
+				button.lightOn();
+				break;
 			case F_STATIC_BLINK:
-				handleStaticFunc(sco);
+				button.lightBlink();
 				break;
 			// Functions that require station section
 			case F_DISPATCH:
@@ -310,22 +315,14 @@ public class PushButton extends Script implements InteractionActionListener{
 			disableAction();
 		}
 	}
-	
-	private void handleStaticFunc(SceneObject sco){
-		// Sets the light's state, based on function
-		switch (func){
-			case F_STATIC_ON:
-				button.lightOn();
-				break;
-			case F_STATIC_BLINK:
-				button.lightBlink();
-				break;
-			default:
-				button.lightOff();
-		}
-	}
 
 	// Interactible Functions //
+	
+	private void handleStaticFunc(bool action){
+		if (action){
+			button.buttonPush();
+		}
+	}
 	
 	private void handleManualMoveFunc(bool action){
 		if (action){
@@ -741,6 +738,8 @@ public class PushButton extends Script implements InteractionActionListener{
 			case F_BRAKE_RELEASE_NO_INT:
 				handleManualBrakeReleaseFunc();
 				break;
+			default:
+				handleStaticFunc(action);
 		}
 	}
 

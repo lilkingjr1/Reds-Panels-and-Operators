@@ -1,7 +1,7 @@
 /**
 	Switch NL2 Script
 	David Wolfe (Red-Thirten)
-	03/05/2024
+	03/11/2024
 	Animates the switch during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -15,6 +15,7 @@ import com.nolimitscoaster.Section;
 import com.nolimitscoaster.SpecialTrack;
 import com.nolimitscoaster.InteractionObject;
 import com.nolimitscoaster.InteractionActionListener;
+import com.nolimitscoaster.ResourcePath;
 import nlvm.lang.Math;
 
 import obj.OperatorSwitch;
@@ -166,10 +167,17 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 		/* Create Switch Object
 			Creates a new OperatorSwitch object, based on the selected function.
 		*/
+		// Get sound Resource Paths
+		ResourcePath[] soundPaths = new ResourcePath[]{
+			this.getResourcePathForId("sound_on"),
+			this.getResourcePathForId("sound_off")
+		};
+		// Create OperatorSwitch based on Function
 		switch (func){
 			case F_NUM_TRAINS_NO_INT:
 				operatorSwitch = new OperatorSwitch(
 					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
+					soundPaths,
 					trainCount, // States = # of Trains on Track
 					sco.getDoubleParameter("start_angle").floatValue(),
 					sco.getDoubleParameter("end_angle").floatValue(),
@@ -183,6 +191,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 			case F_COASTER_LIGHTS_NO_INT:
 				operatorSwitch = new OperatorSwitch(
 					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
+					soundPaths,
 					3, // States = BWD/N/FWD, Left/N/Right, or Auto/Maint/Manual
 					sco.getDoubleParameter("start_angle").floatValue(),
 					sco.getDoubleParameter("end_angle").floatValue(),
@@ -192,6 +201,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 			default: // Every other function just has two states
 				operatorSwitch = new OperatorSwitch(
 					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
+					soundPaths,
 					2,
 					sco.getDoubleParameter("start_angle").floatValue(),
 					sco.getDoubleParameter("end_angle").floatValue(),
@@ -218,6 +228,12 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 	}
 
 	// Interactible Functions //
+
+	private void handleStaticFunc(bool action){
+		if (action){
+			operatorSwitch.toggleSwitch();
+		}
+	}
 	
 	private void handleRestraintsFunc(bool action){
 		if (action){
@@ -453,6 +469,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 				handleCoasterLightsFunc();
 				break;
 			default:
+				handleStaticFunc(action);
 		}
 	}
 	

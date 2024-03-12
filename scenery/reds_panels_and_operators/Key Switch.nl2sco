@@ -31,6 +31,8 @@
       <class>KeySwitch</class>
       <sharedvm>true</sharedvm>
       <resource id="LICENSE">LICENSE</resource>
+      <resource id="sound_off">sounds/switch_key_off.ogg</resource>
+      <resource id="sound_on">sounds/switch_key_on.ogg</resource>
     </script>
     <scriptparameter>
       <type>int</type>

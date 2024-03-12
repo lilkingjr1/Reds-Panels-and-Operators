@@ -1,7 +1,7 @@
 /**
 	Operator Button Object NL2 Script
 	David Wolfe (Red-Thirten)
-	03/08/2024
+	03/11/2024
 	A Java object representing a button that can be animated to be pushed, or even lit differently if it has a pilot light.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -35,6 +35,8 @@ package obj;
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.SceneObjectLight;
+import com.nolimitscoaster.StaticSound;
+import com.nolimitscoaster.ResourcePath;
 import com.nolimitscoaster.Tools;
 import nlvm.math3d.Vector3f;
 
@@ -45,6 +47,7 @@ public class OperatorButton{
 
 	private SceneObjectElement button;
 	private SceneObjectLight light;
+	private StaticSound soundOn, soundOff;
 	
 	private bool hasLight, animate, enableLightSource, blink, blinkState = false;
 	private int buttonState = 0;
@@ -53,6 +56,7 @@ public class OperatorButton{
 
 	public OperatorButton(
 			SceneObjectElement element,
+			ResourcePath[] soundPaths,
 			bool hasLight,
 			float blinkInterval,
 			float travelDistance,
@@ -78,6 +82,36 @@ public class OperatorButton{
 		DELTA_MAX = travelDistance;
 		DELTA_T = travelTime/2; // DELTA_T is the time to do half a full "push"
 		DELTA_Ta = DELTA_T/3.f; // (De)Acceleration window is the first and last 3rd of the animation
+		setupSounds(soundPaths);
+	}
+
+	private void setupSounds(ResourcePath[] soundPaths){
+		if (soundPaths[0] == null || soundPaths[1] == null)
+			System.throwRuntimeException("[OperatorButton] Missing sound Resource Path(s) during instantiation!");
+		soundOn = StaticSound.loadFromResource(
+			soundPaths[0],
+			StaticSound.FLAG_MIXDOWN_MONO
+		);
+		soundOff = StaticSound.loadFromResource(
+			soundPaths[1],
+			StaticSound.FLAG_MIXDOWN_MONO
+		);
+		if (soundOn == null || soundOff == null)
+			System.throwRuntimeException("[OperatorButton] Failed to load sound files!");
+		
+		soundOn.setPosition(this.getAbsoluteTranslation());
+		soundOn.setDistanceParameters(1.f, 1.f);
+		soundOn.setGain(1.f);
+		soundOn.setPitch(1.f);
+		soundOn.setDopplerMode(false);
+		soundOn.setEnvironmentMode(StaticSound.E_ENVMODE_LOCAL);
+		
+		soundOff.setPosition(this.getAbsoluteTranslation());
+		soundOff.setDistanceParameters(1.f, 1.f);
+		soundOff.setGain(1.f);
+		soundOff.setPitch(1.f);
+		soundOff.setDopplerMode(false);
+		soundOff.setEnvironmentMode(StaticSound.E_ENVMODE_LOCAL);
 	}
 
 	public Vector3f getAbsoluteTranslation(){
@@ -134,6 +168,7 @@ public class OperatorButton{
 			deltaCurrent = delta;
 			deltaTarget = DELTA_MAX;
 			animate = true;
+			soundOn.play();
 		}
 	}
 	
@@ -144,6 +179,7 @@ public class OperatorButton{
 			deltaCurrent = delta;
 			deltaTarget = -DELTA_MAX;
 			animate = true;
+			soundOff.play();
 		}
 	}
 	
@@ -154,6 +190,7 @@ public class OperatorButton{
 			deltaCurrent = delta;
 			deltaTarget = DELTA_MAX;
 			animate = true;
+			soundOn.play();
 		}
 	}
 	
@@ -183,6 +220,7 @@ public class OperatorButton{
 					deltaCurrent = delta;
 					deltaTarget = -DELTA_MAX;
 					buttonState = 0; // used to be 1
+					soundOff.play();
 				}
 				else{ // If not a push, leave as is and end animation
 					animate = false;

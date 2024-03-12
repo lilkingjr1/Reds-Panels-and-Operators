@@ -61,6 +61,7 @@
       <class>PLCController</class>
       <sharedvm>true</sharedvm>
       <resource id="LICENSE">LICENSE</resource>
+      <resource id="sound_toggle">sounds/switch_breaker.ogg</resource>
     </script>
     <scriptparameter>
       <type>coaster</type>

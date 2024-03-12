@@ -36,6 +36,8 @@
       <class>PushButtonFlat</class>
       <sharedvm>true</sharedvm>
       <resource id="LICENSE">LICENSE</resource>
+      <resource id="sound_off">sounds/button_out.ogg</resource>
+      <resource id="sound_on">sounds/button_in.ogg</resource>
     </script>
     <scriptparameter>
       <type>int</type>

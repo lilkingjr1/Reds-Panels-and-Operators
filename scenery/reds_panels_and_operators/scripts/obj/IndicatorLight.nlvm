@@ -1,12 +1,12 @@
 /**
 	Indicator Light Object NL2 Class
 	David Wolfe (Red-Thirten)
-	03/08/2024
+	03/11/2024
 	A Java object representing an indicator/pilot light that can manage the indicator's light and texture animation.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 
 	Constructors:
-		IndicatorLight(SceneObjectElement element, SceneObjectLight light, float blinkInterval, bool hasLight)
+		IndicatorLight(SceneObjectElement element, SceneObjectLight light, float blinkInterval, bool enableVolumetricLight)
 
 	Methods:
 		void lightOff() - Turns the indicator off.
@@ -30,21 +30,22 @@ public class IndicatorLight{
 	private SceneObjectElement element;
 	private SceneObjectLight light;
 
-	private bool hasLight, blink, blinkState = false;
+	private bool blink, blinkState, enableVolumetricLight = false;
 	private float lightT, blinkInterval = 0.f;
 
-	public IndicatorLight(SceneObjectElement element, SceneObjectLight light, float blinkInterval, bool hasLight){ // Default object constructor
+	public IndicatorLight(SceneObjectElement element, SceneObjectLight light, float blinkInterval, bool enableVolumetricLight){ // Default object constructor
 		this.element = element;
 		this.light = light;
 		this.blinkInterval = blinkInterval;
-		this.hasLight = hasLight;
+		this.enableVolumetricLight = enableVolumetricLight;
 		element.setTextureAnimationIndex(L_TEX_OFF);
-		if (!this.hasLight) light.setEnabled(false);
+		light.setEnabled(false);
 	}
 
 	private void lightSourcesOff(){
 		element.setTextureAnimationIndex(L_TEX_OFF);
-		if (hasLight) light.setEnabled(false);
+		if (enableVolumetricLight)
+			light.setEnabled(false);
 	}
 
 	public void lightOff(){
@@ -54,7 +55,8 @@ public class IndicatorLight{
 
 	private void lightSourcesOn(){
 		element.setTextureAnimationIndex(L_TEX_ON);
-		if (hasLight) light.setEnabled(true);
+		if (enableVolumetricLight)
+			light.setEnabled(true);
 	}
 
 	public void lightOn(){
