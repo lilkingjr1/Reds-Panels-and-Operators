@@ -1,7 +1,7 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	03/11/2024
+	03/13/2024
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -83,6 +83,7 @@ public class PushButton extends Script implements InteractionActionListener{
 	private IndicatorLight plcIndicatorLight;
 	
 	private int func = F_STATIC_OFF;
+	private int frameCounter = 5; // Stupid workaround for Dispatch Function where NL2 bug can sometimes report moving train speed as 0
 	private float binaryState = 0.f; // Helps determine if a "binary" state starts to change to the other value (ie. restraints start to close, vice-versa, etc)
 	private bool enabled = false;
 	
@@ -358,14 +359,23 @@ public class PushButton extends Script implements InteractionActionListener{
 			section.doStationManualDispatch();
 			return;
 		}
+		
+		// NL2 Train speed bug workaround
+		if (section.isTrainOnSection() && section.getTrainOnSection().getSpeed() == 0.0){
+			if (frameCounter < 5)
+				frameCounter++;
+		}
+		else
+			frameCounter = 0;
 
+		
 		// Ready
 		if (section.canStationManualDispatch()){
 			enableActionIf(section.isStationManualDispatchMode());
 			button.setLightState(Block.LAMP_FLASHING);
 		}
 		// Dispatching & approaching
-		else if (section.isTrainOnSection() && section.getTrainOnSection().getSpeed() != 0.0){
+		else if (section.isTrainOnSection() && (section.getTrainOnSection().getSpeed() != 0.0 || frameCounter < 5)){
 			disableAction();
 			button.setLightState(Block.LAMP_ON);
 			button.buttonIn();
@@ -758,6 +768,10 @@ public class PushButton extends Script implements InteractionActionListener{
 		// If set to attach to special track, update translation of SCO
 		if (specialTrackModule != null)
 			specialTrackModule.updateTranslation();
+		
+		// If iObj exists, update its translation if SCO moves
+		if (iObj != null)
+			iObj.setPosition(button.getAbsoluteTranslation());
 	}
 
 	public void onInteractionAction(InteractionObject obj){

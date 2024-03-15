@@ -48,20 +48,6 @@
       <label>Function:</label>
     </scriptparameter>
     <scriptparameter>
-      <type>double</type>
-      <defaultvalue>-45</defaultvalue>
-      <id>start_angle</id>
-      <description>Relative to straight up (0 deg). Used for all Functions (including None).</description>
-      <label>Start Angle:</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>double</type>
-      <defaultvalue>45</defaultvalue>
-      <id>end_angle</id>
-      <description>Relative to straight up (0 deg). Used for all non-static Functions.</description>
-      <label>End Angle:</label>
-    </scriptparameter>
-    <scriptparameter>
       <type>blocksection</type>
       <id>block</id>
       <description>This is the block that this operator will be assigned to for all Non-Static Functions.</description>
@@ -78,6 +64,20 @@
       <id>special_track_attach</id>
       <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
       <label>Special Track to Attach To (Optional):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>double</type>
+      <defaultvalue>-45</defaultvalue>
+      <id>start_angle</id>
+      <description>Relative to straight up (0 deg). Used for all Functions (including None).</description>
+      <label>Start Angle:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>double</type>
+      <defaultvalue>45</defaultvalue>
+      <id>end_angle</id>
+      <description>Relative to straight up (0 deg). Used for all non-static Functions.</description>
+      <label>End Angle:</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>

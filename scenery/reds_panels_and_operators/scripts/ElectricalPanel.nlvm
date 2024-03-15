@@ -1,7 +1,7 @@
 /**
 	Electrical Panel Initialization NL2 Script
 	David Wolfe (Red-Thirten)
-	03/05/2024
+	03/12/2024
 	Initializes the electrical panel's texture, mount, and electrical conduit based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -43,7 +43,7 @@ public class ElectricalPanel extends MainPanel{
 		}
 		
 		// If set to attach to special track, set up the module object for it
-		if (sco.getSpecialTrackParameter("special_track") != null){
+		if (sco.getSpecialTrackParameter("special_track_attach") != null){
 			specialTrackModule = new SpecialTrackModule(sco);
 			return true;
 		}

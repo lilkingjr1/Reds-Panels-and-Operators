@@ -37,7 +37,7 @@
     <scriptparameter>
       <type>int</type>
       <defaultvalue>0</defaultvalue>
-      <enums>None (See Options Below),Station Status,Block Indicator (Only Non-Scripted Coasters),Special Track Status</enums>
+      <enums>None (See Options Below),Station Status,Block Indicator (Only Non-Scripted Coasters),Special Track Manual Status</enums>
       <id>function</id>
       <description>How this light stack will behave during Play Mode.</description>
       <label>Function:</label>

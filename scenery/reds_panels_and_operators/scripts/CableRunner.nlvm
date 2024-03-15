@@ -1,7 +1,7 @@
 /**
 	Cable Runner NL2 Script
 	David Wolfe (Red-Thirten)
-	03/05/2024
+	03/12/2024
 	Extends Electrical Panel
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -31,7 +31,7 @@ public class CableRunner extends ElectricalPanel{
 		);
 		
 		// If set to attach to special track, set up the module object for it
-		if (sco.getSpecialTrackParameter("special_track") != null){
+		if (sco.getSpecialTrackParameter("special_track_attach") != null){
 			super.specialTrackModule = new SpecialTrackModule(sco);
 			return true;
 		}

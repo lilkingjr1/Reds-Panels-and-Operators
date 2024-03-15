@@ -168,6 +168,7 @@ public class OperatorButton{
 			deltaCurrent = delta;
 			deltaTarget = DELTA_MAX;
 			animate = true;
+			soundOn.setPosition(this.getAbsoluteTranslation());
 			soundOn.play();
 		}
 	}
@@ -179,6 +180,7 @@ public class OperatorButton{
 			deltaCurrent = delta;
 			deltaTarget = -DELTA_MAX;
 			animate = true;
+			soundOff.setPosition(this.getAbsoluteTranslation());
 			soundOff.play();
 		}
 	}
@@ -190,6 +192,7 @@ public class OperatorButton{
 			deltaCurrent = delta;
 			deltaTarget = DELTA_MAX;
 			animate = true;
+			soundOn.setPosition(this.getAbsoluteTranslation());
 			soundOn.play();
 		}
 	}
@@ -220,6 +223,7 @@ public class OperatorButton{
 					deltaCurrent = delta;
 					deltaTarget = -DELTA_MAX;
 					buttonState = 0; // used to be 1
+					soundOff.setPosition(this.getAbsoluteTranslation());
 					soundOff.play();
 				}
 				else{ // If not a push, leave as is and end animation

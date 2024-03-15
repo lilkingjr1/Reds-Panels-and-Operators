@@ -31,6 +31,8 @@
       <class>KeySwitch</class>
       <sharedvm>true</sharedvm>
       <resource id="LICENSE">LICENSE</resource>
+      <resource id="key_in">sounds/key_in.ogg</resource>
+      <resource id="key_out">sounds/key_out.ogg</resource>
       <resource id="sound_off">sounds/switch_key_off.ogg</resource>
       <resource id="sound_on">sounds/switch_key_on.ogg</resource>
     </script>
@@ -41,20 +43,6 @@
       <id>function</id>
       <description>How this switch will behave during Play Mode.</description>
       <label>Function:</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>double</type>
-      <defaultvalue>-45</defaultvalue>
-      <id>start_angle</id>
-      <description>Relative to straight up (0 deg). Used for all Functions (including None).</description>
-      <label>Start Angle:</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>double</type>
-      <defaultvalue>45</defaultvalue>
-      <id>end_angle</id>
-      <description>Relative to straight up (0 deg). Used for all non-static Functions.</description>
-      <label>End Angle:</label>
     </scriptparameter>
     <scriptparameter>
       <type>blocksection</type>
@@ -75,8 +63,22 @@
       <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
     <scriptparameter>
+      <type>double</type>
+      <defaultvalue>-45</defaultvalue>
+      <id>start_angle</id>
+      <description>Relative to straight up (0 deg). Used for all Functions (including None).</description>
+      <label>Start Angle:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>double</type>
+      <defaultvalue>45</defaultvalue>
+      <id>end_angle</id>
+      <description>Relative to straight up (0 deg). Used for all non-static Functions.</description>
+      <label>End Angle:</label>
+    </scriptparameter>
+    <scriptparameter>
       <type>bool</type>
-      <defaultvalue>true</defaultvalue>
+      <defaultvalue>false</defaultvalue>
       <id>hide_key</id>
       <description>Will hide the key during simulation. Only works with the &quot;None&quot; Function.</description>
       <label>Hide Key (None Function Only)</label>

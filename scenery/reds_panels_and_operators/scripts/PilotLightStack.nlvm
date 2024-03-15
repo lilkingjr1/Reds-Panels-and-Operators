@@ -1,7 +1,7 @@
 /**
 	Pilot Light (Stack) NL2 Script
 	David Wolfe (Red-Thirten)
-	03/08/2024
+	03/14/2024
 	Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -261,26 +261,24 @@ public class PilotLightStack extends PilotLight{
 			}
 		}
 		else{
-			Train train = section.getTrainOnSection();
-			// Train is on section
-			if (train != null){
-				// Train is not moving
-				if (train.getSpeed() == 0.0){
-					light.lightOn();
-					light2.lightOff();
-				}
-				// Train is moving
-				else{
-					light.lightOff();
-					light2.lightBlink();
-				}
+			// Bottom Light (Special Track can be manually moved)
+			if (specialTrack.canChangeManualSwitchDirection()){
+				light.lightOn();
 			}
 			else{
 				light.lightOff();
+			}
+
+			// Middle Light (Train movement)
+			Train train = section.getTrainOnSection();
+			if (train != null && train.getSpeed() != 0.0){
+				light2.lightBlink();
+			}
+			else{
 				light2.lightOff();
 			}
 
-			// If Special Track is moving
+			// Top Light (Special Track movement)
 			if (specialTrack.getVisibleSwitchState() % 1.f != 0.f){
 				light3.lightBlink();
 			}

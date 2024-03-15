@@ -1,7 +1,7 @@
 /**
 	Switch NL2 Script
 	David Wolfe (Red-Thirten)
-	03/11/2024
+	03/14/2024
 	Animates the switch during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -56,7 +56,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 	private Coaster coaster;
 	private Block block;
 	private Section section;
-	private SpecialTrack specialTrack;
+	protected SpecialTrack specialTrack;
 	private InteractionObject iObj;
 	
 	private Logger log;
@@ -108,17 +108,10 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 			section = block.getSection();
 		}
 		
-		// Create OperatorSwitch object
-		createSwitchObject(sco, func);
-		
 		// Function-specific checks and setup
 		switch (func){
 			// Functions that require station section
 			case F_RESTRAINTS:
-				// Set initial switch state based on initial train harness state
-				Train train = section.getTrainOnSection();
-				if (train != null)
-					operatorSwitch.setSwitchState((int) train.getHarnessState());
 			case F_GATES:
 			case F_PLATFORM:
 			case F_DISPATCH_MODE:
@@ -150,13 +143,32 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 			log.err("The configured function requires that the coaster have a platform in the station.");
 			return false;
 		}
+		
+		// Create OperatorSwitch object
+		createSwitchObject(sco, func);
+
+		// Set initial states (if required)
+		switch (func){
+			case F_RESTRAINTS:
+				Train train = section.getTrainOnSection();
+				if (train != null)
+					operatorSwitch.setSwitchState((int) train.getHarnessState());
+				break;
+			case F_GATES:
+				if (section.getStationGateState() == 0.f)
+					operatorSwitch.setSwitchState(1);
+				break;
+			case F_PLATFORM:
+				if (section.getStationPlatformState() == 0.f)
+					operatorSwitch.setSwitchState(1);
+				break;
+		}
 
 		// Setup InteractionObject (if interactible function)
 		if (isInteractibleFunc(func)){
 			iObj = InteractionObject.createSimpleButton();
 			iObj.setPosition(operatorSwitch.getAbsoluteTranslation());
 			iObj.setRadius(SWITCH_INTERACTION_RADIUS);
-			// iObj.setProcessActionEventsWhenDisabled(true);
 			iObj.addActionListener(this);
 		}
 		
@@ -172,42 +184,34 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 			this.getResourcePathForId("sound_on"),
 			this.getResourcePathForId("sound_off")
 		};
-		// Create OperatorSwitch based on Function
+		// Determine totalStates based on Function
+		int totalStates;
 		switch (func){
 			case F_NUM_TRAINS_NO_INT:
-				operatorSwitch = new OperatorSwitch(
-					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
-					soundPaths,
-					trainCount, // States = # of Trains on Track
-					sco.getDoubleParameter("start_angle").floatValue(),
-					sco.getDoubleParameter("end_angle").floatValue(),
-					SWITCH_TRAVEL_TIME
-				);
+				totalStates = trainCount;
+				break;
+			case F_SPECIAL_TRACK:
+				totalStates = specialTrack.getNumberOfSwitchDirections();
 				break;
 			case F_OP_MODE:
 			case F_LIFT_JOG_NO_INT:
 			case F_TRANSPORTS_NO_INT:
 			case F_SPECIAL_TRACK_NO_INT:
 			case F_COASTER_LIGHTS_NO_INT:
-				operatorSwitch = new OperatorSwitch(
-					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
-					soundPaths,
-					3, // States = BWD/N/FWD, Left/N/Right, or Auto/Maint/Manual
-					sco.getDoubleParameter("start_angle").floatValue(),
-					sco.getDoubleParameter("end_angle").floatValue(),
-					SWITCH_TRAVEL_TIME
-				);
+				totalStates = 3;
 				break;
 			default: // Every other function just has two states
-				operatorSwitch = new OperatorSwitch(
-					SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
-					soundPaths,
-					2,
-					sco.getDoubleParameter("start_angle").floatValue(),
-					sco.getDoubleParameter("end_angle").floatValue(),
-					SWITCH_TRAVEL_TIME
-				);
+				totalStates = 2;
 		}
+		// Create OperatorSwitch
+		operatorSwitch = new OperatorSwitch(
+			SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
+			soundPaths,
+			totalStates,
+			sco.getDoubleParameter("start_angle").floatValue(),
+			sco.getDoubleParameter("end_angle").floatValue(),
+			SWITCH_TRAVEL_TIME
+		);
 	}
 	
 	protected int getFuncFromScoParams(SceneObject sco){
@@ -220,6 +224,8 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 	}
 
 	private bool isInteractibleFunc(int func){
+		if (func == F_STATIC && operatorSwitch.isStatic()) // None function w/o rotation
+			return false;
 		for (int i = 0; i < NON_INTERACT_MODES.length; i++){
 			if (func == NON_INTERACT_MODES[i])
 				return false;
@@ -323,11 +329,12 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 			return;
 		}
 		
+		// Interaction func
 		if (func == F_SPECIAL_TRACK){
 			operatorSwitch.setSwitchState(specialTrack.getSetSwitchDirection());
 			iObj.setEnabled(specialTrack.canChangeManualSwitchDirection());
 		}
-		// No interation
+		// No interation func
 		else{
 			if (specialTrack.getVisibleSwitchState() < binaryState){
 				binaryState = specialTrack.getVisibleSwitchState();
@@ -416,10 +423,16 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 	private void handleTransportsFunc(){
 		if (coaster.getBlockSystemMode() == Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL){
 			float transSpeed = (float) section.getTransportCurrentSpeed();
-			if (transSpeed < 0.f && transSpeed <= binaryState) operatorSwitch.setSwitchState(0);
-			else if (transSpeed > 0.f && transSpeed >= binaryState) operatorSwitch.setSwitchState(2);
-			else operatorSwitch.setSwitchState(1);
+			if (transSpeed < 0.f && transSpeed <= binaryState)
+				operatorSwitch.setSwitchState(0);
+			else if (transSpeed > 0.f && transSpeed >= binaryState)
+				operatorSwitch.setSwitchState(2);
+			else
+				operatorSwitch.setSwitchState(1);
 			binaryState = transSpeed;
+		}
+		else{
+			operatorSwitch.setSwitchState(1);
 		}
 	}
 	
@@ -491,6 +504,10 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 		// If set to attach to special track, update SCO translation
 		if (specialTrackModule != null)
 			specialTrackModule.updateTranslation();
+		
+		// If iObj exists, update its translation if SCO moves
+		if (iObj != null)
+			iObj.setPosition(operatorSwitch.getAbsoluteTranslation());
 	}
 
 	public void onInteractionAction(InteractionObject obj){

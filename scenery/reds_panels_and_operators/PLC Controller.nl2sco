@@ -2,30 +2,31 @@
 <root>
   <sceneobject>
     <model path="models/plc_controller.dae">
-      <clip mesh="estop_pilot" distance="20"/>
-      <clip mesh="indicator1" distance="15"/>
-      <clip mesh="indicator2" distance="15"/>
-      <clip mesh="indicator3" distance="15"/>
-      <clip mesh="indicator4" distance="15"/>
-      <clip mesh="indicator5" distance="15"/>
-      <clip mesh="indicator6" distance="15"/>
-      <clip mesh="indicator7" distance="15"/>
-      <clip mesh="indicator8" distance="15"/>
-      <clip mesh="indicator9" distance="15"/>
-      <clip mesh="indicator10" distance="15"/>
-      <clip mesh="indicator11" distance="15"/>
-      <clip mesh="indicator12" distance="15"/>
-      <clip mesh="indicator13" distance="15"/>
-      <clip mesh="indicator14" distance="15"/>
-      <clip mesh="indicator15" distance="15"/>
-      <clip mesh="indicator16" distance="15"/>
-      <clip mesh="indicator17" distance="15"/>
-      <clip mesh="indicator18" distance="15"/>
-      <clip mesh="indicator19" distance="15"/>
-      <clip mesh="indicator20" distance="15"/>
+      <clip mesh="estop_pilot" distance="50"/>
+      <clip mesh="indicator1" distance="40"/>
+      <clip mesh="indicator2" distance="40"/>
+      <clip mesh="indicator3" distance="40"/>
+      <clip mesh="indicator4" distance="40"/>
+      <clip mesh="indicator5" distance="40"/>
+      <clip mesh="indicator6" distance="40"/>
+      <clip mesh="indicator7" distance="40"/>
+      <clip mesh="indicator8" distance="40"/>
+      <clip mesh="indicator9" distance="40"/>
+      <clip mesh="indicator10" distance="40"/>
+      <clip mesh="indicator11" distance="40"/>
+      <clip mesh="indicator12" distance="40"/>
+      <clip mesh="indicator13" distance="40"/>
+      <clip mesh="indicator14" distance="40"/>
+      <clip mesh="indicator15" distance="40"/>
+      <clip mesh="indicator16" distance="40"/>
+      <clip mesh="indicator17" distance="40"/>
+      <clip mesh="indicator18" distance="40"/>
+      <clip mesh="indicator19" distance="40"/>
+      <clip mesh="indicator20" distance="40"/>
       <clip mesh="switch1" distance="30"/>
       <clip mesh="control_lockout_switch" distance="25"/>
     </model>
+    <description>A Programmable Logic Controller tower. Required for E-Stop Advanced &amp; Reset functions for buttons.</description>
     <defaultinstancename>PLC Controller</defaultinstancename>
     <preview>materials/previews/plc_controller.png</preview>
     <param lockonterrain="true"/>
