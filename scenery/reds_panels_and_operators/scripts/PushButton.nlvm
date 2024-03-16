@@ -1,7 +1,7 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	03/13/2024
+	03/15/2024
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -276,6 +276,7 @@ public class PushButton extends Script implements InteractionActionListener{
 			iObj.setRadius(BUTTON_INTERACTION_RADIUS);
 			iObj.setProcessActionEventsWhenDisabled(true);
 			iObj.addActionListener(this);
+			if (func <= F_STATIC_BLINK) iObj.setEnabled(false);
 		}
 		
 		return true; // Everything's just dandy
@@ -502,14 +503,18 @@ public class PushButton extends Script implements InteractionActionListener{
 			return;
 		}
 		
+		// E-Stopped
+		if (coaster.isEmergencyStop()){
+			disableAction();
+			button.lightOff();
+		}
 		// Track is moving
-		if (specialTrack.getVisibleSwitchState() % 1.f != 0.f && !coaster.isEmergencyStop()){
+		else if (specialTrack.getVisibleSwitchState() % 1.f != 0.f){
 			disableAction();
 			button.lightOn();
 		}
 		// Track ready to move to new position
-		else if ( !coaster.isEmergencyStop()
-				&& specialTrack.canChangeManualSwitchDirection() 
+		else if ( specialTrack.canChangeManualSwitchDirection() 
 				&& ( (func == F_SPECIAL_LEFT && specialTrack.getSetSwitchDirection() - 1 > 0) 
 					|| (func == F_SPECIAL_RIGHT && specialTrack.getSetSwitchDirection() + 1 < specialTrack.getNumberOfSwitchDirections()) ) ){
 			enableAction();

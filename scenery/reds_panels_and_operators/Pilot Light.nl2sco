@@ -41,7 +41,7 @@
     <scriptparameter>
       <type>int</type>
       <defaultvalue>0</defaultvalue>
-      <enums>None (Light Off),None (Light On),None (Light Blinking),Block Indicator (Only Non-Scripted Coasters),Station Status,Platform (Engaged),E-Stopped,Automatic Operation,Manual Block Operation,Full Manual Operation</enums>
+      <enums>None (Light Off),None (Light On),None (Light Blinking),Block Indicator (Only Non-Scripted Coasters),Station Status,Platform (Engaged),Special Track Status,E-Stopped (Blink),Automatic Operation,Manual Block Operation,Full Manual Operation</enums>
       <id>function</id>
       <description>How this light will behave during Play Mode.</description>
       <label>Function:</label>
@@ -51,6 +51,12 @@
       <id>block</id>
       <description>This is the block that this light will be assigned to for all Non-Static Functions.</description>
       <label>Block Location:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track</id>
+      <description>This is the Special Track that this light will monitor. Required for the Special Track Function.</description>
+      <label>Special Track (for Special Track Function):</label>
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>

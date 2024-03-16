@@ -1,7 +1,7 @@
 /**
 	Pilot Light NL2 Script
 	David Wolfe (Red-Thirten)
-	03/08/2024
+	03/15/2024
 	Animates the pilot light during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -12,6 +12,7 @@ import com.nolimitscoaster.Coaster;
 import com.nolimitscoaster.Train;
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.Section;
+import com.nolimitscoaster.SpecialTrack;
 
 import obj.IndicatorLight;
 import util.Logger;
@@ -33,15 +34,17 @@ public class PilotLight extends Script{
 	protected static final int F_BLOCK_IND = 3; // Non-Scripted Coasters Only
 	protected static final int F_DISPATCH = 4;
 	private static final int F_PLATFORM = 5;
-	private static final int F_ESTOP = 6;
-	private static final int F_AUTOMATIC_OP = 7;
-	private static final int F_SEMI_MAN_OP = 8;
-	private static final int F_FULL_MAN_OP = 9;
+	protected static final int F_SPECIAL_TRACK = 6;
+	private static final int F_ESTOP = 7;
+	private static final int F_AUTOMATIC_OP = 8;
+	private static final int F_SEMI_MAN_OP = 9;
+	private static final int F_FULL_MAN_OP = 10;
 	
 	protected SceneObject sco;
 	protected Coaster coaster;
 	protected Block block;
 	protected Section section;
+	private SpecialTrack specialTrack;
 	
 	protected Logger log;
 	protected IndicatorLight light;
@@ -114,6 +117,13 @@ public class PilotLight extends Script{
 					log.err("The configured function requires that the coaster have a platform in the station.");
 					return false;
 				}
+			case F_SPECIAL_TRACK:
+				specialTrack = sco.getSpecialTrackParameter("special_track");
+				if (specialTrack == null){
+					log.err("The configured function requires the Special Track parameter to be specified.");
+					return false;
+				}
+				break;
 			case F_DISPATCH:
 				if (!section.isStation()){
 					log.err("The configured function requires the specified block to be a station.");
@@ -218,6 +228,20 @@ public class PilotLight extends Script{
 			light.lightOff();
 		}
 	}
+
+	private void handleSpecialTrackFunc(){
+		// E-stopped
+		if (coaster.isEmergencyStop())
+			light.lightOff();
+		// Track is moving
+		else if (specialTrack.getVisibleSwitchState() % 1.f != 0.f)
+			light.lightBlink();
+		// Track is not in state 0
+		else if (specialTrack.getVisibleSwitchState() != 0.f)
+			light.lightOn();
+		else
+			light.lightOff();
+	}
 	
 	private void handleEStopFunc(){
 		if (coaster.isEmergencyStop()){
@@ -260,6 +284,9 @@ public class PilotLight extends Script{
 				break;
 			case F_PLATFORM:
 				handlePlatformFunc();
+				break;
+			case F_SPECIAL_TRACK:
+				handleSpecialTrackFunc();
 				break;
 			case F_ESTOP:
 				handleEStopFunc();

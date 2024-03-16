@@ -53,7 +53,7 @@
       <defaultcolor r="1" g="0.517647" b="0"/>
     </usercolor>
     <usertexture>
-      <label>E-Stop Placard:</label>
+      <label>E-Stop Placard (Optional):</label>
       <description></description>
       <defaultpath>[ Placards ]/Emergency Stop.png</defaultpath>
     </usertexture>

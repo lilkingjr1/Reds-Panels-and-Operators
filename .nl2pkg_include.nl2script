@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <script>
+    <classpath>Copy the folder in scenery to your park to use</classpath>
+    <class>WelcomeScript</class>
+    <sharedvm>true</sharedvm>
+    <resource id="README">scenery/reds_panels_and_operators/README.html</resource>
+    <resource id="resource1">scenery/reds_panels_and_operators/[ Placards ]/Acknowledge.png</resource>
+    <resource id="resource2">scenery/reds_panels_and_operators/[ Placards ]/Advance.png</resource>
+    <resource id="resource3">scenery/reds_panels_and_operators/[ Placards ]/Automatic Dispatch.png</resource>
+    <resource id="resource4">scenery/reds_panels_and_operators/[ Placards ]/Automatic Mode.png</resource>
+    <resource id="resource5">scenery/reds_panels_and_operators/[ Placards ]/Block Reset.png</resource>
+    <resource id="resource6">scenery/reds_panels_and_operators/[ Placards ]/Clear Block.png</resource>
+    <resource id="resource7">scenery/reds_panels_and_operators/[ Placards ]/Control Lockout (Large).png</resource>
+    <resource id="resource8">scenery/reds_panels_and_operators/[ Placards ]/Control Power (Off-On).png</resource>
+    <resource id="resource9">scenery/reds_panels_and_operators/[ Placards ]/Default.png</resource>
+    <resource id="resource10">scenery/reds_panels_and_operators/[ Placards ]/Dispatch Mode (Manual-Auto).png</resource>
+    <resource id="resource11">scenery/reds_panels_and_operators/[ Placards ]/Dispatch-Advance.png</resource>
+    <resource id="resource12">scenery/reds_panels_and_operators/[ Placards ]/E-Stop Reset.png</resource>
+    <resource id="resource13">scenery/reds_panels_and_operators/[ Placards ]/Emergency Stop (Circle).png</resource>
+    <resource id="resource14">scenery/reds_panels_and_operators/[ Placards ]/Emergency Stop.png</resource>
+    <resource id="resource15">scenery/reds_panels_and_operators/[ Placards ]/Floor (Raise-Lower).png</resource>
+    <resource id="resource16">scenery/reds_panels_and_operators/[ Placards ]/Full Manual Mode.png</resource>
+    <resource id="resource17">scenery/reds_panels_and_operators/[ Placards ]/Gates (Open-Close).png</resource>
+    <resource id="resource18">scenery/reds_panels_and_operators/[ Placards ]/Gates Closing Announcement.png</resource>
+    <resource id="resource19">scenery/reds_panels_and_operators/[ Placards ]/Harness (Open-Lock).png</resource>
+    <resource id="resource20">scenery/reds_panels_and_operators/[ Placards ]/Harness Lock.png</resource>
+    <resource id="resource21">scenery/reds_panels_and_operators/[ Placards ]/Harness Open.png</resource>
+    <resource id="resource22">scenery/reds_panels_and_operators/[ Placards ]/HMI Enable.png</resource>
+    <resource id="resource23">scenery/reds_panels_and_operators/[ Placards ]/Horn.png</resource>
+    <resource id="resource24">scenery/reds_panels_and_operators/[ Placards ]/Jog Lift (BWD-N-FWD).png</resource>
+    <resource id="resource25">scenery/reds_panels_and_operators/[ Placards ]/Jog Lift.png</resource>
+    <resource id="resource26">scenery/reds_panels_and_operators/[ Placards ]/Lamp Test.png</resource>
+    <resource id="resource27">scenery/reds_panels_and_operators/[ Placards ]/Launch Boost Enable.png</resource>
+    <resource id="resource28">scenery/reds_panels_and_operators/[ Placards ]/Launch.png</resource>
+    <resource id="resource29">scenery/reds_panels_and_operators/[ Placards ]/Lift Block (4-Way).png</resource>
+    <resource id="resource30">scenery/reds_panels_and_operators/[ Placards ]/Lift Block.png</resource>
+    <resource id="resource31">scenery/reds_panels_and_operators/[ Placards ]/Lift Start.png</resource>
+    <resource id="resource32">scenery/reds_panels_and_operators/[ Placards ]/Lift Stop.png</resource>
+    <resource id="resource33">scenery/reds_panels_and_operators/[ Placards ]/Load (4-Way).png</resource>
+    <resource id="resource34">scenery/reds_panels_and_operators/[ Placards ]/Load.png</resource>
+    <resource id="resource35">scenery/reds_panels_and_operators/[ Placards ]/Maintenance (Bypass-Off-Enable).png</resource>
+    <resource id="resource36">scenery/reds_panels_and_operators/[ Placards ]/Manual Block Mode.png</resource>
+    <resource id="resource37">scenery/reds_panels_and_operators/[ Placards ]/Manual Brake Release.png</resource>
+    <resource id="resource38">scenery/reds_panels_and_operators/[ Placards ]/Manual Dispatch.png</resource>
+    <resource id="resource39">scenery/reds_panels_and_operators/[ Placards ]/MCBR (4-Way).png</resource>
+    <resource id="resource40">scenery/reds_panels_and_operators/[ Placards ]/Mic Zone (Station-Lift-Brakes).png</resource>
+    <resource id="resource41">scenery/reds_panels_and_operators/[ Placards ]/Microphone Enable.png</resource>
+    <resource id="resource42">scenery/reds_panels_and_operators/[ Placards ]/Midcourse Brake Run.png</resource>
+    <resource id="resource43">scenery/reds_panels_and_operators/[ Placards ]/Operation Mode (Auto-Block-Maint).png</resource>
+    <resource id="resource44">scenery/reds_panels_and_operators/[ Placards ]/Operation Mode (Auto-Xfer-Maint).png</resource>
+    <resource id="resource45">scenery/reds_panels_and_operators/[ Placards ]/Platform (Raise-Lower).png</resource>
+    <resource id="resource46">scenery/reds_panels_and_operators/[ Placards ]/Power Lockout (Large).png</resource>
+    <resource id="resource47">scenery/reds_panels_and_operators/[ Placards ]/Power On.png</resource>
+    <resource id="resource48">scenery/reds_panels_and_operators/[ Placards ]/Ready Brakes (4-Way).png</resource>
+    <resource id="resource49">scenery/reds_panels_and_operators/[ Placards ]/Ready Brakes.png</resource>
+    <resource id="resource50">scenery/reds_panels_and_operators/[ Placards ]/Reset.png</resource>
+    <resource id="resource51">scenery/reds_panels_and_operators/[ Placards ]/Restraints (Open-Lock).png</resource>
+    <resource id="resource52">scenery/reds_panels_and_operators/[ Placards ]/Restraints Announcement.png</resource>
+    <resource id="resource53">scenery/reds_panels_and_operators/[ Placards ]/Restraints Lock.png</resource>
+    <resource id="resource54">scenery/reds_panels_and_operators/[ Placards ]/Restraints Open.png</resource>
+    <resource id="resource55">scenery/reds_panels_and_operators/[ Placards ]/Reverse.png</resource>
+    <resource id="resource56">scenery/reds_panels_and_operators/[ Placards ]/Ride Start.png</resource>
+    <resource id="resource57">scenery/reds_panels_and_operators/[ Placards ]/Ride Stop.png</resource>
+    <resource id="resource58">scenery/reds_panels_and_operators/[ Placards ]/Running Lights (Off-On-Emrg).png</resource>
+    <resource id="resource59">scenery/reds_panels_and_operators/[ Placards ]/Switch Track (Left-Right).png</resource>
+    <resource id="resource60">scenery/reds_panels_and_operators/[ Placards ]/System Status.png</resource>
+    <resource id="resource61">scenery/reds_panels_and_operators/[ Placards ]/Technical Difficulties.png</resource>
+    <resource id="resource62">scenery/reds_panels_and_operators/[ Placards ]/Temp Delay Announcement.png</resource>
+    <resource id="resource63">scenery/reds_panels_and_operators/[ Placards ]/Trains In Service (1-2-3).png</resource>
+    <resource id="resource64">scenery/reds_panels_and_operators/[ Placards ]/Transfer Table (1-2-3).png</resource>
+    <resource id="resource65">scenery/reds_panels_and_operators/[ Placards ]/Transfer Table (Left-N-Right).png</resource>
+    <resource id="resource66">scenery/reds_panels_and_operators/[ Placards ]/Transfer Track (4-Way).png</resource>
+    <resource id="resource67">scenery/reds_panels_and_operators/[ Placards ]/Transfer Track.png</resource>
+    <resource id="resource68">scenery/reds_panels_and_operators/[ Placards ]/Transports (Bwd-N-Fwd).png</resource>
+    <resource id="resource69">scenery/reds_panels_and_operators/[ Placards ]/Trouble.png</resource>
+    <resource id="resource70">scenery/reds_panels_and_operators/[ Placards ]/Unload (4-Way).png</resource>
+    <resource id="resource71">scenery/reds_panels_and_operators/[ Placards ]/Unload.png</resource>
+    <resource id="resource72">scenery/reds_panels_and_operators/[ Placards ]/Unloading Announcement.png</resource>
+    <resource id="resource73">scenery/reds_panels_and_operators/[ Placards ]/Warning.png</resource>
+    <resource id="resource74">scenery/reds_panels_and_operators/[ Labels ]/Brake.png</resource>
+    <resource id="resource75">scenery/reds_panels_and_operators/[ Labels ]/Communication.png</resource>
+    <resource id="resource76">scenery/reds_panels_and_operators/[ Labels ]/Dispatch Enable.png</resource>
+    <resource id="resource77">scenery/reds_panels_and_operators/[ Labels ]/Electrical.png</resource>
+    <resource id="resource78">scenery/reds_panels_and_operators/[ Labels ]/Lift.png</resource>
+    <resource id="resource79">scenery/reds_panels_and_operators/[ Labels ]/Midcourse Brake Run.png</resource>
+    <resource id="resource80">scenery/reds_panels_and_operators/[ Labels ]/Operator 1.png</resource>
+    <resource id="resource81">scenery/reds_panels_and_operators/[ Labels ]/Operator 2.png</resource>
+    <resource id="resource82">scenery/reds_panels_and_operators/[ Labels ]/Operator 3.png</resource>
+    <resource id="resource83">scenery/reds_panels_and_operators/[ Labels ]/Operator 4.png</resource>
+    <resource id="resource84">scenery/reds_panels_and_operators/[ Labels ]/Operator 5.png</resource>
+    <resource id="resource85">scenery/reds_panels_and_operators/[ Labels ]/Transfer.png</resource>
+  </script>
+</root>

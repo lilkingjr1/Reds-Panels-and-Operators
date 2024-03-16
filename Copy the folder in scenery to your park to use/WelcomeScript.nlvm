@@ -9,7 +9,7 @@ import com.nolimitscoaster.Script;
 
 public class WelcomeScript extends Script{
 	public bool onInit(){ // On initialization of Play simulation
-		if (false){ // Enable or disable message
+		if (true){ // Enable or disable message
 			System.err.println("HEY! No error! Just wanted to thank you very much for downloading my Panels & Operators pack!");
 			System.err.println("If you have any questions, please check out the easy README.html in \\scenery\\reds_panels_and_operators.");
 			System.err.println("I recommend checking out all the different rides in this park.");

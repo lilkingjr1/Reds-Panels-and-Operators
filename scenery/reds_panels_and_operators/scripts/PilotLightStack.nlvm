@@ -1,7 +1,7 @@
 /**
 	Pilot Light (Stack) NL2 Script
 	David Wolfe (Red-Thirten)
-	03/14/2024
+	03/15/2024
 	Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -25,7 +25,6 @@ public class PilotLightStack extends PilotLight{
 		
 	// All Light Stack specific Functions:
 	private static final int F_STATIC = 0;
-	private static final int F_SPECIAL_TRACK = 99;
 
 	private SpecialTrack specialTrack;
 	private StaticSound soundEmergency;
