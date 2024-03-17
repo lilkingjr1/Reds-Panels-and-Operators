@@ -1,7 +1,7 @@
 /**
 	Pilot Light (Stack) NL2 Script
 	David Wolfe (Red-Thirten)
-	03/15/2024
+	03/17/2024
 	Initializes the light stack's lights and animates the pilot lights during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -10,7 +10,6 @@ import com.nolimitscoaster.SceneObject;
 import com.nolimitscoaster.Coaster;
 import com.nolimitscoaster.Train;
 import com.nolimitscoaster.Block;
-import com.nolimitscoaster.SpecialTrack;
 import com.nolimitscoaster.StaticSound;
 import nlvm.math3d.Vector3f;
 
@@ -26,7 +25,6 @@ public class PilotLightStack extends PilotLight{
 	// All Light Stack specific Functions:
 	private static final int F_STATIC = 0;
 
-	private SpecialTrack specialTrack;
 	private StaticSound soundEmergency;
 	
 	private IndicatorLight light2;

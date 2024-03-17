@@ -44,7 +44,7 @@ public class PilotLight extends Script{
 	protected Coaster coaster;
 	protected Block block;
 	protected Section section;
-	private SpecialTrack specialTrack;
+	protected SpecialTrack specialTrack;
 	
 	protected Logger log;
 	protected IndicatorLight light;
