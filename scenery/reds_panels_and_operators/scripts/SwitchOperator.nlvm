@@ -1,7 +1,7 @@
 /**
 	Switch NL2 Script
 	David Wolfe (Red-Thirten)
-	03/14/2024
+	03/17/2024
 	Animates the switch during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -101,10 +101,6 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 			// Get ride details based on block parameter
 			coaster = block.getCoaster();
 			trainCount = coaster.getTrainCount();
-			if (coaster.isScriptedOperationMode()){
-				log.err("Sorry! Non-static functions do not support Scripted Operation Mode rides at this time.");
-				return false;
-			}
 			section = block.getSection();
 		}
 		

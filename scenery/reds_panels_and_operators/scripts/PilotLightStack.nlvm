@@ -67,20 +67,13 @@ public class PilotLightStack extends PilotLight{
 				soundEmergency.setDopplerMode(false);
 			}
 			
-			// Function-specific checks and setup
+			// Additional Function-specific checks and setup
 			switch (func){
 				case F_STATIC_BLINK: // None/Static
 					return handleStaticFunc(
 						new IndicatorLight[]{light, light2, light3},
 						new String[]{"light1", "light2", "light3"}
 					);
-				case F_SPECIAL_TRACK:
-					specialTrack = sco.getSpecialTrackParameter("special_track");
-					if (specialTrack == null){
-						log.err("The configured function requires the Special Track parameter to be specified.");
-						return false;
-					}
-					break;
 			}
 			
 			return true; // Everything's just dandy

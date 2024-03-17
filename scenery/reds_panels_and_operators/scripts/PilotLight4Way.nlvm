@@ -61,7 +61,7 @@ public class PilotLight4Way extends PilotLight{
 					);
 				case F_BLOCK_IND: // Block Indicator (4-Way)
 					if (coaster.isScriptedOperationMode()){
-						System.err.println(SCRIPT_NAME + ": Sorry! The Block Status (4-Way) function does not support Scripted Operation Mode rides at this time.");
+						System.err.println(SCRIPT_NAME + ": Sorry! The Block Status (4-Way) Function does not support Scripted Operation Mode rides at this time.");
 						return false;
 					}
 			}

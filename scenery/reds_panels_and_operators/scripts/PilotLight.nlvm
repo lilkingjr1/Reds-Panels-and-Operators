@@ -1,7 +1,7 @@
 /**
 	Pilot Light NL2 Script
 	David Wolfe (Red-Thirten)
-	03/15/2024
+	03/17/2024
 	Animates the pilot light during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -85,10 +85,6 @@ public class PilotLight extends Script{
 			
 			// Get ride details based on block parameter
 			coaster = block.getCoaster();
-			if (coaster.isScriptedOperationMode()){
-				log.err("Sorry! Non-static functions do not support Scripted Operation Mode rides at this time.");
-				return false;
-			}
 			section = block.getSection();
 		}
 
@@ -117,16 +113,24 @@ public class PilotLight extends Script{
 					log.err("The configured function requires that the coaster have a platform in the station.");
 					return false;
 				}
+			case F_DISPATCH:
+				if (!section.isStation()){
+					log.err("The configured function requires the specified block to be a station.");
+					return false;
+				}
+				break;
+			// Functions that require non-scripted operation mode
+			case F_BLOCK_IND:
+				if (coaster.isScriptedOperationMode()){
+					log.err("Sorry! The Block Indicator Function does not support Scripted Operation Mode rides at this time.");
+					return false;
+				}
+				break;
+			// Functions that require special track parameter
 			case F_SPECIAL_TRACK:
 				specialTrack = sco.getSpecialTrackParameter("special_track");
 				if (specialTrack == null){
 					log.err("The configured function requires the Special Track parameter to be specified.");
-					return false;
-				}
-				break;
-			case F_DISPATCH:
-				if (!section.isStation()){
-					log.err("The configured function requires the specified block to be a station.");
 					return false;
 				}
 				break;
