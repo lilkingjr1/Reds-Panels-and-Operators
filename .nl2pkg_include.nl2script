@@ -78,17 +78,18 @@
     <resource id="resource71">scenery/reds_panels_and_operators/[ Placards ]/Unload.png</resource>
     <resource id="resource72">scenery/reds_panels_and_operators/[ Placards ]/Unloading Announcement.png</resource>
     <resource id="resource73">scenery/reds_panels_and_operators/[ Placards ]/Warning.png</resource>
-    <resource id="resource74">scenery/reds_panels_and_operators/[ Labels ]/Brake.png</resource>
-    <resource id="resource75">scenery/reds_panels_and_operators/[ Labels ]/Communication.png</resource>
-    <resource id="resource76">scenery/reds_panels_and_operators/[ Labels ]/Dispatch Enable.png</resource>
-    <resource id="resource77">scenery/reds_panels_and_operators/[ Labels ]/Electrical.png</resource>
-    <resource id="resource78">scenery/reds_panels_and_operators/[ Labels ]/Lift.png</resource>
-    <resource id="resource79">scenery/reds_panels_and_operators/[ Labels ]/Midcourse Brake Run.png</resource>
-    <resource id="resource80">scenery/reds_panels_and_operators/[ Labels ]/Operator 1.png</resource>
-    <resource id="resource81">scenery/reds_panels_and_operators/[ Labels ]/Operator 2.png</resource>
-    <resource id="resource82">scenery/reds_panels_and_operators/[ Labels ]/Operator 3.png</resource>
-    <resource id="resource83">scenery/reds_panels_and_operators/[ Labels ]/Operator 4.png</resource>
-    <resource id="resource84">scenery/reds_panels_and_operators/[ Labels ]/Operator 5.png</resource>
-    <resource id="resource85">scenery/reds_panels_and_operators/[ Labels ]/Transfer.png</resource>
+    <resource id="resource74">scenery/reds_panels_and_operators/[ Placards ]/Winch (-_N_+).png</resource>
+    <resource id="resource75">scenery/reds_panels_and_operators/[ Labels ]/Brake.png</resource>
+    <resource id="resource76">scenery/reds_panels_and_operators/[ Labels ]/Communication.png</resource>
+    <resource id="resource77">scenery/reds_panels_and_operators/[ Labels ]/Dispatch Enable.png</resource>
+    <resource id="resource78">scenery/reds_panels_and_operators/[ Labels ]/Electrical.png</resource>
+    <resource id="resource79">scenery/reds_panels_and_operators/[ Labels ]/Lift.png</resource>
+    <resource id="resource80">scenery/reds_panels_and_operators/[ Labels ]/Midcourse Brake Run.png</resource>
+    <resource id="resource81">scenery/reds_panels_and_operators/[ Labels ]/Operator 1.png</resource>
+    <resource id="resource82">scenery/reds_panels_and_operators/[ Labels ]/Operator 2.png</resource>
+    <resource id="resource83">scenery/reds_panels_and_operators/[ Labels ]/Operator 3.png</resource>
+    <resource id="resource84">scenery/reds_panels_and_operators/[ Labels ]/Operator 4.png</resource>
+    <resource id="resource85">scenery/reds_panels_and_operators/[ Labels ]/Operator 5.png</resource>
+    <resource id="resource86">scenery/reds_panels_and_operators/[ Labels ]/Transfer.png</resource>
   </script>
 </root>

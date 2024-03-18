@@ -1,7 +1,7 @@
 /**
 	Switch NL2 Script
 	David Wolfe (Red-Thirten)
-	03/17/2024
+	03/18/2024
 	Animates the switch during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -16,7 +16,6 @@ import com.nolimitscoaster.SpecialTrack;
 import com.nolimitscoaster.InteractionObject;
 import com.nolimitscoaster.InteractionActionListener;
 import com.nolimitscoaster.ResourcePath;
-import nlvm.lang.Math;
 
 import obj.OperatorSwitch;
 import util.Logger;
@@ -25,12 +24,12 @@ import util.CoasterTools;
 import util.SpecialTrackModule;
 
 public class SwitchOperator extends Script implements InteractionActionListener{
-	protected String SCRIPT_NAME = "SwitchOperator";	// Script name for debugging
-	protected String SWITCH_ELEMENT_NAME = "switch";	// Name of the switch element in the SCO/model
-	protected String PLACARD_ELEMENT_NAME = "placard";	// Name of the placard element in the SCO/model
-	protected float SWITCH_TRAVEL_TIME = 0.4f;			// Time, in seconds, for the switch to travel ("speed")
-	protected float SWITCH_INTERACTION_RADIUS = 0.04f;	// Radius, in meters, of the InteractionObject detection sphere
-	private static final float SUN_ELEVATION_LIMIT = (float)Math.toRadians(18.0); // 18 degrees is the default sun angle limit for lights to turn on and off
+	protected String SCRIPT_NAME = "SwitchOperator";		// Script name for debugging
+	protected String SWITCH_ELEMENT_NAME = "switch";		// Name of the switch element in the SCO/model
+	protected String PLACARD_ELEMENT_NAME = "placard";		// Name of the placard element in the SCO/model
+	protected float SWITCH_TRAVEL_TIME = 0.4f;				// Time, in seconds, for the switch to travel ("speed")
+	protected float SWITCH_INTERACTION_RADIUS = 0.04f;		// Radius, in meters, of the InteractionObject detection sphere
+	private static final float SUN_ELEVATION_LIMIT = 0.4f;	// 0.4 radians is the default sun angle limit for lights to turn on and off
 	
 	// All Switch Functions:
 	protected static final int F_STATIC = 0;

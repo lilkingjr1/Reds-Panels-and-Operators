@@ -88,7 +88,7 @@
     <lightsource range="0.5" intensity="1" type="point">
       <name>light</name>
       <parent>button</parent>
-      <position x="0.025" y="0.0195" z="0.033"/>
+      <position x="0.025" y="0.0195" z="0.034"/>
       <color r="1" g="1" b="1"/>
       <halo zoffset="0" intensity="0.4" size="0.075"/>
     </lightsource>
