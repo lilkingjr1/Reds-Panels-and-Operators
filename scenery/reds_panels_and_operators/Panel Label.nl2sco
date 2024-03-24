@@ -5,7 +5,7 @@
       <clip distance="15"/>
     </model>
     <description>A small label to add detail to an existing operator or electrical panel.</description>
-    <preview>textures/previews/label.png</preview>
+    <preview>materials/previews/label.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -19,6 +19,11 @@
       <index>1</index>
       <defaultcolor r="1" g="1" b="1"/>
     </usercolor>
+    <usertexture>
+      <label>Label:</label>
+      <description>Label text image to use. Can be custom, but must be black text with white background.</description>
+      <defaultpath>[ Labels ]/Operator 1.png</defaultpath>
+    </usertexture>
     <script>
       <classpath>scripts</classpath>
       <class>ElectricalPanelLabel</class>
@@ -27,92 +32,13 @@
     </script>
     <scriptparameter>
       <type>specialtrack</type>
-      <id>special_track</id>
+      <id>special_track_attach</id>
       <description>Select the special track of a ride you want this label to move with during simulation. Set to &lt;None&gt; to disable.</description>
       <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
-    <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>label_instructions</id>
-      <description>Selections for label texture. Changing this text does nothing.</description>
-      <label>========== Label Options ==========</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>placard0</id>
-      <label>OP1</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard1</id>
-      <label>OP2</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard2</id>
-      <label>OP3</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard3</id>
-      <label>OP4</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard4</id>
-      <label>OP5</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard5</id>
-      <label>BRKE</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard6</id>
-      <label>COM</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard7</id>
-      <label>Dispatch Enable</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard8</id>
-      <label>ELEC</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard9</id>
-      <label>LIFT</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard10</id>
-      <label>MCBR</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard11</id>
-      <label>XFER</label>
-    </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="label_op1">textures/label.nl2mat</materialpath>
-    <materialpath name="rivet_normal">textures/rivet.nl2mat</materialpath>
-    <materialpath name="rivet_normal_0">textures/rivet.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="label_op1">[ Labels ]/label.nl2mat</materialpath>
+    <materialpath name="rivet_normal">materials/rivet.nl2mat</materialpath>
+    <materialpath name="rivet_normal_0">materials/rivet.nl2mat</materialpath>
   </sceneobject>
 </root>

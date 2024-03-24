@@ -1,0 +1,101 @@
+/**
+	Indicator Light Object NL2 Class
+	David Wolfe (Red-Thirten)
+	03/11/2024
+	A Java object representing an indicator/pilot light that can manage the indicator's light and texture animation.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+
+	Constructors:
+		IndicatorLight(SceneObjectElement element, SceneObjectLight light, float blinkInterval, bool enableVolumetricLight)
+
+	Methods:
+		void lightOff() - Turns the indicator off.
+		void lightOn() - Turns the indicator on.
+		void lightBlink() - Sets the indicator to blink (onNextFrame calls req.).
+		void setLightState(int state) - Sets the indicator's state given a com.nolimitscoaster.block LAMP constant.
+		void onNextFrame(float tick) - Called every frame to handle light and texture blink sync. Don't call if blink state unused.
+*/
+
+package obj;
+
+import com.nolimitscoaster.Block;
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.SceneObjectLight;
+
+public class IndicatorLight{
+	// All Light Texture States:
+	private static final int L_TEX_OFF = 0;
+	private static final int L_TEX_ON = 1;
+
+	private SceneObjectElement element;
+	private SceneObjectLight light;
+
+	private bool blink, blinkState, enableVolumetricLight = false;
+	private float lightT, blinkInterval = 0.f;
+
+	public IndicatorLight(SceneObjectElement element, SceneObjectLight light, float blinkInterval, bool enableVolumetricLight){ // Default object constructor
+		this.element = element;
+		this.light = light;
+		this.blinkInterval = blinkInterval;
+		this.enableVolumetricLight = enableVolumetricLight;
+		element.setTextureAnimationIndex(L_TEX_OFF);
+		light.setEnabled(false);
+	}
+
+	private void lightSourcesOff(){
+		element.setTextureAnimationIndex(L_TEX_OFF);
+		if (enableVolumetricLight)
+			light.setEnabled(false);
+	}
+
+	public void lightOff(){
+		blink = false;
+		lightSourcesOff();
+	}
+
+	private void lightSourcesOn(){
+		element.setTextureAnimationIndex(L_TEX_ON);
+		if (enableVolumetricLight)
+			light.setEnabled(true);
+	}
+
+	public void lightOn(){
+		blink = false;
+		lightSourcesOn();
+	}
+
+	public void lightBlink(){
+		blink = true;
+	}
+
+	public void setLightState(int state){
+		switch(state){
+			case Block.LAMP_ON:
+				lightOn();
+				break;
+			case Block.LAMP_FLASHING:
+				lightBlink();
+				break;
+			default:
+				lightOff();
+		}
+	}
+
+	public void onNextFrame(float tick){
+		// Handle light and texture blink sync
+		if (lightT >= blinkInterval){
+			lightT = 0.f;
+			blinkState = !blinkState;
+			if (blink){
+				if (blinkState){
+					lightSourcesOff();
+				}
+				else{
+					lightSourcesOn();
+				}
+			}
+		}
+
+		lightT += tick;
+	}
+}

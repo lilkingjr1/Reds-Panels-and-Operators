@@ -1,0 +1,48 @@
+/**
+	Logger NL2 Class
+	David Wolfe (Red-Thirten)
+	01/09/2024
+	A helper class for easier console printing.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+
+	Constructors:
+		Logger(String scriptName, String instanceName)
+
+	Methods:
+		void out(String msg) - Prints `msg` w/ prefix as a standard message to the console.
+		void err(String msg) - Prints `msg` w/ prefix as an error message to the console.
+		throwRE(String msg) - Throws runtime exception w/ `msg` & prefix as an error message to the console.
+*/
+
+package util;
+
+import nlvm.lang.System;
+
+public class Logger{
+	private String prefix;
+
+	public Logger(String scriptName, String instanceName){
+		// If instance name is null, script name will be used for message prefix.
+		if (instanceName != null && instanceName.length() > 0){
+			prefix = instanceName;
+		}
+		else if (scriptName != null){
+			prefix = scriptName;
+		}
+		else{
+			System.throwRuntimeException("Cannot set up a Logger with a null script name!");
+		}
+	}
+
+	public void out(String msg){
+		System.out.println(prefix + ": " + msg);
+	}
+
+	public void err(String msg){
+		System.err.println(prefix + ": " + msg);
+	}
+
+	public void throwRE(String msg){
+		System.throwRuntimeException("[" + prefix + "] " + msg);
+	}
+}

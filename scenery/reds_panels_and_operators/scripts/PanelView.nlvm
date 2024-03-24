@@ -1,7 +1,7 @@
 /**
 	Panel View NL2 Script
 	David Wolfe (Red-Thirten)
-	6/8/2022
+	03/05/2024
 	Extends Block Display. Handles additional harness and gate indicator functionality.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -12,36 +12,39 @@ import com.nolimitscoaster.Section;
 import nlvm.lang.Math;
 import nlvm.math3d.Vector4f;
 
+import util.SceneObjectTools;
+
 public class PanelView extends BlockDisplay{
-    private static final String HARNESS_ELEMENT_NAME = "harness_indicator";						// Name of the harness indicator element in the SCO/model
-    private static final String GATES_ELEMENT_NAME = "gates_indicator";							// Name of the gates indicator element in the SCO/model
-    private static final String WIND_ELEMENT_NAME = "wind_indicator";							// Name of the wind indicator element in the SCO/model
+	private static final String HARNESS_ELEMENT_NAME = "harness_indicator";						// Name of the harness indicator element in the SCO/model
+	private static final String GATES_ELEMENT_NAME = "gates_indicator";							// Name of the gates indicator element in the SCO/model
+	private static final String WIND_ELEMENT_NAME = "wind_indicator";							// Name of the wind indicator element in the SCO/model
 	private static final Vector4f COLOR_HARNESS_GATES = new Vector4f(0.0f, 1.0f, 0.0f, 1.0f);	// Color of the harness and gates indicators
 	private static final Vector4f COLOR_WIND_SLOW = new Vector4f(0.0f, 1.0f, 0.0f, 1.0f);		// Color to indicate slow wind speeds
 	private static final Vector4f COLOR_WIND_FAST = new Vector4f(1.0f, 0.0f, 0.0f, 1.0f);		// Color to indicate fast wind speeds
-	private static final float WIND_SPEED_CAUTION = 0.55f;										// Wind speed at which the wind indicator will start flashing
 	private static final float MAX_WIND_SPEED = 34.75187f;										// NL2's static max wind speed (m/s)
+	private static final float WIND_SPEED_CAUTION = 0.55f;										// Wind speed % at which the wind indicator will start flashing
 	
-    private Section section;
+	private Section section;
 	private SceneObjectElement harnessIndicatorElement, gatesIndicatorElement, windIndicatorElement;
 	private Vector4f windIndicatorColor = COLOR_WIND_SLOW.dup();
 	
 	private float stationGateState, harnessState, windSpeed;
 
-    public bool onInit(){ // On initialization of Play simulation
+	public bool onInit(){ // On initialization of Play simulation
 		super.SCRIPT_NAME = "PanelView"; // Script name for debugging
 		
 		if (super.onInit()){ // If the base block display initializes successfully
-			harnessIndicatorElement = super.getElementOnScoForName(super.sco, HARNESS_ELEMENT_NAME); // Get and assign harness, gates, and wind indicators' elements
-			gatesIndicatorElement = super.getElementOnScoForName(super.sco, GATES_ELEMENT_NAME);
-			windIndicatorElement = super.getElementOnScoForName(super.sco, WIND_ELEMENT_NAME);
+			// Get and assign harness, gates, and wind indicators' elements
+			harnessIndicatorElement = SceneObjectTools.getElementForName(super.sco, HARNESS_ELEMENT_NAME, SCRIPT_NAME);
+			gatesIndicatorElement = SceneObjectTools.getElementForName(super.sco, GATES_ELEMENT_NAME, SCRIPT_NAME);
+			windIndicatorElement = SceneObjectTools.getElementForName(super.sco, WIND_ELEMENT_NAME, SCRIPT_NAME);
 			harnessIndicatorElement.setEntityColor(super.INDICATOR_COLOR_SLOT, COLOR_HARNESS_GATES);
 			gatesIndicatorElement.setEntityColor(super.INDICATOR_COLOR_SLOT, COLOR_HARNESS_GATES);
 			section = super.blocks[0].getSection(); // Get the station section
 			return true;
 		}
 		else return false;
-    }
+	}
 	
 	private float saturateColorValue(float v){
 		// y = -2x^2 + 2x
@@ -52,7 +55,7 @@ public class PanelView extends BlockDisplay{
 		return v;
 	}
 
-    public void onNextFrame(float tick){
+	public void onNextFrame(float tick){
 		// Handle harness indicator animation
 		if (super.blocks[0].getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_IN_STATION){
 			harnessState = section.getTrainOnSection().getHarnessState();
@@ -95,5 +98,5 @@ public class PanelView extends BlockDisplay{
 		}
 		
 		super.onNextFrame(tick); // Run the rest of the base animations
-    }
+	}
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/push_button_mushroom.dae">
+      <clip distance="30"/>
+      <clip mesh="button_housing" distance="5"/>
+      <clip mesh="button" distance="25"/>
+    </model>
+    <description>A recolorable &amp; animated mushroom (dispatch) button.</description>
+    <preview>materials/previews/push_button_mushroom.png</preview>
+    <param basescalex="2"/>
+    <param basescaley="2"/>
+    <param basescalez="2"/>
+    <usercolor>
+      <label>Placard Background</label>
+      <index>0</index>
+      <defaultcolor r="1" g="1" b="0.94902"/>
+    </usercolor>
+    <usercolor>
+      <label>Placard Text</label>
+      <index>1</index>
+      <defaultcolor r="0" g="0" b="0"/>
+    </usercolor>
+    <usercolor>
+      <label>Button</label>
+      <index>2</index>
+      <lightsources>light</lightsources>
+      <defaultcolor r="0" g="1" b="0"/>
+    </usercolor>
+    <usertexture>
+      <label>Placard:</label>
+      <description>Placard text image to use. Can be custom, but must be black text with white background.</description>
+      <defaultpath>[ Placards ]/Default.png</defaultpath>
+    </usertexture>
+    <script>
+      <classpath>scripts</classpath>
+      <class>PushButtonMushroom</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+      <resource id="sound_off">sounds/button_out.ogg</resource>
+      <resource id="sound_on">sounds/button_in.ogg</resource>
+    </script>
+    <scriptparameter>
+      <type>int</type>
+      <defaultvalue>0</defaultvalue>
+      <enums>None (Light Off),None (Light On),None (Light Blinking),Block Advance,Block Reverse,Station Dispatch,Restraints Open,Restraints Lock,Platform Raise,Platform Lower,Platform Toggle,Flyer Seats Unlock,Flyer Seats Lock,Flyer Seats Toggle,Special Track Left,Special Track Right,Auto Dispatch,Manual Dispatch,Automatic Operation,Manual Block Operation,Full Manual Operation,E-Stop Reset,Lift Jog (No Interaction),Brake Release (No Interaction)</enums>
+      <id>function</id>
+      <description>How this button will behave during Play Mode.</description>
+      <label>Function:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block</id>
+      <description>This is the block that this operator will be assigned to for all Non-Static Functions.</description>
+      <label>Block Location:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track</id>
+      <description>This is the Special Track that this operator will control. Required for the Special Track Functions.</description>
+      <label>Special Track (for Special Track Functions):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track_attach</id>
+      <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
+      <label>Special Track to Attach To (Optional):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>disable_light</id>
+      <description>Disables the &quot;real&quot; light during simulation, possibly leading to better performance. Pilot light will still have a basic &quot;glow&quot;.</description>
+      <label>Disable Volumetric Light</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>hide_placard</id>
+      <description>Hides the placard during Play Mode.</description>
+      <label>Hide Placard</label>
+    </scriptparameter>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="button">materials/plastic_darker_user2.nl2mat</materialpath>
+    <materialpath name="button_color">materials/button_user2.nl2mat</materialpath>
+    <materialpath name="button_side_on_color">materials/estop_side_user2.nl2mat</materialpath>
+    <materialpath name="metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>light</name>
+      <parent>button</parent>
+      <position x="0.025" y="0.0215" z="0.0355"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+  </sceneobject>
+</root>

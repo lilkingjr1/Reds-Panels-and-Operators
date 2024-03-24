@@ -1,0 +1,254 @@
+/**
+	Operator Button Object NL2 Script
+	David Wolfe (Red-Thirten)
+	03/11/2024
+	A Java object representing a button that can be animated to be pushed, or even lit differently if it has a pilot light.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+
+	Constructors:
+		public OperatorButton(
+			SceneObjectElement element,
+			bool hasLight,
+			float blinkInterval,
+			float travelDistance,
+			float travelTime,
+			SceneObjectLight light,
+			bool enableLightSource
+		)
+
+	Methods:
+		Vector3f getAbsoluteTranslation() - Returns the absolute translation of the button element.
+		void lightOff() - Turns the light texture off.
+		void lightOn() - Turns the light texture on.
+		void lightBlink() - Sets the light texture to blink.
+		void setLightState(int state) - Sets the button's light state given a com.nolimitscoaster.block LAMP constant.
+		void buttonIn() - If not currently animating or already pushed in, prep the button to be animated in (via onNextFrame).
+		void buttonOut() - If not currently animating or already pushed out, prep the button to be animated out (via onNextFrame).
+		void buttonPush() - If not currently animating or already pushed, prep the button to be animated in & out (via onNextFrame).
+		bool isAnimating() - Returns if the button is in the middle of an animation.
+		bool isPushedIn() - Returns if the button is pressed in.
+		void onNextFrame(float tick) - Should be called every frame to animate button.
+*/
+
+package obj;
+
+import com.nolimitscoaster.Block;
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.SceneObjectLight;
+import com.nolimitscoaster.StaticSound;
+import com.nolimitscoaster.ResourcePath;
+import com.nolimitscoaster.Tools;
+import nlvm.math3d.Vector3f;
+
+public class OperatorButton{
+	// All Light Texture States:
+	private static final int L_TEX_OFF = 0;
+	private static final int L_TEX_ON = 1;
+
+	private SceneObjectElement button;
+	private SceneObjectLight light;
+	private StaticSound soundOn, soundOff;
+	
+	private bool hasLight, animate, enableLightSource, blink, blinkState = false;
+	private int buttonState = 0;
+	private float t, delta, deltaCurrent, deltaTarget, lightT, blinkInterval = 0.f;
+	private float DELTA_MAX, DELTA_T, DELTA_Ta; // Semi-static (set only once during init)
+
+	public OperatorButton(
+			SceneObjectElement element,
+			ResourcePath[] soundPaths,
+			bool hasLight,
+			float blinkInterval,
+			float travelDistance,
+			float travelTime,
+			SceneObjectLight light,
+			bool enableLightSource
+	){ // Default object constructor
+		button = element; // Assign element
+		this.hasLight = hasLight;
+		// Has a pilot light
+		if (this.hasLight){
+			button.setTextureAnimationIndex(L_TEX_OFF);
+			this.blinkInterval = blinkInterval;
+			this.light = light;
+			this.enableLightSource = enableLightSource;
+			if (!this.enableLightSource) light.setEnabled(false);
+		}
+		// Does not have pilot light
+		else{
+			// Force disable light source
+			this.enableLightSource = false;
+		}
+		DELTA_MAX = travelDistance;
+		DELTA_T = travelTime/2; // DELTA_T is the time to do half a full "push"
+		DELTA_Ta = DELTA_T/3.f; // (De)Acceleration window is the first and last 3rd of the animation
+		setupSounds(soundPaths);
+	}
+
+	private void setupSounds(ResourcePath[] soundPaths){
+		if (soundPaths[0] == null || soundPaths[1] == null)
+			System.throwRuntimeException("[OperatorButton] Missing sound Resource Path(s) during instantiation!");
+		soundOn = StaticSound.loadFromResource(
+			soundPaths[0],
+			StaticSound.FLAG_MIXDOWN_MONO
+		);
+		soundOff = StaticSound.loadFromResource(
+			soundPaths[1],
+			StaticSound.FLAG_MIXDOWN_MONO
+		);
+		if (soundOn == null || soundOff == null)
+			System.throwRuntimeException("[OperatorButton] Failed to load sound files!");
+		
+		soundOn.setPosition(this.getAbsoluteTranslation());
+		soundOn.setDistanceParameters(1.f, 1.f);
+		soundOn.setGain(1.f);
+		soundOn.setPitch(1.f);
+		soundOn.setDopplerMode(false);
+		soundOn.setEnvironmentMode(StaticSound.E_ENVMODE_LOCAL);
+		
+		soundOff.setPosition(this.getAbsoluteTranslation());
+		soundOff.setDistanceParameters(1.f, 1.f);
+		soundOff.setGain(1.f);
+		soundOff.setPitch(1.f);
+		soundOff.setDopplerMode(false);
+		soundOff.setEnvironmentMode(StaticSound.E_ENVMODE_LOCAL);
+	}
+
+	public Vector3f getAbsoluteTranslation(){
+		return button.getAbsoluteTranslation();
+	}
+
+	private void lightSourcesOff(){
+		button.setTextureAnimationIndex(L_TEX_OFF);
+		if (enableLightSource) light.setEnabled(false);
+	}
+
+	public void lightOff(){
+		if (hasLight){
+			blink = false;
+			lightSourcesOff();
+		}
+	}
+
+	private void lightSourcesOn(){
+		button.setTextureAnimationIndex(L_TEX_ON);
+		if (enableLightSource) light.setEnabled(true);
+	}
+
+	public void lightOn(){
+		if (hasLight){
+			blink = false;
+			lightSourcesOn();
+		}
+	}
+
+	public void lightBlink(){
+		blink = true;
+	}
+
+	public void setLightState(int state){
+		if (!hasLight) return;
+
+		switch(state){
+			case Block.LAMP_ON:
+				lightOn();
+				break;
+			case Block.LAMP_FLASHING:
+				lightBlink();
+				break;
+			default:
+				lightOff();
+		}
+	}
+	
+	public void buttonIn(){
+		if (!animate && buttonState != 1){
+			t = 0.f;
+			buttonState = 1;
+			deltaCurrent = delta;
+			deltaTarget = DELTA_MAX;
+			animate = true;
+			soundOn.setPosition(this.getAbsoluteTranslation());
+			soundOn.play();
+		}
+	}
+	
+	public void buttonOut(){
+		if (!animate && buttonState != 0){
+			t = 0.f;
+			buttonState = 0;
+			deltaCurrent = delta;
+			deltaTarget = -DELTA_MAX;
+			animate = true;
+			soundOff.setPosition(this.getAbsoluteTranslation());
+			soundOff.play();
+		}
+	}
+	
+	public void buttonPush(){
+		if (!animate && buttonState != 1){
+			t = 0.f;
+			buttonState = 2; // 2 = special state to indicate a push
+			deltaCurrent = delta;
+			deltaTarget = DELTA_MAX;
+			animate = true;
+			soundOn.setPosition(this.getAbsoluteTranslation());
+			soundOn.play();
+		}
+	}
+	
+	// DEPRECIATED (Does not need to be called)
+	// public void resetButtonState(){
+	// 	if (buttonState != 2){ // If not in the middle of a push
+	// 		buttonState = 0; // Reset the button state
+	// 	}
+	// }
+
+	public bool isAnimating(){
+		return animate;
+	}
+
+	public bool isPushedIn(){
+		return (buttonState == 1) ? true : false;
+	}
+	
+	public void onNextFrame(float tick){
+		if (animate){
+			delta = deltaCurrent + (float)Tools.switchRampC1(DELTA_T, deltaTarget, DELTA_Ta, t); // Calculate change in position, based on smoothing function
+			button.setTranslation(0.f, delta, 0.f); // Set the translation 
+			
+			if (t >= DELTA_T){ // If we've reached the end of the animation
+				if (buttonState == 2){ // If push, reset for second animation of going out
+					t = 0.f;
+					deltaCurrent = delta;
+					deltaTarget = -DELTA_MAX;
+					buttonState = 0; // used to be 1
+					soundOff.setPosition(this.getAbsoluteTranslation());
+					soundOff.play();
+				}
+				else{ // If not a push, leave as is and end animation
+					animate = false;
+				}
+			}
+			
+			t += tick; // Increment time based on time passed
+		}
+		
+		// Handle light and texture blink sync
+		if (hasLight){
+			if (lightT >= blinkInterval){
+				lightT = 0.f;
+				blinkState = !blinkState;
+				if (blink){
+					if (blinkState){
+						lightSourcesOff();
+					}
+					else{
+						lightSourcesOn();
+					}
+				}
+			}
+			lightT += tick;
+		}
+	}
+}

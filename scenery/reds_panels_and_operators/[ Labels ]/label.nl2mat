@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <material>
+    <description>All possible labels, listed in animation format.</description>
+    <preview>Operator 1.png</preview>
+    <renderpass>
+      <shadercore>Result = Lerp(Tex0, Entity0, Entity1);
+Roughness = 1;
+Specular = 0;</shadercore>
+      <transparency mode="opaque"/>
+      <linearshading/>
+      <rgbgen mode="lighting"/>
+      <texunit>
+        <entity/>
+        <tcgen mode="base"/>
+      </texunit>
+    </renderpass>
+  </material>
+</root>

@@ -10,7 +10,7 @@
       <clip mesh="light4" distance="15"/>
     </model>
     <description>A recolorable, scripted 4-way pilot light, with customizable lights and placard.</description>
-    <preview>textures/previews/pilot_light_4way.png</preview>
+    <preview>materials/previews/pilot_light_4way.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -27,23 +27,32 @@
     <usercolor>
       <label>Pilot Light (Top)</label>
       <index>2</index>
+      <lightsources>light1</lightsources>
       <defaultcolor r="0.996078" g="1" b="0.623529"/>
     </usercolor>
     <usercolor>
       <label>Pilot Light (Right)</label>
       <index>3</index>
+      <lightsources>light2</lightsources>
       <defaultcolor r="1" g="0" b="0"/>
     </usercolor>
     <usercolor>
       <label>Pilot Light (Bottom)</label>
       <index>4</index>
+      <lightsources>light3</lightsources>
       <defaultcolor r="0" g="0" b="1"/>
     </usercolor>
     <usercolor>
       <label>Pilot Light (Left)</label>
       <index>5</index>
+      <lightsources>light4</lightsources>
       <defaultcolor r="0" g="1" b="0"/>
     </usercolor>
+    <usertexture>
+      <label>Placard:</label>
+      <description>Placard text image to use. Can be custom, but must be black text with white background.</description>
+      <defaultpath>[ Placards ]/Default.png</defaultpath>
+    </usertexture>
     <script>
       <classpath>scripts</classpath>
       <class>PilotLight4Way</class>
@@ -52,131 +61,109 @@
     </script>
     <scriptparameter>
       <type>int</type>
+      <defaultvalue>0</defaultvalue>
+      <enums>None (See Options Below),Block Indicator (Only Non-Scripted Coasters)</enums>
+      <id>function</id>
+      <description>How this light will behave during Play Mode.</description>
+      <label>Function:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>int</type>
       <defaultvalue>1</defaultvalue>
-      <id>light</id>
-      <description>This setting is ONLY used in Static Mode -- 0 = Light Off, 1 = Light On, 2 = Light Blinking</description>
-      <label>Top Pilot Light (Hover cursor to see options):</label>
+      <enums>Light Off,Light On,Light Blinking</enums>
+      <id>light1</id>
+      <description>This setting is ONLY used if Function is set to &quot;None&quot;.</description>
+      <label>Top Pilot Light:</label>
     </scriptparameter>
     <scriptparameter>
       <type>int</type>
       <defaultvalue>0</defaultvalue>
+      <enums>Light Off,Light On,Light Blinking</enums>
       <id>light2</id>
-      <description>This setting is ONLY used in Static Mode -- 0 = Light Off, 1 = Light On, 2 = Light Blinking</description>
-      <label>Right Pilot Light (Hover cursor to see options):</label>
+      <description>This setting is ONLY used if Function is set to &quot;None&quot;.</description>
+      <label>Right Pilot Light:</label>
     </scriptparameter>
     <scriptparameter>
       <type>int</type>
       <defaultvalue>2</defaultvalue>
+      <enums>Light Off,Light On,Light Blinking</enums>
       <id>light3</id>
-      <description>This setting is ONLY used in Static Mode -- 0 = Light Off, 1 = Light On, 2 = Light Blinking</description>
-      <label>Bottom Pilot Light (Hover cursor to see options):</label>
+      <description>This setting is ONLY used if Function is set to &quot;None&quot;.</description>
+      <label>Bottom Pilot Light:</label>
     </scriptparameter>
     <scriptparameter>
       <type>int</type>
       <defaultvalue>0</defaultvalue>
+      <enums>Light Off,Light On,Light Blinking</enums>
       <id>light4</id>
-      <description>This setting is ONLY used in Static Mode -- 0 = Light Off, 1 = Light On, 2 = Light Blinking</description>
-      <label>Left Pilot Light (Hover cursor to see options):</label>
+      <description>This setting is ONLY used if Function is set to &quot;None&quot;.</description>
+      <label>Left Pilot Light:</label>
     </scriptparameter>
     <scriptparameter>
       <type>blocksection</type>
       <id>block</id>
-      <description>This is the block that this light will be assigned to for all Non-Static Modes.</description>
-      <label>Block Location (for all Non-Static Modes):</label>
+      <description>This is the block that this light will be assigned to for all Non-Static Functions.</description>
+      <label>Block Location:</label>
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>
-      <id>special_track</id>
+      <id>special_track_attach</id>
       <description>Select the special track of a ride you want this light to move with during simulation. Set to &lt;None&gt; to disable.</description>
       <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
     <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>mode_instructions</id>
-      <description>How this light will behave during Play Mode. Changing this text does nothing.</description>
-      <label>=========== Light Mode ===========</label>
-    </scriptparameter>
-    <scriptparameter>
       <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>static</id>
-      <description>Will remain static with no animation or light changes.</description>
-      <label>Static</label>
+      <defaultvalue>false</defaultvalue>
+      <id>disable_light</id>
+      <description>Disables the &quot;real&quot; light during simulation, possibly leading to better performance. Pilot light will still have a basic &quot;glow&quot;.</description>
+      <label>Disable Volumetric Light</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
-      <id>four_way</id>
-      <description>Will light accordingly if a chosen block is occupied, clear, approaching, or manual mode.</description>
-      <label>4-Way Block Indicator</label>
+      <id>hide_placard</id>
+      <description>Hides the placard during Play Mode.</description>
+      <label>Hide Placard</label>
     </scriptparameter>
-    <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>placard_instructions</id>
-      <description>Selections for placard text. Changing this text does nothing.</description>
-      <label>========== Placard Options ==========</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard0</id>
-      <label>No Placard (Invisible)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>placard1</id>
-      <label>Lift Block (4-Way)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard2</id>
-      <label>Load (4-Way)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard3</id>
-      <label>MCBR (4-Way)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard4</id>
-      <label>Ready Brakes (4-Way)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard5</id>
-      <label>Transfer Track (4-Way)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard6</id>
-      <label>Unload (4-Way)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard7</id>
-      <label>System Status</label>
-    </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
-    <materialpath name="pilot_1_color">textures/button_user2.nl2mat</materialpath>
-    <materialpath name="pilot_2_color">textures/button_user3.nl2mat</materialpath>
-    <materialpath name="pilot_3_color">textures/button_user4.nl2mat</materialpath>
-    <materialpath name="pilot_4_color">textures/button_user5.nl2mat</materialpath>
-    <materialpath name="pilot_side_1_color">textures/button_side_user2.nl2mat</materialpath>
-    <materialpath name="pilot_side_2_color">textures/button_side_user3.nl2mat</materialpath>
-    <materialpath name="pilot_side_3_color">textures/button_side_user4.nl2mat</materialpath>
-    <materialpath name="pilot_side_4_color">textures/button_side_user5.nl2mat</materialpath>
-    <materialpath name="placard">textures/placard_pilot_light_4way.nl2mat</materialpath>
-    <materialpath name="ribbed_height">textures/metal011_ribbed.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="pilot_1_color">materials/button_user2.nl2mat</materialpath>
+    <materialpath name="pilot_2_color">materials/button_user3.nl2mat</materialpath>
+    <materialpath name="pilot_3_color">materials/button_user4.nl2mat</materialpath>
+    <materialpath name="pilot_4_color">materials/button_user5.nl2mat</materialpath>
+    <materialpath name="pilot_side_1_color">materials/button_side_user2.nl2mat</materialpath>
+    <materialpath name="pilot_side_2_color">materials/button_side_user3.nl2mat</materialpath>
+    <materialpath name="pilot_side_3_color">materials/button_side_user4.nl2mat</materialpath>
+    <materialpath name="pilot_side_4_color">materials/button_side_user5.nl2mat</materialpath>
+    <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
+    <materialpath name="ribbed_height">materials/metal_ribbed.nl2mat</materialpath>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>light1</name>
+      <parent>light1</parent>
+      <position x="0.025" y="0.0283" z="0.0285"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>light2</name>
+      <parent>light2</parent>
+      <position x="0.0295" y="0.0237" z="0.0285"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>light3</name>
+      <parent>light3</parent>
+      <position x="0.025" y="0.0192" z="0.0285"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
+    <lightsource range="0.5" intensity="1" type="point">
+      <name>light4</name>
+      <parent>light4</parent>
+      <position x="0.0205" y="0.0237" z="0.0285"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0" intensity="0.4" size="0.075"/>
+    </lightsource>
   </sceneobject>
 </root>

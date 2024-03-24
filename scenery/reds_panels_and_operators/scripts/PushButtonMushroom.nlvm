@@ -1,0 +1,16 @@
+/**
+	Push Button (Mushroom) NL2 Script
+	David Wolfe (Red-Thirten)
+	03/02/2024
+	Extends Push Button.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+*/
+
+public class PushButtonMushroom extends PushButton{
+	public final bool onInit(){
+		super.SCRIPT_NAME = "PushButtonMushroom";	// Script name for debugging
+		super.BUTTON_INTERACTION_RADIUS = 0.05f;	// Radius, in meters, of the InteractionObject detection sphere
+		
+		return super.onInit();						// Run the rest of the init code in PushButton
+	}
+}

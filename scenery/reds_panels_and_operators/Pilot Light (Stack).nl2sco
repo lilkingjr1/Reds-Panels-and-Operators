@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <sceneobject>
+    <model path="models/pilot_light_stack.dae">
+      <clip distance="30"/>
+      <clip mesh="base" distance="20"/>
+    </model>
+    <description>A recolorable 3-stack tower of pilot lights.</description>
+    <preview>materials/previews/pilot_light_stack.png</preview>
+    <param basescalex="0.6"/>
+    <param basescaley="0.6"/>
+    <param basescalez="0.6"/>
+    <usercolor>
+      <label>Bottom Light</label>
+      <index>2</index>
+      <lightsources>light1</lightsources>
+      <defaultcolor r="0" g="1" b="0"/>
+    </usercolor>
+    <usercolor>
+      <label>Middle Light</label>
+      <index>3</index>
+      <lightsources>light2</lightsources>
+      <defaultcolor r="1" g="0.498039" b="0"/>
+    </usercolor>
+    <usercolor>
+      <label>Top Light</label>
+      <index>4</index>
+      <lightsources>light3</lightsources>
+      <defaultcolor r="1" g="0" b="0"/>
+    </usercolor>
+    <script>
+      <classpath>scripts</classpath>
+      <class>PilotLightStack</class>
+      <sharedvm>true</sharedvm>
+      <resource id="LICENSE">LICENSE</resource>
+    </script>
+    <scriptparameter>
+      <type>int</type>
+      <defaultvalue>0</defaultvalue>
+      <enums>None (See Options Below),Station Status,Block Indicator (Only Non-Scripted Coasters),Special Track Manual Status</enums>
+      <id>function</id>
+      <description>How this light stack will behave during Play Mode.</description>
+      <label>Function:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>int</type>
+      <defaultvalue>1</defaultvalue>
+      <enums>Light Off,Light On,Light Blinking</enums>
+      <id>light1</id>
+      <description>This setting is ONLY used if Function is set to &quot;None&quot;.</description>
+      <label>Bottom Pilot Light:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>int</type>
+      <defaultvalue>0</defaultvalue>
+      <enums>Light Off,Light On,Light Blinking</enums>
+      <id>light2</id>
+      <description>This setting is ONLY used if Function is set to &quot;None&quot;.</description>
+      <label>Middle Pilot Light:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>int</type>
+      <defaultvalue>2</defaultvalue>
+      <enums>Light Off,Light On,Light Blinking</enums>
+      <id>light3</id>
+      <description>This setting is ONLY used if Function is set to &quot;None&quot;.</description>
+      <label>Top Pilot Light:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>blocksection</type>
+      <id>block</id>
+      <description>This is the block that this light stack will be assigned to for all Non-Static Functions.</description>
+      <label>Block Location:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track</id>
+      <description>This is the Special Track that this light stack will monitor. Required for the Special Track Function.</description>
+      <label>Special Track (for Special Track Functions):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track_attach</id>
+      <description>Select the special track of a ride you want this light stack to move with during simulation. Set to &lt;None&gt; to disable.</description>
+      <label>Special Track to Attach To (Optional):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type filetype="audio">resourcepath</type>
+      <defaultvalue>sounds/alarm.ogg</defaultvalue>
+      <id>estop_sound</id>
+      <description>Sound that plays out the speaker when the ride is emergency stoped. Will only play for Non-Static Functions. Leave empty to play no sound.</description>
+      <label>E-Stop Sound:</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>bool</type>
+      <defaultvalue>false</defaultvalue>
+      <id>disable_light</id>
+      <description>Disables the &quot;real&quot; light during simulation, possibly leading to better performance. Pilot light will still have a basic &quot;glow&quot;.</description>
+      <label>Disable Volumetric Light</label>
+    </scriptparameter>
+    <materialpath name="black_plastic">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="black_plastic_ribbed">materials/plastic_black_ribbed.nl2mat</materialpath>
+    <materialpath name="bottom_light_ribbed">materials/plastic_ribbed_user2.nl2mat</materialpath>
+    <materialpath name="bottom_light_side">materials/button_side_user2.nl2mat</materialpath>
+    <materialpath name="metal">intern:data/materials/Chrome.nl2mat</materialpath>
+    <materialpath name="middle_light_ribbed">materials/plastic_ribbed_user3.nl2mat</materialpath>
+    <materialpath name="middle_light_side">materials/button_side_user3.nl2mat</materialpath>
+    <materialpath name="screw_normal">materials/screw.nl2mat</materialpath>
+    <materialpath name="top_light_ribbed">materials/plastic_ribbed_user4.nl2mat</materialpath>
+    <materialpath name="top_light_side">materials/button_side_user4.nl2mat</materialpath>
+    <lightsource range="0.75" intensity="1" type="point">
+      <name>light1</name>
+      <parent>light1</parent>
+      <position x="0" y="0.4" z="0"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0.053" intensity="0.65" size="0.16"/>
+    </lightsource>
+    <lightsource range="0.75" intensity="1" type="point">
+      <name>light2</name>
+      <parent>light2</parent>
+      <position x="0" y="0.5" z="0"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0.053" intensity="0.65" size="0.16"/>
+    </lightsource>
+    <lightsource range="0.75" intensity="1" type="point">
+      <name>light3</name>
+      <parent>light3</parent>
+      <position x="0" y="0.6" z="0"/>
+      <color r="1" g="1" b="1"/>
+      <halo zoffset="0.053" intensity="0.65" size="0.16"/>
+    </lightsource>
+  </sceneobject>
+</root>

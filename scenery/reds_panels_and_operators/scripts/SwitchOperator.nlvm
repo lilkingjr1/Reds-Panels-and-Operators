@@ -1,205 +1,279 @@
 /**
 	Switch NL2 Script
 	David Wolfe (Red-Thirten)
-	6/7/2022
-	Initializes the switch's placard and animates the switch during run time, based on user settings.
+	03/18/2024
+	Animates the switch during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;
-import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Coaster;
+import com.nolimitscoaster.Train;
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.Section;
 import com.nolimitscoaster.SpecialTrack;
-import nlvm.lang.Math;
+import com.nolimitscoaster.InteractionObject;
+import com.nolimitscoaster.InteractionActionListener;
+import com.nolimitscoaster.ResourcePath;
 
-import util.OperatorSwitch;
-import util.OperatorPlacard;
+import obj.OperatorSwitch;
+import util.Logger;
+import util.SceneObjectTools;
+import util.CoasterTools;
 import util.SpecialTrackModule;
 
-public class SwitchOperator extends Script{
-	protected String SCRIPT_NAME = "SwitchOperator";	// Script name for debugging
-	protected String SWITCH_ELEMENT_NAME = "switch";	// Name of the switch element in the SCO/model
-	protected String PLACARD_ELEMENT_NAME = "placard";	// Name of the placard element in the SCO/model
-	protected float SWITCH_TRAVEL_TIME = 0.4f;			// Time, in seconds, for the switch to travel ("speed")
+public class SwitchOperator extends Script implements InteractionActionListener{
+	protected String SCRIPT_NAME = "SwitchOperator";		// Script name for debugging
+	protected String SWITCH_ELEMENT_NAME = "switch";		// Name of the switch element in the SCO/model
+	protected String PLACARD_ELEMENT_NAME = "placard";		// Name of the placard element in the SCO/model
+	protected float SWITCH_TRAVEL_TIME = 0.4f;				// Time, in seconds, for the switch to travel ("speed")
+	protected float SWITCH_INTERACTION_RADIUS = 0.04f;		// Radius, in meters, of the InteractionObject detection sphere
+	private static final float SUN_ELEVATION_LIMIT = 0.4f;	// 0.4 radians is the default sun angle limit for lights to turn on and off
 	
-	private static final String[] MODES = { // Possible mode parameters
-		"static",
-		"restraints",
-		"gates",
-		"platform",
-		"trains",
-		"transports",
-		"special_track_mode",
-		"maintenance_mode",
-		"lights",
-		"manual_lift_jog"
+	// All Switch Functions:
+	protected static final int F_STATIC = 0;
+	protected static final int F_RESTRAINTS = 1;
+	protected static final int F_GATES = 2;
+	protected static final int F_PLATFORM = 3;
+	protected static final int F_SPECIAL_TRACK = 4;
+	protected static final int F_DISPATCH_MODE = 5;
+	protected static final int F_OP_MODE = 6;
+	protected static final int F_NUM_TRAINS_NO_INT = 7;
+	protected static final int F_LIFT_JOG_NO_INT = 8;
+	protected static final int F_TRANSPORTS_NO_INT = 9;
+	protected static final int F_SPECIAL_TRACK_NO_INT = 10;
+	protected static final int F_COASTER_LIGHTS_NO_INT = 11;
+	private static final int[] NON_INTERACT_MODES = {
+		F_NUM_TRAINS_NO_INT,
+		F_LIFT_JOG_NO_INT,
+		F_TRANSPORTS_NO_INT,
+		F_SPECIAL_TRACK_NO_INT,
+		F_COASTER_LIGHTS_NO_INT
 	};
-	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24}; // All platform coaster IDs in NL2, as of this file's creation date
-	private static final float SUN_ELEVATION_LIMIT = (float)Math.toRadians(18.0); // 18 degrees is the default sun angle limit for lights to turn on and off
 	
-    protected Coaster coaster;
-    private Block block;
-    private Section section;
-	private SpecialTrack specialTrack;
+	private Coaster coaster;
+	private Block block;
+	private Section section;
+	protected SpecialTrack specialTrack;
+	private InteractionObject iObj;
 	
-    protected OperatorSwitch operatorSwitch;
+	private Logger log;
+	protected OperatorSwitch operatorSwitch;
 	private SpecialTrackModule specialTrackModule;
 	
-	protected int mode = 0;
+	private int func = F_STATIC;
+	protected int trainCount;
 	private int trainsLashedToTrack;
-	private int TRAIN_COUNT; // Semi-static (set only once during init)
 	private float binaryState = 0.f; // Helps determine if a "binary" state starts to change to the other value (ie. gates start to close, vice-versa, etc)
-	private bool coasterHasPlatform;
 	
 	public bool onInit(){ // On initialization of Play simulation
-		SceneObject sco = getScoFromParentEntity(); // Get and assign local sco
-		OperatorPlacard.setPlacardTextureFromScoParams( sco, getElementOnScoForName(sco, PLACARD_ELEMENT_NAME) ); // Set placard texture using external class
-		mode = getModeFromScoParams(sco);
+		// Get and assign local sco
+		SceneObject sco = SceneObjectTools.getSceneObjectForEntityId(
+			sim,
+			getParentEntityId(),
+			SCRIPT_NAME
+		);
+
+		// Setup Logger
+		log = new Logger(SCRIPT_NAME, sco.getName());
+
+		// Hide placard if configured
+		if ( sco.getBooleanParameter("hide_placard").boolValue() ){
+			SceneObjectTools.getElementForName(sco, PLACARD_ELEMENT_NAME, SCRIPT_NAME).setVisible(false);
+		}
 		
-		if (sco.getSpecialTrackParameter("special_track") != null){ // If set to attach to special track, set up the module object for it
+		// If set to attach to special track, set up the module object for it
+		if (sco.getSpecialTrackParameter("special_track_attach") != null){
 			specialTrackModule = new SpecialTrackModule(sco);
 		}
 		
-		if (mode != 0){ // If not static mode
+		// Get configured function and required parameters
+		func = getFuncFromScoParams(sco);
+		if (func > F_STATIC){ // If not static function
 			block = sco.getBlockParameter("block");
-			if (block != null){ // Get ride details based on block parameter
-				coaster = block.getCoaster();
-				if (coaster.isScriptedOperationMode()){
-					System.err.println(SCRIPT_NAME + ": Sorry! Non-static modes do not support Scripted Operation Mode rides at this time.");
-					return false;
-				}
-				section = block.getSection();
-			}
-			else{
-				if (!sco.getName().equals("")){
-					System.err.println(sco.getName() + ": Block parameter required for any non-static mode.");
-				}
-				else{
-					System.err.println(SCRIPT_NAME + ": Block parameter required for any non-static mode.");
-				}
+			if (block == null){ // Check for unconfigured block
+				log.err("Block parameter required for any non-static functions.");
 				return false;
 			}
+			
+			// Get ride details based on block parameter
+			coaster = block.getCoaster();
+			trainCount = coaster.getTrainCount();
+			section = block.getSection();
 		}
 		
-		createSwitchObject(sco);
-		
-		switch (mode){
-			case 1: // Restraints
-				if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_IN_STATION){ // Set initial switch state based on initial train harness state
-					operatorSwitch.setSwitchState((int) section.getTrainOnSection().getHarnessState());
+		// Function-specific checks and setup
+		switch (func){
+			// Functions that require station section
+			case F_RESTRAINTS:
+			case F_GATES:
+			case F_PLATFORM:
+			case F_DISPATCH_MODE:
+				if (!section.isStation()){
+					log.err("The configured function requires the specified block to be a station.");
+					return false;
 				}
 				break;
-			case 2: // Gates
-				operatorSwitch.setSwitchState(1 - (int) section.getStationGateState()); // Set initial switch state based on initial station gates state
+			// Functions that require Special Track
+			case F_SPECIAL_TRACK:
+			case F_SPECIAL_TRACK_NO_INT:
+				specialTrack = sco.getSpecialTrackParameter("special_track");
+				if (specialTrack == null){
+					log.err("The configured function requires the Special Track parameter to be specified.");
+					return false;
+				}
 				break;
-			case 3: // Platform
-				coasterHasPlatform = isCoasterWithPlatform(coaster); // Check if the coaster has a platform
-				if (coasterHasPlatform) operatorSwitch.setSwitchState(1 - (int) section.getStationPlatformState()); // Set initial switch state based on initial station platform state
+			// Functions that require lift section
+			case F_LIFT_JOG_NO_INT:
+				if (!section.isLift()){
+					log.err("The configured function requires the specified block to be a lift.");
+					return false;
+				}
 				break;
-			case 4: // Trains on Track
-				TRAIN_COUNT = coaster.getTrainCount(); // Set static train count
+		}
+
+		// Check for platform (if applicable)
+		if (func == F_PLATFORM && !CoasterTools.isCoasterWithPlatform(coaster)){
+			log.err("The configured function requires that the coaster have a platform in the station.");
+			return false;
+		}
+		
+		// Create OperatorSwitch object
+		createSwitchObject(sco, func);
+
+		// Set initial states (if required)
+		switch (func){
+			case F_RESTRAINTS:
+				Train train = section.getTrainOnSection();
+				if (train != null)
+					operatorSwitch.setSwitchState((int) train.getHarnessState());
 				break;
-			case 5: // Transports
-			case 6: // Special Track
-			case 9: // Manual Lift Jog
-				operatorSwitch.setSwitchState(1);
+			case F_GATES:
+				if (section.getStationGateState() == 0.f)
+					operatorSwitch.setSwitchState(1);
 				break;
+			case F_PLATFORM:
+				if (section.getStationPlatformState() == 0.f)
+					operatorSwitch.setSwitchState(1);
+				break;
+		}
+
+		// Setup InteractionObject (if interactible function)
+		if (isInteractibleFunc(func)){
+			iObj = InteractionObject.createSimpleButton();
+			iObj.setPosition(operatorSwitch.getAbsoluteTranslation());
+			iObj.setRadius(SWITCH_INTERACTION_RADIUS);
+			iObj.addActionListener(this);
 		}
 		
 		return true; // Everything's just dandy
 	}
 	
-	protected void createSwitchObject(SceneObject sco){ // Creates a new OperatorSwitch object, based on the selected mode
-		switch (mode){
-			case 4: // Trains in Service mode
-				operatorSwitch = new OperatorSwitch(
-					getElementOnScoForName(sco, SWITCH_ELEMENT_NAME),
-					coaster.getTrainCount(), // States = # of Trains on Track
-					sco.getDoubleParameter("start_angle").floatValue(),
-					sco.getDoubleParameter("end_angle").floatValue(),
-					SWITCH_TRAVEL_TIME
-				);
+	protected void createSwitchObject(SceneObject sco, int func){
+		/* Create Switch Object
+			Creates a new OperatorSwitch object, based on the selected function.
+		*/
+		// Get sound Resource Paths
+		ResourcePath[] soundPaths = new ResourcePath[]{
+			this.getResourcePathForId("sound_on"),
+			this.getResourcePathForId("sound_off")
+		};
+		// Determine totalStates based on Function
+		int totalStates;
+		switch (func){
+			case F_NUM_TRAINS_NO_INT:
+				totalStates = trainCount;
 				break;
-			case 5: // Transports mode
-			case 6: // Special Track mode
-			case 8: // Lights mode
-			case 9: // Manual Lift Jog
-				operatorSwitch = new OperatorSwitch(
-					getElementOnScoForName(sco, SWITCH_ELEMENT_NAME),
-					3, // States = BWD/N/FWD, Left/N/Right, or Off/Running/Emergency
-					sco.getDoubleParameter("start_angle").floatValue(),
-					sco.getDoubleParameter("end_angle").floatValue(),
-					SWITCH_TRAVEL_TIME
-				);
+			case F_SPECIAL_TRACK:
+				totalStates = specialTrack.getNumberOfSwitchDirections();
 				break;
-			default: // Every other mode just has two states
-				operatorSwitch = new OperatorSwitch(
-					getElementOnScoForName(sco, SWITCH_ELEMENT_NAME),
-					2,
-					sco.getDoubleParameter("start_angle").floatValue(),
-					sco.getDoubleParameter("end_angle").floatValue(),
-					SWITCH_TRAVEL_TIME
-				);
+			case F_OP_MODE:
+			case F_LIFT_JOG_NO_INT:
+			case F_TRANSPORTS_NO_INT:
+			case F_SPECIAL_TRACK_NO_INT:
+			case F_COASTER_LIGHTS_NO_INT:
+				totalStates = 3;
+				break;
+			default: // Every other function just has two states
+				totalStates = 2;
+		}
+		// Create OperatorSwitch
+		operatorSwitch = new OperatorSwitch(
+			SceneObjectTools.getElementForName(sco, SWITCH_ELEMENT_NAME, SCRIPT_NAME),
+			soundPaths,
+			totalStates,
+			sco.getDoubleParameter("start_angle").floatValue(),
+			sco.getDoubleParameter("end_angle").floatValue(),
+			SWITCH_TRAVEL_TIME
+		);
+	}
+	
+	protected int getFuncFromScoParams(SceneObject sco){
+		/* Get Function from SCO Parameters
+			Returns the proper function number based on the "function" parameter enumeration.
+		*/
+		if (sco.getIntegerParameter("function") == null) return 0;
+		
+		return sco.getIntegerParameter("function").intValue();
+	}
+
+	private bool isInteractibleFunc(int func){
+		if (func == F_STATIC && operatorSwitch.isStatic()) // None function w/o rotation
+			return false;
+		for (int i = 0; i < NON_INTERACT_MODES.length; i++){
+			if (func == NON_INTERACT_MODES[i])
+				return false;
+		}
+		return true;
+	}
+
+	// Interactible Functions //
+
+	private void handleStaticFunc(bool action){
+		if (action){
+			operatorSwitch.toggleSwitch();
 		}
 	}
 	
-	private SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling
-        SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
-        if (sco == null){
-            System.err.println(SCRIPT_NAME + ": This script only works with NL2 scene objects");
-        }
-        return sco;
-    }
-	
-	protected SceneObjectElement getElementOnScoForName(SceneObject sco, String name){ // Basically getElementForName() with error handling - Gratz to bestdani for idea
-        SceneObjectElement element = sco.getElementForName(name);
-        if (element == null){
-            System.err.println(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + name + "\" element)");
-        }
-        return element;
-    }
-	
-	private int getModeFromScoParams(SceneObject sco){ // Returns the mode ID, based on the first MODES-based parameter to be found true
-		Boolean curBool = null;
-		
-		for (int i = 0; i < MODES.length; i++){ // Traverse the MODES array
-			if (MODES[i].equals("special_track_mode")){
-				specialTrack = sco.getSpecialTrackParameter( MODES[i] );
-				if (specialTrack != null) return i; else specialTrack = null;
+	private void handleRestraintsFunc(bool action){
+		if (action){
+			if (section.isStationManualClosedHarness()){
+				section.doStationManualOpenHarness();
 			}
 			else{
-				curBool = sco.getBooleanParameter( MODES[i] );
-				if (curBool != null && curBool.boolValue()) return i;
+				section.doStationManualCloseHarness();
 			}
+			return;
 		}
-		return 0; // Default to static mode if no mode selection found
+
+		Train train = section.getTrainOnSection();
+		if (train == null) return;
+		if (train.getHarnessState() > binaryState){
+			binaryState = train.getHarnessState();
+			operatorSwitch.setSwitchState(0);
+		}
+		else if (train.getHarnessState() < binaryState){
+			binaryState = train.getHarnessState();
+			operatorSwitch.setSwitchState(1);
+		}
+		
+		iObj.setEnabled(
+			section.canStationManualOpenHarness() || section.canStationManualCloseHarness()
+		);
 	}
 	
-	private bool isCoasterWithPlatform(Coaster coaster){ // Returns if the given coaster has a platform station, based on the master PLATFORM_COASTERS list
-		int coasterID = coaster.getCoasterStyleId();
-		for (int i = 0; i < PLATFORM_COASTERS.length; i++){
-			if (PLATFORM_COASTERS[i] == coasterID) return true;
-		}
-		return false;
-	}
-	
-	private void handleRestraintsMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_IN_STATION){
-			if (section.getTrainOnSection().getHarnessState() > binaryState){
-				binaryState = section.getTrainOnSection().getHarnessState();
-				operatorSwitch.setSwitchState(0);
+	private void handleGatesFunc(bool action){
+		if (action){
+			if (section.isStationManualClosedGates()){
+				section.doStationManualOpenGates();
 			}
-			else if (section.getTrainOnSection().getHarnessState() < binaryState){
-				binaryState = section.getTrainOnSection().getHarnessState();
-				operatorSwitch.setSwitchState(1);
+			else{
+				section.doStationManualCloseGates();
 			}
+			return;
 		}
-	}
-	
-	private void handleGatesMode(){
+
 		if (section.getStationGateState() > binaryState){
 			binaryState = section.getStationGateState();
 			operatorSwitch.setSwitchState(0);
@@ -208,61 +282,156 @@ public class SwitchOperator extends Script{
 			binaryState = section.getStationGateState();
 			operatorSwitch.setSwitchState(1);
 		}
+		
+		iObj.setEnabled(
+			section.canStationManualOpenGates() || section.canStationManualCloseGates()
+		);
 	}
 	
-	private void handlePlatformMode(){
-		if (coasterHasPlatform){
-			if (section.getStationPlatformState() > binaryState){
-				binaryState = section.getStationPlatformState();
+	private void handlePlatformFunc(bool action){
+		if (action){
+			if (section.isStationManualEngagedPlatform()){
+				section.doStationManualDisengagePlatform();
+			}
+			else{
+				section.doStationManualEngagePlatform();
+			}
+			return;
+		}
+
+		if (section.getStationPlatformState() > binaryState){
+			binaryState = section.getStationPlatformState();
+			operatorSwitch.setSwitchState(0);
+		}
+		else if (section.getStationPlatformState() < binaryState){
+			binaryState = section.getStationPlatformState();
+			operatorSwitch.setSwitchState(1);
+		}
+		
+		iObj.setEnabled(
+			section.canStationManualDisengagePlatform() || section.canStationManualEngagePlatform()
+		);
+	}
+	
+	private void handleSpecialTrackFunc(bool action){
+		if (action){
+			if (specialTrack.getSetSwitchDirection() == 0){
+				specialTrack.setManualSwitchDirection(1);
+			}
+			else{
+				specialTrack.setManualSwitchDirection(0);
+			}
+			return;
+		}
+		
+		// Interaction func
+		if (func == F_SPECIAL_TRACK){
+			operatorSwitch.setSwitchState(specialTrack.getSetSwitchDirection());
+			iObj.setEnabled(specialTrack.canChangeManualSwitchDirection());
+		}
+		// No interation func
+		else{
+			if (specialTrack.getVisibleSwitchState() < binaryState){
+				binaryState = specialTrack.getVisibleSwitchState();
 				operatorSwitch.setSwitchState(0);
 			}
-			else if (section.getStationPlatformState() < binaryState){
-				binaryState = section.getStationPlatformState();
-				operatorSwitch.setSwitchState(1);
+			else if (specialTrack.getVisibleSwitchState() > binaryState){
+				binaryState = specialTrack.getVisibleSwitchState();
+				operatorSwitch.setSwitchState(2);
 			}
+			else operatorSwitch.setSwitchState(1);
 		}
 	}
 	
-	private void handleTrainsMode(){
+	private void handleDispatchModeFunc(bool action){
+		if (action){
+			section.setStationManualDispatchMode(
+				!section.isStationManualDispatchMode()
+			);
+			return;
+		}
+
+		if (section.isStationManualDispatchMode()){
+			operatorSwitch.setSwitchState(0);
+		}
+		else{
+			operatorSwitch.setSwitchState(1);
+		}
+	}
+	
+	private void handleBlockSystemModeFunc(bool action){
+		if (action){
+			if ( coaster.getBlockSystemMode() == Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC
+					&& coaster.canSetBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL) ){
+				coaster.setBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL);
+			}
+			else if ( coaster.getBlockSystemMode() == Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL
+					&& coaster.canSetBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC) ){
+				coaster.setBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC);
+			}
+			else if ( coaster.getBlockSystemMode() == Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL
+					&& coaster.canSetBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL) ){
+				coaster.setBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL);
+			}
+			return;
+		}
+
+		switch (coaster.getBlockSystemMode()){
+			case Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC:
+				operatorSwitch.setSwitchState(0);
+				break;
+			case Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL:
+				operatorSwitch.setSwitchState(1);
+				break;
+			default:
+				operatorSwitch.setSwitchState(2);
+		}
+		
+		iObj.setEnabled(
+			( coaster.getBlockSystemMode() != Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC
+				&& coaster.canSetBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC) )
+			|| ( coaster.getBlockSystemMode() != Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL
+				&& coaster.canSetBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL) )
+		);
+	}
+	
+	private void handleNumTrainsFunc(){
 		trainsLashedToTrack = 1; // Set to 1 to offset the result by one, because setSwitchState() starts from 0
-		for (int i = TRAIN_COUNT - 1; i >= 0; --i){ // Go through all trains
+		for (int i = trainCount - 1; i >= 0; --i){ // Go through all trains
 			if (coaster.getTrainAt(i).isLashedToTrack()){ // If it's lashed to track, increase the counter
 				trainsLashedToTrack++;
 			}
 		}
-		operatorSwitch.setSwitchState(TRAIN_COUNT - trainsLashedToTrack); // Set the switch state to the number of trains in service, minus 1 (for the offset)
+		operatorSwitch.setSwitchState(trainCount - trainsLashedToTrack); // Set the switch state to the number of trains in service, minus 1 (for the offset)
 	}
 	
-	private void handleTransportsMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE){
-			float transSpeed = (float) section.getTransportCurrentSpeed();
-			if (transSpeed < 0.f && transSpeed <= binaryState) operatorSwitch.setSwitchState(0);
-			else if (transSpeed > 0.f && transSpeed >= binaryState) operatorSwitch.setSwitchState(2);
+	public void handleLiftJogFunc(){
+		if (coaster.getBlockSystemMode() == Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL){
+			float liftSpeed = (float) section.getLiftCurrentSpeed();
+			if (liftSpeed < 0.f && liftSpeed <= binaryState) operatorSwitch.setSwitchState(0);
+			else if (liftSpeed > 0.f && liftSpeed >= binaryState) operatorSwitch.setSwitchState(2);
 			else operatorSwitch.setSwitchState(1);
+			binaryState = liftSpeed;
+		}
+	}
+	
+	private void handleTransportsFunc(){
+		if (coaster.getBlockSystemMode() == Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL){
+			float transSpeed = (float) section.getTransportCurrentSpeed();
+			if (transSpeed < 0.f && transSpeed <= binaryState)
+				operatorSwitch.setSwitchState(0);
+			else if (transSpeed > 0.f && transSpeed >= binaryState)
+				operatorSwitch.setSwitchState(2);
+			else
+				operatorSwitch.setSwitchState(1);
 			binaryState = transSpeed;
 		}
-	}
-	
-	private void handleSpecialTrackMode(){
-		if (specialTrack.getVisibleSwitchState() < binaryState){
-			binaryState = specialTrack.getVisibleSwitchState();
-			operatorSwitch.setSwitchState(0);
-		}
-		else if (specialTrack.getVisibleSwitchState() > binaryState){
-			binaryState = specialTrack.getVisibleSwitchState();
-			operatorSwitch.setSwitchState(2);
-		}
-		else operatorSwitch.setSwitchState(1);
-	}
-	
-	private void handleMaintenanceMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE){
+		else{
 			operatorSwitch.setSwitchState(1);
 		}
-		else operatorSwitch.setSwitchState(0);
 	}
 	
-	public void handleLightsMode(){
+	public void handleCoasterLightsFunc(){
 		if (coaster.isEmergencyStop()){
 			operatorSwitch.setSwitchState(2);
 		}
@@ -273,14 +442,42 @@ public class SwitchOperator extends Script{
 			operatorSwitch.setSwitchState(0);
 		}
 	}
-	
-	public void handleManualLiftJogMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE && section.isLift()){
-			float liftSpeed = (float) section.getLiftCurrentSpeed();
-			if (liftSpeed < 0.f && liftSpeed <= binaryState) operatorSwitch.setSwitchState(0);
-			else if (liftSpeed > 0.f && liftSpeed >= binaryState) operatorSwitch.setSwitchState(2);
-			else operatorSwitch.setSwitchState(1);
-			binaryState = liftSpeed;
+
+	private void handleFunc(bool action){
+		switch (func){
+			case F_RESTRAINTS:
+				handleRestraintsFunc(action);
+				break;
+			case F_GATES:
+				handleGatesFunc(action);
+				break;
+			case F_PLATFORM:
+				handlePlatformFunc(action);
+				break;
+			case F_SPECIAL_TRACK:
+			case F_SPECIAL_TRACK_NO_INT:
+				handleSpecialTrackFunc(action);
+				break;
+			case F_DISPATCH_MODE:
+				handleDispatchModeFunc(action);
+				break;
+			case F_OP_MODE:
+				handleBlockSystemModeFunc(action);
+				break;
+			case F_NUM_TRAINS_NO_INT:
+				handleNumTrainsFunc();
+				break;
+			case F_LIFT_JOG_NO_INT:
+				handleLiftJogFunc();
+				break;
+			case F_TRANSPORTS_NO_INT:
+				handleTransportsFunc();
+				break;
+			case F_COASTER_LIGHTS_NO_INT:
+				handleCoasterLightsFunc();
+				break;
+			default:
+				handleStaticFunc(action);
 		}
 	}
 	
@@ -294,42 +491,21 @@ public class SwitchOperator extends Script{
 		if (Button.isPressed(Button.ACTION)){ //DEBUGGING
 			operatorSwitch.setSwitchState(2);
 		}*/
+		handleFunc(false);
 		
-		switch (mode){
-			case 0:
-				break;
-			case 1:
-				handleRestraintsMode();
-				break;
-			case 2:
-				handleGatesMode();
-				break;
-			case 3:
-				handlePlatformMode();
-				break;
-			case 4:
-				handleTrainsMode();
-				break;
-			case 5:
-				handleTransportsMode();
-				break;
-			case 6:
-				handleSpecialTrackMode();
-				break;
-			case 7:
-				handleMaintenanceMode();
-				break;
-			case 8:
-				handleLightsMode();
-				break;
-			case 9:
-				handleManualLiftJogMode();
-				break;
-			default:
-		}
+		// Run switch object's onNextFrame() as well to animate
+		operatorSwitch.onNextFrame(tick);
 		
-		operatorSwitch.onNextFrame(tick); // Run switch object's onNextFrame() as well to animate
+		// If set to attach to special track, update SCO translation
+		if (specialTrackModule != null)
+			specialTrackModule.updateTranslation();
 		
-		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
+		// If iObj exists, update its translation if SCO moves
+		if (iObj != null)
+			iObj.setPosition(operatorSwitch.getAbsoluteTranslation());
+	}
+
+	public void onInteractionAction(InteractionObject obj){
+		handleFunc(true);
 	}
 }

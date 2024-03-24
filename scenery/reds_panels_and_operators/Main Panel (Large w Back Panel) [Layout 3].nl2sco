@@ -7,7 +7,7 @@
       <clip distance="175"/>
     </model>
     <description>A large main control panel with layout 3, back panel, and optional audio panel attachement. -80 deg. X angle for button face.</description>
-    <preview>textures/previews/main_panel_xlarge_layout3.png</preview>
+    <preview>materials/previews/main_panel_xlarge_layout3.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -45,46 +45,26 @@
       <label>Hide Audio Panel</label>
     </scriptparameter>
     <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>texture_instructions</id>
-      <description>Selections for panel texture. Changing this text does nothing.</description>
-      <label>========== Texture Options ==========</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>brushed_metal</id>
-      <description>Looks best when Panel Color is pure white, or can be colored.</description>
-      <label>Brushed Metal</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>bumpy_metal</id>
-      <description>Looks best when Panel Color is changed to any color, other than white.</description>
-      <label>Bumpy Painted Metal</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>rusty</id>
-      <description>Looks best when Panel Color is pure white.</description>
-      <label>Rusty</label>
+      <type>int</type>
+      <defaultvalue>0</defaultvalue>
+      <enums>Brushed Metal,Bumpy Painted Metal,Rusty Metal</enums>
+      <id>texture</id>
+      <description>Texture that will be used and visible in Play Mode.</description>
+      <label>Texture:</label>
     </scriptparameter>
     <materialpath name="audio_panel_mounts">intern:data/materials/metal/Metal A User0.nl2mat</materialpath>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="flexable_metal">textures/flexable_metal.nl2mat</materialpath>
-    <materialpath name="flexable_metal_0">textures/flexable_metal.nl2mat</materialpath>
-    <materialpath name="key_hole_displacement">textures/door_key_hole.nl2mat</materialpath>
-    <materialpath name="metal_large">textures/main_panel_texture_user0.nl2mat</materialpath>
-    <materialpath name="metal_small">textures/main_panel_texture_user0.nl2mat</materialpath>
-    <materialpath name="mic_opening">textures/mic_opening.nl2mat</materialpath>
-    <materialpath name="screw_normal">textures/screw.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="flexable_metal">materials/flexable_metal.nl2mat</materialpath>
+    <materialpath name="flexable_metal_0">materials/flexable_metal.nl2mat</materialpath>
+    <materialpath name="key_hole_displacement">materials/door_key_hole.nl2mat</materialpath>
+    <materialpath name="metal_large">materials/main_panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="metal_small">materials/main_panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="mic_opening">materials/mic_opening.nl2mat</materialpath>
+    <materialpath name="screw_normal">materials/screw.nl2mat</materialpath>
     <materialpath name="silver">intern:data/materials/Chrome.nl2mat</materialpath>
-    <materialpath name="vent">textures/vent.nl2mat</materialpath>
-    <materialpath name="zone1">textures/plastic_user1.nl2mat</materialpath>
-    <materialpath name="zone2">textures/plastic_user2.nl2mat</materialpath>
-    <materialpath name="zone3">textures/plastic_user3.nl2mat</materialpath>
+    <materialpath name="vent">materials/vent.nl2mat</materialpath>
+    <materialpath name="zone1">materials/plastic_user1.nl2mat</materialpath>
+    <materialpath name="zone2">materials/plastic_user2.nl2mat</materialpath>
+    <materialpath name="zone3">materials/plastic_user3.nl2mat</materialpath>
   </sceneobject>
 </root>

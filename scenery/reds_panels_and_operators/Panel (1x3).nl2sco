@@ -7,7 +7,7 @@
       <clip mesh="mount" distance="30"/>
     </model>
     <description>A 1 operator wide, by 3 operator high, empty operator panel, with optional mounting bracket and wire conduit.</description>
-    <preview>textures/previews/panel_1x3.png</preview>
+    <preview>materials/previews/panel_1x3.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -43,41 +43,21 @@
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>
-      <id>special_track</id>
+      <id>special_track_attach</id>
       <description>Select the special track of a ride you want this panel to move with during simulation. Set to &lt;None&gt; to disable.</description>
       <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
     <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>texture_instructions</id>
-      <description>Selections for panel texture. Changing this text does nothing.</description>
-      <label>========== Texture Options ==========</label>
+      <type>int</type>
+      <defaultvalue>0</defaultvalue>
+      <enums>Brushed Metal,Bumpy Painted Metal,Rusty Metal</enums>
+      <id>texture</id>
+      <description>Texture that will be used and visible in Play Mode.</description>
+      <label>Texture:</label>
     </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>brushed_metal</id>
-      <description>Looks best when Panel Color is pure white, or can be colored.</description>
-      <label>Brushed Metal</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>bumpy_metal</id>
-      <description>Looks best when Panel Color is changed to any color, other than white.</description>
-      <label>Bumpy Painted Metal</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>rusty</id>
-      <description>Looks best when Panel Color is pure white.</description>
-      <label>Rusty</label>
-    </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
-    <materialpath name="metal">textures/panel_texture_user0.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
+    <materialpath name="metal">materials/panel_texture_user0.nl2mat</materialpath>
     <materialpath name="mount">intern:data/materials/metal/Metal A User1.nl2mat</materialpath>
-    <materialpath name="screw_normal">textures/screw.nl2mat</materialpath>
+    <materialpath name="screw_normal">materials/screw.nl2mat</materialpath>
   </sceneobject>
 </root>

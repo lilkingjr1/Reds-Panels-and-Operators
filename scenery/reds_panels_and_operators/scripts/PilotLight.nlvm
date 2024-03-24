@@ -1,252 +1,312 @@
 /**
 	Pilot Light NL2 Script
 	David Wolfe (Red-Thirten)
-	6/14/2022
-	Initializes the pilot light's placard and animates the pilot light during run time, based on user settings.
+	03/17/2024
+	Animates the pilot light during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
 
 import com.nolimitscoaster.Script;
 import com.nolimitscoaster.SceneObject;
-import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Coaster;
+import com.nolimitscoaster.Train;
 import com.nolimitscoaster.Block;
 import com.nolimitscoaster.Section;
+import com.nolimitscoaster.SpecialTrack;
 
-import util.OperatorPlacard;
+import obj.IndicatorLight;
+import util.Logger;
+import util.SceneObjectTools;
+import util.CoasterTools;
 import util.SpecialTrackModule;
 
 public class PilotLight extends Script{
 	protected String SCRIPT_NAME = "PilotLight";		// Script name for debugging
 	protected String LIGHT_ELEMENT_NAME = "pilot";		// Name of the pilot light element in the SCO/model
+	protected String LIGHT_OBJECT_NAME = "light";		// Name of the Scene Object Light
 	protected String PLACARD_ELEMENT_NAME = "placard";	// Name of the placard element in the SCO/model
+	protected float BLINK_INTERVAL = 0.5f;				// Interval, in seconds, of the pilot light changing states when blinking
 	
-	protected String[] MODES = { // Possible mode parameters
-		"static",
-		"advance",
-		"dispatch",
-		"platform",
-		"e_stop_reset",
-		"automatic_mode",
-		"full_manual_mode"
-	};
-	private static final int[] PLATFORM_COASTERS = {2, 4, 6, 14, 21, 22, 24}; // All platform coaster IDs in NL2, as of this file's creation date
+	// All Pilot Light Functions:
+	private static final int F_STATIC_OFF = 0;
+	private static final int F_STATIC_ON = 1;
+	protected static final int F_STATIC_BLINK = 2;
+	protected static final int F_BLOCK_IND = 3; // Non-Scripted Coasters Only
+	protected static final int F_DISPATCH = 4;
+	private static final int F_PLATFORM = 5;
+	protected static final int F_SPECIAL_TRACK = 6;
+	private static final int F_ESTOP = 7;
+	private static final int F_AUTOMATIC_OP = 8;
+	private static final int F_SEMI_MAN_OP = 9;
+	private static final int F_FULL_MAN_OP = 10;
 	
 	protected SceneObject sco;
-	protected SceneObjectElement light;
-    protected Coaster coaster;
-    protected Block block;
-    private Section section;
+	protected Coaster coaster;
+	protected Block block;
+	protected Section section;
+	protected SpecialTrack specialTrack;
 	
-	private SpecialTrackModule specialTrackModule;
+	protected Logger log;
+	protected IndicatorLight light;
+	protected SpecialTrackModule specialTrackModule;
 	
-	protected int mode = 0;
-	private bool coasterHasPlatform;
+	protected int func = F_STATIC_OFF;
 	
 	public bool onInit(){ // On initialization of Play simulation
-		sco = getScoFromParentEntity(); // Get and assign local sco
-		light = getElementOnScoForName(sco, LIGHT_ELEMENT_NAME); // Get and assign light element
-		if (light == null) return false; // Missing element check
-		OperatorPlacard.setPlacardTextureFromScoParams( sco, getElementOnScoForName(sco, PLACARD_ELEMENT_NAME) ); // Set placard texture using external class
-		mode = getModeFromScoParams(sco);
+		// Get and assign local sco
+		sco = SceneObjectTools.getSceneObjectForEntityId(
+			sim,
+			getParentEntityId(),
+			SCRIPT_NAME
+		);
+
+		// Setup Logger
+		log = new Logger(SCRIPT_NAME, sco.getName());
+
+		// Hide placard if configured
+		if ( sco.getBooleanParameter("hide_placard") != null
+				&& sco.getBooleanParameter("hide_placard").boolValue() ){
+			SceneObjectTools.getElementForName(sco, PLACARD_ELEMENT_NAME, SCRIPT_NAME).setVisible(false);
+		}
 		
-		if (sco.getSpecialTrackParameter("special_track") != null){ // If set to attach to special track, set up the module object for it
+		// If set to attach to special track, set up the module object for it
+		if (sco.getSpecialTrackParameter("special_track_attach") != null){
 			specialTrackModule = new SpecialTrackModule(sco);
 		}
 		
-		if (mode == 0){
-			handleStaticMode(sco);
-			return true;
-		}
-		else{ // If not static mode
+		// Get configured function and required parameters
+		func = getFuncFromScoParams(sco);
+		if (func > F_STATIC_BLINK){ // If not static function
 			block = sco.getBlockParameter("block");
-			if (block != null){ // Get ride details based on block parameter
-				coaster = block.getCoaster();
-				if (coaster.isScriptedOperationMode()){
-					System.err.println(SCRIPT_NAME + ": Sorry! Non-static modes do not support Scripted Operation Mode rides at this time.");
-					return false;
-				}
-				section = block.getSection();
-				coasterHasPlatform = isCoasterWithPlatform(coaster);
-				return true;
-			}
-			else{
-				if (!sco.getName().equals("")){
-					System.err.println(sco.getName() + ": Block parameter required for any non-static mode.");
-				}
-				else{
-					System.err.println(SCRIPT_NAME + ": Block parameter required for any non-static mode.");
-				}
+			if (block == null){ // Check for unconfigured block
+				log.err("Block parameter required for any non-static functions.");
 				return false;
 			}
+			
+			// Get ride details based on block parameter
+			coaster = block.getCoaster();
+			section = block.getSection();
 		}
-	}
-	
-	private SceneObject getScoFromParentEntity(){ // Returns the SceneObject via the parent entity ID with error handling
-        SceneObject sco = sim.getSceneObjectForEntityId(getParentEntityId());
-        if (sco == null){
-            System.err.println(SCRIPT_NAME + ": This script only works with NL2 scene objects");
-        }
-        return sco;
-    }
-	
-	protected SceneObjectElement getElementOnScoForName(SceneObject sco, String name){ // Basically getElementForName() with error handling - Gratz to bestdani for idea
-        SceneObjectElement element = sco.getElementForName(name);
-        if (element == null){
-            System.err.println(SCRIPT_NAME + ": Wrong 3d model loaded (Cannot find \"" + name + "\" element)");
-        }
-        return element;
-    }
-	
-	private int getModeFromScoParams(SceneObject sco){ // Returns the mode ID, based on the first MODES-based parameter to be found true
-		Boolean curBool = null;
-		
-		for (int i = 0; i < MODES.length; i++){ // Traverse the MODES array
-			curBool = sco.getBooleanParameter( MODES[i] ); // Get the corresponding parameter
-			if (curBool != null && curBool.boolValue()){ // Check if it exists, then if it is positive
-				return i;
-			}
-		}
-		return 0; // Default to static mode if no mode selection found
-	}
-	
-	private bool isCoasterWithPlatform(Coaster coaster){ // Returns if the given coaster has a platform station, based on the master PLATFORM_COASTERS list
-		int coasterID = coaster.getCoasterStyleId();
-		for (int i = 0; i < PLATFORM_COASTERS.length; i++){
-			if (PLATFORM_COASTERS[i] == coasterID) return true;
-		}
-		return false;
-	}
-	
-	private void handleStaticMode(SceneObject sco){
-		switch (sco.getIntegerParameter("light").intValue()){ // Sets the light's state, based on static parameters
-			case 1:
-				light.setTextureAnimationIndex(1);
+
+		// Create IndicatorLight object
+		light = new IndicatorLight(
+			SceneObjectTools.getElementForName(sco, LIGHT_ELEMENT_NAME, SCRIPT_NAME),
+			SceneObjectTools.getLightForName(sco, LIGHT_OBJECT_NAME, SCRIPT_NAME),
+			BLINK_INTERVAL,
+			!sco.getBooleanParameter("disable_light").boolValue()
+		);
+
+		// Function-specific checks and setup
+		switch (func){
+			// Static functions
+			case F_STATIC_OFF:
+			case F_STATIC_ON:
+				handleStaticFunc(sco);
+				return false;
+			case F_STATIC_BLINK:
+				handleStaticFunc(sco);
 				break;
-			case 2:
-				light.setTextureAnimationIndex(-1);
+			// Functions that require station section
+			case F_PLATFORM:
+				// Also requires coaster with platform
+				if (!CoasterTools.isCoasterWithPlatform(coaster)){
+					log.err("The configured function requires that the coaster have a platform in the station.");
+					return false;
+				}
+			case F_DISPATCH:
+				if (!section.isStation()){
+					log.err("The configured function requires the specified block to be a station.");
+					return false;
+				}
+				break;
+			// Functions that require non-scripted operation mode
+			case F_BLOCK_IND:
+				if (coaster.isScriptedOperationMode()){
+					log.err("Sorry! The Block Indicator Function does not support Scripted Operation Mode rides at this time.");
+					return false;
+				}
+				break;
+			// Functions that require special track parameter
+			case F_SPECIAL_TRACK:
+				specialTrack = sco.getSpecialTrackParameter("special_track");
+				if (specialTrack == null){
+					log.err("The configured function requires the Special Track parameter to be specified.");
+					return false;
+				}
+				break;
+		}
+		
+		return true; // Everything's just dandy
+	}
+	
+	protected int getFuncFromScoParams(SceneObject sco){
+		/* Get Function from SCO Parameters
+			Returns the proper function number based on the "function" parameter enumeration.
+		*/
+		if (sco.getIntegerParameter("function") == null) return 0;
+		
+		return sco.getIntegerParameter("function").intValue();
+	}
+	
+	private void handleStaticFunc(SceneObject sco){
+		// Sets the light's state, based on function
+		switch (func){
+			case F_STATIC_ON:
+				light.lightOn();
+				break;
+			case F_STATIC_BLINK:
+				light.lightBlink();
 				break;
 			default:
-				light.setTextureAnimationIndex(0);
+				light.lightOff();
 		}
 	}
 	
-	private void handleAdvanceMode(){
+	private void handleBlockIndicatorFunc(){
 		if (coaster.isEmergencyStop()){
-			light.setTextureAnimationIndex(0);
+			light.lightOff();
 		}
 		else{
 			switch (block.getNormalModeState(Block.PROTOCOL_V1)){
 				case Block.STATE_OCCUPIED:
 				case Block.STATE_IN_STATION:
-					light.setTextureAnimationIndex(1);
+					light.lightOn();
 					break;
 				case Block.STATE_APPROACHING_FWD:
 				case Block.STATE_APPROACHING_BWD:
-					light.setTextureAnimationIndex(-1);
+					light.lightBlink();
 					break;
 				default:
-					light.setTextureAnimationIndex(0);
+					light.lightOff();
 			}
 		}
 	}
 	
-	private void handleDispatchMode(){
+	private void handleDispatchFunc(){
+		Train train = section.getTrainOnSection();
+		// Train on section
+		if (!coaster.isEmergencyStop() && train != null){
+			// Train is moving
+			if (train.getSpeed() != 0.0){
+				light.lightOn();
+			}
+			// Train is not ready to dispatch
+			else if ( (CoasterTools.isCoasterWithPlatform(coaster) && section.getStationPlatformState() != 0.f)
+					|| train.getHarnessState() != 0.f
+					|| section.getStationGateState() != 0.f
+					|| section.isStationWaitingForClearBlock() ){
+				light.lightOff();
+			}
+			// Train is ready to dispatch
+			else{
+				light.lightBlink();
+			}
+		}
+		// Train not on section or E-Stopped
+		else{
+			light.lightOff();
+		}
+	}
+	
+	private void handlePlatformFunc(){
+		Train train = section.getTrainOnSection();
+		// Train stopped in station
+		if ( !coaster.isEmergencyStop()
+				&& train != null
+				&& train.getSpeed() == 0.0 ){
+			// Platform is engaged
+			if (section.getStationPlatformState() == 1.f){
+				light.lightOn();
+			}
+			// Platform is disengaged
+			else if (section.getStationPlatformState() == 0.f){
+				light.lightOff();
+			}
+			// Platform is moving
+			else{
+				light.lightBlink();
+			}
+		}
+		// Train not in station or E-Stopped
+		else{
+			light.lightOff();
+		}
+	}
+
+	private void handleSpecialTrackFunc(){
+		// E-stopped
+		if (coaster.isEmergencyStop())
+			light.lightOff();
+		// Track is moving
+		else if (specialTrack.getVisibleSwitchState() % 1.f != 0.f)
+			light.lightBlink();
+		// Track is not in state 0
+		else if (specialTrack.getVisibleSwitchState() != 0.f)
+			light.lightOn();
+		else
+			light.lightOff();
+	}
+	
+	private void handleEStopFunc(){
 		if (coaster.isEmergencyStop()){
-			light.setTextureAnimationIndex(0);
+			light.lightBlink();
 		}
 		else{
-			switch (block.getNormalModeState(Block.PROTOCOL_V1)){
-				case Block.STATE_IN_STATION:
-					// If the platform (if applicable) is up, or the harnesses or gates are open, not ready to dispatch (no light)
-					if (coasterHasPlatform && section.getStationPlatformState() != 0.f || section.getTrainOnSection().getSpeed() != 0 ||
-					section.getTrainOnSection().getHarnessState() != 0.f || section.getStationGateState() != 0.f || section.isStationWaitingForClearBlock()){
-						light.setTextureAnimationIndex(0);
-					}
-					else{ // Otherwise, ready to dispatch (blink light)
-						light.setTextureAnimationIndex(-1);
-					}
-					break;
-				case Block.STATE_OCCUPIED:
-					light.setTextureAnimationIndex(1);
-					break;
-				default:
-					light.setTextureAnimationIndex(0);
-			}
+			light.lightOff();
 		}
 	}
 	
-	private void handlePlatformMode(){
-		if (!coasterHasPlatform || coaster.isEmergencyStop()){
-			light.setTextureAnimationIndex(0);
+	private void handleBlockSystemModeFunc(){
+		int targetMode = 0;
+		switch (func){
+			case F_AUTOMATIC_OP:
+				targetMode = Coaster.E_BLOCK_SYSTEM_MODE_AUTOMATIC;
+				break;
+			case F_SEMI_MAN_OP:
+				targetMode = Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL;
+				break;
+			case F_FULL_MAN_OP:
+				targetMode = Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL;
+				break;
 		}
-		// If a train is in the station, and the harnesses and gates are closed, and the train isn't moving (ie. entering station)
-		else if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_IN_STATION && section.getTrainOnSection().getSpeed() == 0
-		&& section.getTrainOnSection().getHarnessState() == 0.f && section.getStationGateState() == 0.f){
-			if (section.getStationPlatformState() == 1 || section.getStationPlatformState() == 0){ // If the platform is fully up or down, blink to show ready state
-				light.setTextureAnimationIndex(-1);
-			}
-			else{ // If the platform is moving, light on
-				light.setTextureAnimationIndex(1);
-			}
-        }
-		else{ // Otherwise, light is off
-			light.setTextureAnimationIndex(0);
+		if ( coaster.getBlockSystemMode() == targetMode
+				&& !coaster.isEmergencyStop() ){
+			light.lightOn();
 		}
-	}
-	
-	private void handleEStopResetMode(){
-		if (coaster.isEmergencyStop()){
-			light.setTextureAnimationIndex(-1);
-        }
 		else{
-			light.setTextureAnimationIndex(0);
-        }
-	}
-	
-	private void handleAutomaticModeMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE || coaster.isEmergencyStop()){
-			light.setTextureAnimationIndex(0);
-        }
-		else{
-			light.setTextureAnimationIndex(1);
-        }
-	}
-	
-	private void handleFullManualModeMode(){
-		if (block.getNormalModeState(Block.PROTOCOL_V1) == Block.STATE_FULL_MANUAL_MODE && !coaster.isEmergencyStop()){
-			light.setTextureAnimationIndex(1);
-        }
-		else{
-			light.setTextureAnimationIndex(0);
-        }
+			light.lightOff();
+		}
 	}
 
 	public void onNextFrame(float tick){
-		switch (mode){
-			case 0:
+		switch (func){
+			case F_BLOCK_IND:
+				handleBlockIndicatorFunc();
 				break;
-			case 1:
-				handleAdvanceMode();
+			case F_DISPATCH:
+				handleDispatchFunc();
 				break;
-			case 2:
-				handleDispatchMode();
+			case F_PLATFORM:
+				handlePlatformFunc();
 				break;
-			case 3:
-				handlePlatformMode();
+			case F_SPECIAL_TRACK:
+				handleSpecialTrackFunc();
 				break;
-			case 4:
-				handleEStopResetMode();
+			case F_ESTOP:
+				handleEStopFunc();
 				break;
-			case 5:
-				handleAutomaticModeMode();
+			case F_AUTOMATIC_OP:
+			case F_SEMI_MAN_OP:
+			case F_FULL_MAN_OP:
+				handleBlockSystemModeFunc();
 				break;
-			case 6:
-				handleFullManualModeMode();
-				break;
-			default:
 		}
+
+		// Run IndicatorLight object's onNextFrame() as well to animate
+		light.onNextFrame(tick);
 		
-		if (specialTrackModule != null) specialTrackModule.setTranslation(); // If set to attach to special track, set translation of SCO
+		// If set to attach to special track, update translation of SCO
+		if (specialTrackModule != null)
+			specialTrackModule.updateTranslation();
 	}
 }

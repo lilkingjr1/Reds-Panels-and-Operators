@@ -1,11 +1,11 @@
 <html>
 	<body style="font-family:Segoe UI; font-size:18px">
-		<img src="textures\previews\overview.png" alt="Header Image" width="30%" height="35%">
+		<img src="materials\previews\overview.png" alt="Header Image" width="30%" height="35%">
 		<h4><i>
 			Red's Panels &amp; Operators<br>
-			©2022 David W. (Red-Thirten)<br>
-			<a href="mailto:rehlmgaming@gmail.com">rehlmgaming@gmail.com</a><br>
-			Version 1.3, 14 June 2022<br>
+			©2024 David W. (Red-Thirten)<br>
+			<a href="mailto:red_thirten@yahoo.com">red_thirten@yahoo.com</a><br>
+			Version 2.0, 15 March 2024<br>
 			NL2 Scenery Custom Object (SCO) Package<br>
 		</h4></i>
 		<p>
@@ -43,8 +43,8 @@
 					<li>(<i>Optional</i>) Give it a name. This may be tedious, but will keep your operators organized for easy editing and will greatly help if you run into any errors in Play Mode.</li>
 					<li><b>Change the position</b> settings to <b><i>exactly</i> match</b> the X,Y,Z coordinates of the panel you placed earlier. This should perfectly align the operator to the panel (except for main panels, which also need the X rotation set to -70 and manual alignment; see <a href="https://youtu.be/Iw8XG1mUMP0" target="_blank">this tutorial video</a> for how to make this easy).</li>
 					<li><b>Adjust position</b> of the operator on the panel as desired.</li>
-					<li>Like the panel, <b>choose any customization settings</b> you would like for the operator. Operators also have a "mode" setting. Hover your cursor over any of the settings' options for details on what it does.</li>
-					<li>If you get an <b>error</b> during play mode, <b>read it carefully</b>; you likely forgot to set the block option if using a non-static mode. Otherwise, please report the bug if possible.</li>
+					<li>Like the panel, <b>choose any customization settings</b> you would like for the operator. Operators also have a "Function" setting. Hover your cursor over any of the settings' options for details on what it does.</li>
+					<li>If you get an <b>error</b> during play mode, <b>read it carefully</b>; you likely forgot to set the block option if using a Function other than "None". Otherwise, please report the bug if possible.</li>
 				</ol>
 			</li>
 			<li><b>Repeat Step 2</b> to fully build out your custom panel composition.</li>
@@ -56,119 +56,36 @@
 		<ul><li>As a final note, it might be good to not delete your original "master" panels until you are completed with your build, just in case you need another copy or you want to modify it. Modifying already moved / rotated panels is a <em>pain</em>!!!</li></ul>
 		<hr>
 		<h3>
-			<u>Removing Unused SCOs / Slimming Down the Pack:</u>
-		</h3>
-		<b>Note</b>: The following only applies to un-packaged parks on your computer in effort to save space. If you package the park, NL2 will automatically slim the pack down for you.
-		<ul style="line-height: 1.5;">
-			<li>Feel free to delete unused <code>.nl2sco</code> files that you do not use in your park to lower the size of the pack.</li>
-			<li>The same goes for anything in <code>\models</code> folder. Most models share a similar name to their <code>.nl2sco</code> counterpart.</li>
-			<li>It is <b><i>not recommended</i></b> to delete anything in the <code>\scripts</code> or <code>\textures</code> folder, as <em>a lot</em> of SCOs share the same scripts or textures. Only delete if you are certain no SCO is using them.</li>
-			<li>However, a large folder you <i>can</i> delete in <code>\textures</code> is the <code>\previews</code> folder. This won't cause any issues when running the park, but <i>will</i> make NL2 throw errors in the editor (so delete this folder, if you choose, when you are finished with your park).
-			<li>The <code>LICENSE</code> file IS NOT ALLOWED TO BE REMOVED/DELETED if you plan to share/distribute your park, per the GNU License.</li>
-		</ul>
-		<hr>
-		<h3>
 			<u>Known Issues:</u>
 		</h3>
 		<ul style="line-height: 1.5;">
-			<li>Unfortunately, any operator set to a non-static mode does not support Scripted Operation Mode rides at this time. This is due to the code relying heavily on NL2 functions that only work in Automatic Operation modes.</li>
 			<li>"Auto-alignment" via coordinates doesn't work for Main Panels, because they are at an angle. The best practice, in my opinion, is to align one operator by hand, and then copy it's coordinates to other operators you want to add, and adjust from there. This makes aligning any additional operators much easier.</li>
-			<li>There is no Manual Block mode for operators because, unfortunately, NL2 has no current way to tell if the ride is in this mode via scripting.</li>
 			<li>"Trains in Service" Mode for Key Switch operators will display the key animation when it shouldn't the first time the ride is put into "Manual Block" Mode. I'm not really sure how to fix this, because it seems like NL2 is miscalculating the number of lashed trains upon entering "Manual Block" Mode for the first time.</li>
-			<li>Some lights (namely operators in "Dispatch" mode) may flicker unexpectedly when the train is coming to a complete stop in the station. This is mainly due to how fast (or slow) the train comes to a complete and final stop in the station.</li>
-			<li>"Platform" mode doesn't work on "flyer" coaster types. This cannot be fixed due to limitations of NL2.</li>
 			<li>A LOT of stuff was copy and pasted from object to object. PLEASE let me know if there are any typos or if settings/options are mislabeled.</li>
-			<li>It's not really an issue... But <b>no, I cannot make the buttons "pressable"</b>. This would require running your ride in Scripted Operation Mode, which may be daunting for most novice players. I wanted this pack to be accessible to everyone. Feel free to fork the pack (following the GNU License) if you would like to add this functionality yourself.
 		</ul>
 		<hr>
 		<h3>
 			<u>Change Log:</u>
 		</h3>
 		<ul>
-			<li>[v1.1]
+			<li>[v2.0] Operator Interactions, Lights, & Sounds Update
 				<ul>
-					<li>Fixed a small texture issue on the audio panel of all the medium Main Panels. (Thanks to Luco for reporting it)</li>
-				</ul>
-			</li>
-			<li>[v1.2]
-				<ul>
-					<li>Added Panel Stand</li>
-					<li>Added Standalone Microphone</li>
-					<li>Added Telephone</li>
+					<li><a href="https://github.com/lilkingjr1/Reds-Panels-and-Operators/releases/tag/v2.0">Change List</a></li>
 				</ul>
 			</li>
 			<li>[v1.3] General QoL Improvements & Fixes
 				<ul>
-					<li>Added:</li>
-					<ul>
-						<li>Switch:</li>
-						<ul>
-							<li>Manual Lift Jog mode</li>
-						</ul>
-						<li>Key Switch:</li>
-						<ul>
-							<li>Manual Lift Jog mode</li>
-						</ul>
-						<li>Mushroom Button:</li>
-						<ul>
-							<li>Manual Lift Jog mode</li>
-							<li>Manual Brake Release mode</li>
-							<li>Restraints Lock placard</li>
-							<li>Ride Start placard</li>
-						</ul>
-						<li>Push Button:</li>
-						<ul>
-							<li>Manual Lift Jog mode</li>
-							<li>Manual Brake Release mode</li>
-							<li>Manual Brake Release placard</li>
-						</ul>
-						<li>Push Button (Shielded):</li>
-						<ul>
-							<li>Manual Lift Jog mode</li>
-							<li>Manual Brake Release mode</li>
-							<li>Manual Brake Release placard</li>
-						</ul>
-						<li>Push Button (Flat):</li>
-						<ul>
-							<li>Manual Lift Jog mode</li>
-							<li>Manual Brake Release mode</li>
-							<li>Manual Brake Release placard</li>
-						</ul>
-						<li>PanelView Plus 1000:</li>
-						<ul>
-							<li>Added animated wind intensity indicator</li>
-						</ul>
-						<li>Control Tower Stack Lights:</li>
-						<ul>
-							<li>Added ability to attach to special track</li>
-							<li>Added Special Track mode</li>
-						</ul>
-						<li>Panel (3x2)</li>
-						<li>Standalone Air Tank SCO</li>
-						<li>Large Lockout switch placard NL2MAT</li>
-					</ul>
-					<li>Improved:</li>
-					<ul>
-						<li>PanelView Plus 1000:</li>
-						<ul>
-							<li>No longer requires a station block to be configured and can be placed as a passive object.</li>
-							<li>Display texture improved.</li>
-						</ul>
-						<li>Push Buttons will now animate for Automatic and Full Manual modes.</li>
-						<li>Made Special Track attachment more simplified and easier to use. Users can now just specify the Special Track table to attach to in settings (instead of having to rename the object and set the block, etc). This also now allows for a switch to be able to attached to one table but "control" another if desired.</li>
-						<li>Transport and Lift Jog modes are now more responsive and realistically represent what the button/switch state would be instead of the track device state (ie. Switch to jog the lift motor wouldn't still be on while the lift is slowing down after a jog).</li>
-						<li>Manually linted code a bunch.</li>
-					</ul>
-					<li>Fixed:</li>
-					<ul>
-						<li>Buttons animating abnormally in Restraints mode if the restraints were already up when entering the station (Thanks to Kevin L. for finding this bug).</li>
-						<li>Switches and Key Switches Manual Lift Jog mode now support going forward and backward.</li>
-						<li>Added check during init if the specified block is a station for station-only modes.</li>
-						<li>Added init <code>false</code> return for all scripts that require non-scripted operation mode.</li>
-						<li>"Break" instead of "Brake" misspelling in many places.</li>
-						<li>Push Button lights staying on when the coaster was E-Stopped in certain modes.</li>
-						<li>Park name having a colon character in it, causing NL2 to display an annoying warning when extracting the package.</li>
-					</ul>
+					<li><a href="https://github.com/lilkingjr1/Reds-Panels-and-Operators/releases/tag/v1.3">Change List</a></li>
+				</ul>
+			</li>
+			<li>[v1.2] Small Extras Added
+				<ul>
+					<li><a href="https://github.com/lilkingjr1/Reds-Panels-and-Operators/releases/tag/v1.2">Change List</a></li>
+				</ul>
+			</li>
+			<li>[v1.1] Texture Hotfix
+				<ul>
+					<li>Fixed a small texture issue on the audio panel of all the medium Main Panels. (Thanks to Luco for reporting it)</li>
 				</ul>
 			</li>
 		</ul>

@@ -1,110 +1,168 @@
 /**
-	Pilot Light 4Way NL2 Script
+	Pilot Light 4-Way NL2 Script
 	David Wolfe (Red-Thirten)
-	11/23/2020
+	03/07/2024
 	Extends Pilot Light. Handles additional lights' functionality.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
 
 import com.nolimitscoaster.SceneObject;
-import com.nolimitscoaster.SceneObjectElement;
 import com.nolimitscoaster.Block;
+
+import obj.IndicatorLight;
+import util.SceneObjectTools;
 
 public class PilotLight4Way extends PilotLight{
 	private static final String LIGHT2_ELEMENT_NAME = "light2";		// Name of the right pilot light element in the SCO/model
 	private static final String LIGHT3_ELEMENT_NAME = "light3";		// Name of the bottom pilot light element in the SCO/model
 	private static final String LIGHT4_ELEMENT_NAME = "light4";		// Name of the left pilot light element in the SCO/model
+		
+	// All Pilot Light 4-Way Functions:
+	private static final int F_STATIC = 0;
+	private static final int F_BLOCK_IND_4WAY = 1;
 	
-	private SceneObjectElement light2;
-	private SceneObjectElement light3;
-	private SceneObjectElement light4;
-	
-	private PilotLight4Way(){ // Idk why I had to do this, or why it works. Was the only way to overload an array.
-		super();
-		MODES = new String[]{"static", "four_way"}; // Possible mode parameters
-	}
+	private IndicatorLight light2;
+	private IndicatorLight light3;
+	private IndicatorLight light4;
 	
 	public bool onInit(){
 		super.SCRIPT_NAME = "PilotLight4Way";		// Script name for debugging
 		super.LIGHT_ELEMENT_NAME = "light1";		// Name of the top pilot light element in the SCO/model
-		super.PLACARD_ELEMENT_NAME = "placard";		// Name of the placard element in the SCO/model
+		super.LIGHT_OBJECT_NAME = "light1";			// Name of the Scene Object Light
 		
-		if(super.onInit()){ // If PilotLight initialization succeeds, continue with self-initialization
-			light2 = super.getElementOnScoForName(super.sco, LIGHT2_ELEMENT_NAME);
-			light3 = super.getElementOnScoForName(super.sco, LIGHT3_ELEMENT_NAME); // Get/assign other light elements
-			light4 = super.getElementOnScoForName(super.sco, LIGHT4_ELEMENT_NAME);
-			if (light2 == null || light3 == null || light4 == null) return false; // Missing element check
+		// If PilotLight initialization succeeds, continue with self-initialization
+		if(super.onInit()){
+			// Create additional IndicatorLight objects
+			light2 = new IndicatorLight(
+				SceneObjectTools.getElementForName(sco, LIGHT2_ELEMENT_NAME, SCRIPT_NAME),
+				SceneObjectTools.getLightForName(sco, LIGHT2_ELEMENT_NAME, SCRIPT_NAME),
+				BLINK_INTERVAL,
+				!sco.getBooleanParameter("disable_light").boolValue()
+			);
+			light3 = new IndicatorLight(
+				SceneObjectTools.getElementForName(sco, LIGHT3_ELEMENT_NAME, SCRIPT_NAME),
+				SceneObjectTools.getLightForName(sco, LIGHT3_ELEMENT_NAME, SCRIPT_NAME),
+				BLINK_INTERVAL,
+				!sco.getBooleanParameter("disable_light").boolValue()
+			);
+			light4 = new IndicatorLight(
+				SceneObjectTools.getElementForName(sco, LIGHT4_ELEMENT_NAME, SCRIPT_NAME),
+				SceneObjectTools.getLightForName(sco, LIGHT4_ELEMENT_NAME, SCRIPT_NAME),
+				BLINK_INTERVAL,
+				!sco.getBooleanParameter("disable_light").boolValue()
+			);
 			
-			if (mode == 0){ // Static mode
-				handleStaticMode(super.sco, light2, "light2");
-				handleStaticMode(super.sco, light3, "light3");
-				handleStaticMode(super.sco, light4, "light4");
+			// Function-specific checks and setup
+			switch (func){
+				case F_STATIC_BLINK: // None/Static
+					return handleStaticFunc(
+						new IndicatorLight[]{light, light2, light3, light4},
+						new String[]{"light1", "light2", "light3", "light4"}
+					);
+				case F_BLOCK_IND: // Block Indicator (4-Way)
+					if (coaster.isScriptedOperationMode()){
+						System.err.println(SCRIPT_NAME + ": Sorry! The Block Status (4-Way) Function does not support Scripted Operation Mode rides at this time.");
+						return false;
+					}
 			}
 			
 			return true; // Everything's just dandy
 		}
 		else return false; // Oh noes! Everything's not dandy!
 	}
-	
-	private void handleStaticMode(SceneObject sco, SceneObjectElement element, String paramName){
-		switch (sco.getIntegerParameter(paramName).intValue()){ // Sets the light's state, based on static parameters
-			case 1:
-				element.setTextureAnimationIndex(1);
-				break;
-			case 2:
-				element.setTextureAnimationIndex(-1);
-				break;
-			default:
-				element.setTextureAnimationIndex(0);
+
+	protected int getFuncFromScoParams(SceneObject sco){
+		/* Get Function from SCO Parameters
+			Returns the proper function number based on the "function" parameter enumeration.
+		*/
+		if (sco.getIntegerParameter("function") == null) return 0;
+
+		int funcVal = sco.getIntegerParameter("function").intValue();
+		switch (funcVal){
+			case F_STATIC:
+				return F_STATIC_BLINK; // Set to F_STATIC_BLINK to let init return true
+			case F_BLOCK_IND_4WAY:
+				return F_BLOCK_IND; // Set to F_BLOCK_IND to let init return true
 		}
+		return funcVal; // Default
 	}
 	
-	private final void handle4WayMode(){
+	private bool handleStaticFunc(IndicatorLight[] lights, String[] paramNames){
+		/* Handle Static Function
+			Sets the lights' states, based on given static parameter names.
+			Returns true if any of the lights were set to blink
+			(so onNextFrame can be called).
+		*/
+		bool anyLightBlink = false;
+		for (int i = 0; i < lights.length; i++){
+			switch (sco.getIntegerParameter(paramNames[i]).intValue()){
+				case 1:
+					lights[i].lightOn();
+					break;
+				case 2:
+					lights[i].lightBlink();
+					anyLightBlink = true;
+					break;
+				default:
+					lights[i].lightOff();
+			}
+		}
+		return anyLightBlink;
+	}
+	
+	private final void handleBlockIndicator4WayFunc(){
 		if (coaster.isEmergencyStop()){
-			light.setTextureAnimationIndex(0);
-			light2.setTextureAnimationIndex(1);
-			light3.setTextureAnimationIndex(0);
-			light4.setTextureAnimationIndex(0);
+			light.lightOff();
+			light2.lightOn();
+			light3.lightOff();
+			light4.lightOff();
 		}
 		else{
 			switch (block.getNormalModeState(Block.PROTOCOL_V1)){
 				case Block.STATE_OCCUPIED:
 				case Block.STATE_IN_STATION:
-					light.setTextureAnimationIndex(1);
-					light2.setTextureAnimationIndex(0);
-					light3.setTextureAnimationIndex(0);
-					light4.setTextureAnimationIndex(0);
+					light.lightOn();
+					light2.lightOff();
+					light3.lightOff();
+					light4.lightOff();
 					break;
 				case Block.STATE_APPROACHING_FWD:
 				case Block.STATE_APPROACHING_BWD:
-					light.setTextureAnimationIndex(0);
-					light2.setTextureAnimationIndex(0);
-					light3.setTextureAnimationIndex(-1);
-					light4.setTextureAnimationIndex(0);
+					light.lightOff();
+					light2.lightOff();
+					light3.lightBlink();
+					light4.lightOff();
 					break;
 				case Block.STATE_IDLE:
-					light.setTextureAnimationIndex(0);
-					light2.setTextureAnimationIndex(0);
-					light3.setTextureAnimationIndex(0);
-					light4.setTextureAnimationIndex(1);
+					light.lightOff();
+					light2.lightOff();
+					light3.lightOff();
+					light4.lightOn();
 					break;
 				default:
-					light.setTextureAnimationIndex(0);
-					light2.setTextureAnimationIndex(-1);
-					light3.setTextureAnimationIndex(0);
-					light4.setTextureAnimationIndex(0);
+					light.lightOff();
+					light2.lightBlink();
+					light3.lightOff();
+					light4.lightOff();
 			}
 		}
 	}
 	
 	public void onNextFrame(float tick){
-		switch (mode){
-			case 0:
+		switch (func){
+			case F_BLOCK_IND: // Block Indicator (4-Way)
+				handleBlockIndicator4WayFunc();
 				break;
-			case 1:
-				handle4WayMode();
-				break;
-			default:
 		}
+
+		// Run IndicatorLight object's onNextFrame() as well to animate
+		light.onNextFrame(tick);
+		light2.onNextFrame(tick);
+		light3.onNextFrame(tick);
+		light4.onNextFrame(tick);
+		
+		// If set to attach to special track, update translation of SCO
+		if (specialTrackModule != null)
+			specialTrackModule.updateTranslation();
 	}
 }

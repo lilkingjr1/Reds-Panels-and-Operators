@@ -6,8 +6,8 @@
       <clip mesh="housing_nut" distance="5"/>
       <clip mesh="key" distance="15"/>
     </model>
-    <description>An scripted, animated key switch, with customizable placard.</description>
-    <preview>textures/previews/key_switch.png</preview>
+    <description>A scripted, animated key switch, with customizable placard.</description>
+    <preview>materials/previews/key_switch.png</preview>
     <param basescalex="2"/>
     <param basescaley="2"/>
     <param basescalez="2"/>
@@ -21,177 +21,79 @@
       <index>1</index>
       <defaultcolor r="0" g="0" b="0"/>
     </usercolor>
+    <usertexture>
+      <label>Placard:</label>
+      <description>Placard text image to use. Can be custom, but must be black text with white background.</description>
+      <defaultpath>[ Placards ]/Default.png</defaultpath>
+    </usertexture>
     <script>
       <classpath>scripts</classpath>
       <class>KeySwitch</class>
       <sharedvm>true</sharedvm>
       <resource id="LICENSE">LICENSE</resource>
+      <resource id="key_in">sounds/key_in.ogg</resource>
+      <resource id="key_out">sounds/key_out.ogg</resource>
+      <resource id="sound_off">sounds/switch_key_off.ogg</resource>
+      <resource id="sound_on">sounds/switch_key_on.ogg</resource>
     </script>
     <scriptparameter>
-      <type>double</type>
-      <defaultvalue>-45</defaultvalue>
-      <id>start_angle</id>
-      <description>Relative to straight up (0 deg). Used for all modes (including static).</description>
-      <label>Start Angle:</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>double</type>
+      <type>int</type>
       <defaultvalue>0</defaultvalue>
-      <id>end_angle</id>
-      <description>Relative to straight up (0 deg). Used for all non-static modes.</description>
-      <label>End Angle:</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>hide_key</id>
-      <description>Will hide the key during play. Only works with static mode.</description>
-      <label>Hide Key (Static Mode Only)</label>
+      <enums>None,Special Track (Toggle Only),Dispatch Mode,Operation Mode,Trains In Service (No Interaction),Lift Jog (No Interaction),Transports (No Interaction),Special Track (No Interaction),Coaster Lights (No Interaction)</enums>
+      <id>function</id>
+      <description>How this switch will behave during Play Mode.</description>
+      <label>Function:</label>
     </scriptparameter>
     <scriptparameter>
       <type>blocksection</type>
       <id>block</id>
-      <description>This is the block that this operator will be assigned to for all Non-Static Modes.</description>
-      <label>Block Location (for all Non-Static Modes):</label>
+      <description>This is the block that this operator will be assigned to for all Non-Static Functions.</description>
+      <label>Block Location:</label>
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>
       <id>special_track</id>
+      <description>This is the Special Track that this operator will control. Required for the Special Track Functions.</description>
+      <label>Special Track (for Special Track Functions):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>specialtrack</type>
+      <id>special_track_attach</id>
       <description>Select the special track of a ride you want this operator to move with during simulation. Set to &lt;None&gt; to disable.</description>
       <label>Special Track to Attach To (Optional):</label>
     </scriptparameter>
     <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>mode_instructions</id>
-      <description>How this button will behave during Play Mode. Changing this text does nothing.</description>
-      <label>=========== Operator Mode ===========</label>
+      <type>double</type>
+      <defaultvalue>-45</defaultvalue>
+      <id>start_angle</id>
+      <description>Relative to straight up (0 deg). Used for all Functions (including None).</description>
+      <label>Start Angle:</label>
     </scriptparameter>
     <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>static</id>
-      <description>Will remain static with no animations.</description>
-      <label>Static</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>lights</id>
-      <description>Block can be any block. Animates to middle angle at night, and End Angle for E-Stop.</description>
-      <label>Night Lights</label>
+      <type>double</type>
+      <defaultvalue>45</defaultvalue>
+      <id>end_angle</id>
+      <description>Relative to straight up (0 deg). Used for all non-static Functions.</description>
+      <label>End Angle:</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
-      <id>trains</id>
-      <description>ONLY trains that are LASHED to track are counted as off. Block can be any block. Animates accordingly.</description>
-      <label>Trains In Service</label>
+      <id>hide_key</id>
+      <description>Will hide the key during simulation. Only works with the &quot;None&quot; Function.</description>
+      <label>Hide Key (None Function Only)</label>
     </scriptparameter>
     <scriptparameter>
       <type>bool</type>
       <defaultvalue>false</defaultvalue>
-      <id>transports</id>
-      <description>Will animate to a block&apos;s transport&apos;s state while ride is in Full Manual mode.</description>
-      <label>Transports</label>
+      <id>hide_placard</id>
+      <description>Hides the placard during Play Mode.</description>
+      <label>Hide Placard</label>
     </scriptparameter>
-    <scriptparameter>
-      <type>specialtrack</type>
-      <id>special_track_mode</id>
-      <description>Special Track you want this switch to animate to.</description>
-      <label>Special Track</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>maintenance_mode</id>
-      <description>Will animate to End Angle when ride is in Full Manual mode. Block can be any block.</description>
-      <label>Full Manual Mode</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>manual_lift_jog</id>
-      <description>Only active when coaster is in Full Manual Mode. Will animate if block is a lift.</description>
-      <label>Manual Lift Jog Mode</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>string</type>
-      <defaultvalue>Only select ONE of the options below.</defaultvalue>
-      <id>placard_instructions</id>
-      <description>Selections for placard text. Changing this text does nothing.</description>
-      <label>========== Placard Options ==========</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard0</id>
-      <label>No Placard (Invisible)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard1</id>
-      <label>Control Power (Off / On)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard2</id>
-      <label>Jog Lift (BWD / N / FWD)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard3</id>
-      <label>Maintenance (Bypass / Off / Enable)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard4</id>
-      <label>Mic Zone (Station / Lift / Brakes)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>true</defaultvalue>
-      <id>placard5</id>
-      <label>Operation Mode (Auto / Maint / Xfer)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard6</id>
-      <label>Running Lights (Off / On / Emrg)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard7</id>
-      <label>Switch Track (Left / Right)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard8</id>
-      <label>Trains In Service (1 / 2 / 3)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard9</id>
-      <label>Transfer Table (Left / N / Right)</label>
-    </scriptparameter>
-    <scriptparameter>
-      <type>bool</type>
-      <defaultvalue>false</defaultvalue>
-      <id>placard10</id>
-      <label>Transports (BWD / N / FWD)</label>
-    </scriptparameter>
-    <materialpath name="black">textures/plastic_black.nl2mat</materialpath>
+    <materialpath name="black">materials/plastic_black.nl2mat</materialpath>
     <materialpath name="key">intern:data/materials/Chrome.nl2mat</materialpath>
-    <materialpath name="key_arrow">textures/key_hole.nl2mat</materialpath>
-    <materialpath name="metal">textures/metal011.nl2mat</materialpath>
-    <materialpath name="placard">textures/placard_key_switch.nl2mat</materialpath>
+    <materialpath name="key_arrow">materials/key_hole.nl2mat</materialpath>
+    <materialpath name="metal">materials/metal.nl2mat</materialpath>
+    <materialpath name="placard">[ Placards ]/placard.nl2mat</materialpath>
   </sceneobject>
 </root>

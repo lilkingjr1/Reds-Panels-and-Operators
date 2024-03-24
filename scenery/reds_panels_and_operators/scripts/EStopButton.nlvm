@@ -1,20 +1,36 @@
 /**
 	Emergency Stop Button NL2 Script
 	David Wolfe (Red-Thirten)
-	12/6/2020
-	Extends Push Button
+	03/06/2024
+	Extends Push Button.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
+
+import com.nolimitscoaster.SceneObject;
 
 public class EStopButton extends PushButton{
 	public final bool onInit(){
 		super.SCRIPT_NAME = "EStopButton";			// Script name for debugging
 		super.BUTTON_ELEMENT_NAME = "estop_button";	// Name of the button element in the SCO/model
-		super.PLACARD_ELEMENT_NAME = "placard";		// Name of the placard element in the SCO/model
-		super.BUTTON_TRAVEL_DIST = 0.008f;			// Distance, in meters, the button will travel to be fully "pressed"
 		super.BUTTON_TRAVEL_TIME = 0.2f;			// Time, in seconds, for the button to travel in and out ("speed")
-		super.BUTTON_HAS_LIGHT = true;				// True if the button has a pilot light
+		super.BUTTON_INTERACTION_RADIUS = 0.05f;	// Radius, in meters, of the InteractionObject detection sphere
 		
 		return super.onInit();						// Run the rest of the init code in PushButton
+	}
+
+	protected int getFuncFromScoParams(SceneObject sco){
+		/* Get Function from SCO Parameters
+			Returns the proper function number based on the "function" parameter enumeration.
+		*/
+		if (sco.getIntegerParameter("function") == null) return 0;
+
+		int funcVal = sco.getIntegerParameter("function").intValue();
+		switch (funcVal){
+			case 3: // E-Stop (Simple)
+				return F_ESTOP_SIMPLE;
+			case 4: // E-Stop (Advanced)
+				return F_ESTOP_ADVANCED;
+		}
+		return funcVal;
 	}
 }

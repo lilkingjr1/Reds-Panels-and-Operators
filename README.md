@@ -1,4 +1,4 @@
-![Red's Panels and Operators](https://steamuserimages-a.akamaihd.net/ugc/1658978787080214701/889239368B7EA292E6C8EF572961640E4D9BD51F/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true)
+![Red's Panels and Operators](scenery/reds_panels_and_operators/materials/previews/overview.png)
 
 ___
 

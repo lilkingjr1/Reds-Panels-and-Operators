@@ -1,8 +1,9 @@
 [h1][u]Red's Panels and Operators[/u][/h1]
 [quote][b]Do you like buttons? Do you like switches? Do you like flashing lights? Do you have an unhealthy obsession with control panels like I do? Then this is the pack for you! 😃[/b][/quote]
 [i]Like what you see? Appreciate the months of hard work that went into making it?
-Then please consider giving this park a thumbs up! 👍
-Want to be even more awesome!? Supporting the project by [url=https://www.paypal.com/donate?hosted_button_id=LT9DY39634NGL]donating at this link[/url] helps me make more content like this in the future![/i]
+[img]https://i.imgur.com/ZpAhItL.gif[/img]
+Want to be even more awesome!? Supporting the project by donating helps me make more content like this in the future![/i]
+[url=https://www.paypal.com/donate?hosted_button_id=LT9DY39634NGL][img]https://i.imgur.com/aQKXQzV.png[/img][/url]
 [hr][/hr]
 [h1]Description:[/h1]
 Red's Panels and Operators is a custom SCO package of various animated buttons, switches, lights, etc. to dress up your ride with custom-built control panels. Numerous different panel sizes and shapes, paired with 12 different types of highly detailed & scripted operators, each with countless configuration possibilities, means you can virtually build any panel you can think of. That, along with various extras like electrical panels, cable runners, etc; this pack is sure to add that extra level of realism to your park!
@@ -12,17 +13,19 @@ Red's Panels and Operators is a custom SCO package of various animated buttons, 
 [list]
     [*][b]5 Main Panels[/b] of different sizes /w 4 button-layouts each & 3 different texture options
     [*][b]13 "Operator" Panels[/b] of different sizes /w 3 different texture options & customizable mounts
-    [*][b]12 Different Operators[/b], each with easily customizable colors, placard, and scripted operation modes
+    [*][b]12 Different Operators & Indicators[/b], each with easily customizable colors, placard, and scripted functions
 These include...
 [list]
     [*]Push Button
     [*]E-Stop Button
     [*]Switch
     [*]Key Switch
+    [*]Pilot Light
     [*]and MORE!
 [/list]
     [*]PanelView Plus 1000 Block Display
     [*]3 Electrical Boxes, with customizable colors, textures, and mounts
+    [*]Large PLC Electrical Cabnet
     [*]Air Tank
     [*]Labels
     [*]Cable Runners
@@ -37,8 +40,7 @@ These include...
 [list]
     [*]I tried my best to make the pack super user friendly, and it's entirely possible to pick it up without any prior instruction.
     [*]However, to learn how to use the pack as efficiently as possible, please watch the [url=https://www.youtube.com/watch?v=Iw8XG1mUMP0]tutorial video above[/url], or open the README.html in the pack for best practices.
-	[*][b]Note[/b]: Operators currently cannot be interacted with (they are not "clickable"); they will only animate based on what the ride is doing or what is being done on the in-game control panel GUI. They also will not animate if the coaster is in Scripted Operation mode. Unfortunately, there is no easy way around these limitations due to limitations with NL2's scripting API and the infinite configuration possibilities of scripted rides. I may release a "manual" version of this pack sometime in the future that will have it's own API for programmers to integrate the operators into their scripted rides.
-    [*]If you have any issues with the pack, please make sure your question or issue isn't already answered by these resources first before posting a comment.
+	[*]If you have any issues with the pack, please make sure your question or issue isn't already answered by these resources first before posting a comment.
 [/list]
 
 [hr][/hr]
