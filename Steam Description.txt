@@ -1,5 +1,5 @@
 [h1][u]Red's Panels and Operators[/u][/h1]
-[quote][b]Do you like buttons? Do you like switches? Do you like flashing lights? Do you have an unhealthy obsession with control panels like I do? Then this is the pack for you! 😃[/b][/quote]
+[quote][b]Do you like pressing buttons? Do you like flipping switches? Do you like flashing lights? Do you have an unhealthy obsession with control panels like I do? Then this is the pack for you! 😃[/b][/quote]
 [i]Like what you see? Appreciate the months of hard work that went into making it?
 [img]https://i.imgur.com/ZpAhItL.gif[/img]
 Want to be even more awesome!? Supporting the project by donating helps me make more content like this in the future![/i]
@@ -13,7 +13,7 @@ Red's Panels and Operators is a custom SCO package of various animated buttons, 
 [list]
     [*][b]5 Main Panels[/b] of different sizes /w 4 button-layouts each & 3 different texture options
     [*][b]13 "Operator" Panels[/b] of different sizes /w 3 different texture options & customizable mounts
-    [*][b]12 Different Operators & Indicators[/b], each with easily customizable colors, placard, and scripted functions
+    [*][b]12 Interactable Operators & Indicators[/b], each with easily customizable colors, volumetric lights, placard, and scripted functions
 These include...
 [list]
     [*]Push Button
@@ -23,6 +23,7 @@ These include...
     [*]Pilot Light
     [*]and MORE!
 [/list]
+    [*]Authentic operator sound effects recorded from real Allen-Bradley™ operators!
     [*]PanelView Plus 1000 Block Display
     [*]3 Electrical Boxes, with customizable colors, textures, and mounts
     [*]Large PLC Electrical Cabnet
@@ -53,6 +54,7 @@ These include...
 [hr][/hr]
 [h1]Credits:[/h1]
 [list]
+    [*]Allen-Bradley™ by Rockwell Automation, Inc. -- Operators & Indicators were modeled/textured with love by referencing the iconic products this company manufactures in real life (*This pack and it's contents are in no way associated with, endorsed by, or represent Rockwell Automation, Inc. in any way).
     [*][url=https://steamcommunity.com/profiles/76561197967797620/myworkshopfiles/?appid=301320]bestdani[/url] -- Some code and a lot of scripting support
     [*][url=https://steamcommunity.com/profiles/76561198332583014/myworkshopfiles/?appid=301320]Mayor 2018[/url] -- Provided the basis of the demo park; Beta testing and feedback
     [*]Dustin Sloane -- Weld Bead Height Map Texture
