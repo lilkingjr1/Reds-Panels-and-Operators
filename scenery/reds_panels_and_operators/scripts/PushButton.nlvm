@@ -1,7 +1,7 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	03/18/2024
+	06/06/2024
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -19,6 +19,7 @@ import com.nolimitscoaster.ResourcePath;
 
 import obj.OperatorButton;
 import obj.IndicatorLight;
+import obj.Speakers;
 import util.Logger;
 import util.SceneObjectTools;
 import util.CoasterTools;
@@ -63,8 +64,10 @@ public class PushButton extends Script implements InteractionActionListener{
 	protected static final int F_ESTOP_RESET = 21;
 	protected static final int F_LIFT_JOG_NO_INT = 22;
 	protected static final int F_BRAKE_RELEASE_NO_INT = 23;
-	protected static final int F_ESTOP_SIMPLE = 24;
-	protected static final int F_ESTOP_ADVANCED = 25;
+	protected static final int F_PLAY_SOUND = 24;
+	// E-Stop Specific Functions at End
+	protected static final int F_ESTOP_SIMPLE = 25;
+	protected static final int F_ESTOP_ADVANCED = 26;
 	private static final int[] NON_INTERACT_MODES = {
 		F_LIFT_JOG_NO_INT,
 		F_BRAKE_RELEASE_NO_INT
@@ -77,10 +80,10 @@ public class PushButton extends Script implements InteractionActionListener{
 	private InteractionObject iObj;
 	private SceneObjectLight plcLight;
 	
-	private Logger log;
 	private OperatorButton button;
 	private SpecialTrackModule specialTrackModule;
 	private IndicatorLight plcIndicatorLight;
+	private Speakers speakers;
 	
 	private int func = F_STATIC_OFF;
 	private int frameCounter = 5; // Stupid workaround for Dispatch Function where NL2 bug can sometimes report moving train speed as 0
@@ -96,7 +99,7 @@ public class PushButton extends Script implements InteractionActionListener{
 		);
 
 		// Setup Logger
-		log = new Logger(SCRIPT_NAME, sco.getName());
+		Logger log = new Logger(SCRIPT_NAME, sco.getName());
 
 		// Hide placard if configured
 		if ( sco.getBooleanParameter("hide_placard").boolValue() ){
@@ -110,9 +113,9 @@ public class PushButton extends Script implements InteractionActionListener{
 		
 		// Get configured function and required parameters
 		func = getFuncFromScoParams(sco);
-		if (func > F_STATIC_BLINK){ // If not static function
+		if (func > F_STATIC_BLINK && func != F_PLAY_SOUND){ // If not static or Play Sound functions
 			block = sco.getBlockParameter("block");
-			if (block == null){ // Check for unconfigured block
+			if (block == null){ // Check for un-configured block
 				log.err("Block parameter required for any non-static functions.");
 				return false;
 			}
@@ -207,6 +210,25 @@ public class PushButton extends Script implements InteractionActionListener{
 					return false;
 				}
 				break;
+			// Functions that require a speaker
+			case F_PLAY_SOUND:
+				ResourcePath soundResource = sco.getResourcePathParameter("play_sound");
+				if (soundResource == null){
+					log.err("The configured function requires the Sound parameter to be specified.");
+					return false;
+				}
+				String speakersScoName = sco.getStringParameter("speakers_sco_name");
+				if (speakersScoName.length() < 1){
+					log.err("The configured function requires the Speaker(s) SCO Name parameter to be specified.");
+					return false;
+				}
+				SceneObject[] speakerSCOS = sim.getSceneObjectsWithName(speakersScoName);
+				if (speakerSCOS.length < 1){
+					log.err("No SCO(s) with the instance name of \"" + speakersScoName + "\" could be found.");
+					return false;
+				}
+				speakers = new Speakers(speakerSCOS, soundResource);
+				break;
 		}
 
 		// Check for platform (if applicable)
@@ -265,8 +287,8 @@ public class PushButton extends Script implements InteractionActionListener{
 			);
 		}
 
-		// Setup InteractionObject (if interactible function)
-		if (isInteractibleFunc(func)){
+		// Setup InteractionObject (if interactable function)
+		if (isInteractableFunc(func)){
 			iObj = InteractionObject.createSimpleButton();
 			iObj.setPosition(button.getAbsoluteTranslation());
 			iObj.setRadius(BUTTON_INTERACTION_RADIUS);
@@ -287,7 +309,7 @@ public class PushButton extends Script implements InteractionActionListener{
 		return sco.getIntegerParameter("function").intValue();
 	}
 
-	private bool isInteractibleFunc(int func){
+	private bool isInteractableFunc(int func){
 		for (int i = 0; i < NON_INTERACT_MODES.length; i++){
 			if (func == NON_INTERACT_MODES[i])
 				return false;
@@ -314,7 +336,7 @@ public class PushButton extends Script implements InteractionActionListener{
 		}
 	}
 
-	// Interactible Functions //
+	// Interactable Functions //
 	
 	private void handleStaticFunc(bool action){
 		if (action){
@@ -347,7 +369,7 @@ public class PushButton extends Script implements InteractionActionListener{
 		// Can Semi-Manual move
 		else{
 			enableAction();
-			button.setLightState(block.LAMP_FLASHING);
+			button.setLightState(Block.LAMP_FLASHING);
 		}
 	}
 	
@@ -596,6 +618,24 @@ public class PushButton extends Script implements InteractionActionListener{
 			button.lightOff();
 		}
 	}
+
+	private void handlePlaySoundFunc(bool action){
+		if (action){
+			button.buttonPush();
+			speakers.play();
+			return;
+		}
+
+		if (button.isAnimating()){
+			disableAction();
+			button.lightOn();
+		}
+		else{
+			enableAction();
+			button.lightOff();
+		}
+		speakers.updateTranslation();
+	}
 	
 	// E-Stop Functions //
 	
@@ -663,7 +703,7 @@ public class PushButton extends Script implements InteractionActionListener{
 		}
 	}
 	
-	// Non-Interactible Functions //
+	// Non-Interactable Functions //
 	
 	private void handleLiftJogFunc(){
 		if (coaster.getBlockSystemMode() != Coaster.E_BLOCK_SYSTEM_MODE_FULL_MANUAL || coaster.isEmergencyStop()){
@@ -750,6 +790,9 @@ public class PushButton extends Script implements InteractionActionListener{
 				break;
 			case F_BRAKE_RELEASE_NO_INT:
 				handleManualBrakeReleaseFunc();
+				break;
+			case F_PLAY_SOUND:
+				handlePlaySoundFunc(action);
 				break;
 			default:
 				handleStaticFunc(action);

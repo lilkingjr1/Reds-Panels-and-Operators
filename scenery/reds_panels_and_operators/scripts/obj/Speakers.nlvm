@@ -1,0 +1,91 @@
+/**
+	Speakers Object NL2 Script
+	David Wolfe (Red-Thirten)
+	06/06/2024
+	A Java object representing one or more speakers that can be easily initialized given
+		a list of SCOs and a sound resource path to play on all speakers when called.
+	Licensed under GNU GPLv3 - See LICENSE for more details.
+
+	Constructors:
+		public Speakers(SceneObject[] scos, ResourcePath soundResource)
+
+	Methods:
+		void play() - Plays sound (configured during construction) on all speakers.
+		void updateTranslation() - Should be called every frame to set the translation of the sounds to the speaker SCOs' current position.
+*/
+
+package obj;
+
+import com.nolimitscoaster.SceneObject;
+import com.nolimitscoaster.SceneObjectElement;
+import com.nolimitscoaster.ResourcePath;
+import com.nolimitscoaster.StaticSound;
+import nlvm.math3d.Vector3f;
+
+public class Speakers{
+	private static final String SPEAKER_ELEMENT_NAME = "speaker";	// Name of the speaker element in the SCO/model (if present)
+    private static final float SOUND_RANGE = 3.0f;					// Default range for sound
+    private static final float SOUND_FALLOFF = 1.0f;				// Default falloff for sound
+    private static final float SOUND_GAIN = 1.0f;					// Default gain for sound
+    private static final float SOUND_PITCH = 1.0f;					// Default pitch for sound
+
+	private SceneObject[] scos;
+	private StaticSound[] speakers;
+
+	public Speakers(SceneObject[] scos, ResourcePath soundResource){ // Default object constructor
+		this.scos = scos;
+		speakers = new StaticSound[scos.length];
+
+		for (int i = 0; i < scos.length; i++){
+			speakers[i] = StaticSound.loadFromResource(soundResource, StaticSound.FLAG_MIXDOWN_MONO);
+			if (speakers[i] == null){
+				System.throwRuntimeException("[Speaker Error]: Unable to load " + soundResource.toString());
+			}
+
+			speakers[i].setDistanceParameters(
+                    getFloatParameterOrDefault(scos[i], "range", SOUND_RANGE),
+                    getFloatParameterOrDefault(scos[i], "falloff", SOUND_FALLOFF)
+            );
+            speakers[i].setGain(getFloatParameterOrDefault(scos[i], "gain", SOUND_GAIN));
+            speakers[i].setPitch(getFloatParameterOrDefault(scos[i], "pitch", SOUND_PITCH));
+			speakers[i].setDopplerMode(false);
+			speakers[i].setEnvironmentMode(StaticSound.E_ENVMODE_LOCAL);
+			
+			// Set sound position to speaker element if possible. Otherwise, set to SCO's root position
+			speakers[i].setPosition(getElementTransOrScoTrans(scos[i], SPEAKER_ELEMENT_NAME));
+		}
+	}
+
+    private float getFloatParameterOrDefault(SceneObject sco, String parameterName, float defaultValue){
+        Double parameter = sco.getDoubleParameter(parameterName);
+        if (parameter != null){
+            return parameter.floatValue();
+        }
+		else{
+            return defaultValue;
+        }
+    }
+
+	private Vector3f getElementTransOrScoTrans(SceneObject sco, String elementName){
+		SceneObjectElement element = sco.getElementForName(elementName);
+		if (element != null){
+			return element.getAbsoluteMatrix().getTrans();
+		}
+		else{
+			return sco.getTranslation();
+		}
+	}
+	
+	public void play(){
+		for (int i = 0; i < speakers.length; i++){
+			speakers[i].stop();
+			speakers[i].play();
+		}
+	}
+
+	public void updateTranslation(){
+		for (int i = speakers.length - 1; i >= 0; --i){
+			speakers[i].setPosition(getElementTransOrScoTrans(scos[i], SPEAKER_ELEMENT_NAME));
+		}
+	}
+}

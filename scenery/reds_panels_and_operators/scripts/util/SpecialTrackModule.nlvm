@@ -23,18 +23,18 @@ import nlvm.math3d.Vector3f;
 public class SpecialTrackModule{
 	private SceneObject sco;
 	private SpecialTrack specialTrack;
-	private Vector3f translationFromSpecialTracktoSCO;
+	private Vector3f translationFromSpecialTrackToSCO;
 	
 	public SpecialTrackModule(SceneObject sco){ // Default object constructor
 		this.sco = sco; // Assign SCO
 		specialTrack = sco.getSpecialTrackParameter("special_track_attach");
-		translationFromSpecialTracktoSCO = new Vector3f( sco.getTranslation() ); // Get the SCO's translation
-		translationFromSpecialTracktoSCO.sub( specialTrack.getMoveableBranchMatrix(0).getTrans() ); // Subtract the Special Track's translation to get the translation between the two
+		translationFromSpecialTrackToSCO = new Vector3f( sco.getTranslation() ); // Get the SCO's translation
+		translationFromSpecialTrackToSCO.sub( specialTrack.getMoveableBranchMatrix(0).getTrans() ); // Subtract the Special Track's translation to get the translation between the two
 	}
 	
 	public void updateTranslation(){
 		Vector3f scoTranslation = new Vector3f( specialTrack.getMoveableBranchMatrix(0).getTrans() );
-		scoTranslation.add(translationFromSpecialTracktoSCO);
+		scoTranslation.add(translationFromSpecialTrackToSCO);
 		sco.setTranslation(scoTranslation);
 	}
 }
