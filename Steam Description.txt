@@ -23,10 +23,11 @@ These include...
     [*]Pilot Light
     [*]and MORE!
 [/list]
+    [*]26 different operation functions, including advanced ones (like E-Stop Reset, Play Sound, etc.) that are not included with NL2's vanilla operators.
     [*]Authentic operator sound effects recorded from real Allen-Bradley™ operators!
     [*]PanelView Plus 1000 Block Display
     [*]3 Electrical Boxes, with customizable colors, textures, and mounts
-    [*]Large PLC Electrical Cabnet
+    [*]Large PLC Electrical Cabinet
     [*]Air Tank
     [*]Labels
     [*]Cable Runners
