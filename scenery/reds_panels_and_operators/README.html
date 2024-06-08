@@ -5,7 +5,7 @@
 			Red's Panels &amp; Operators<br>
 			©2024 David W. (Red-Thirten)<br>
 			<a href="mailto:red_thirten@yahoo.com">red_thirten@yahoo.com</a><br>
-			Version 2.0, 15 March 2024<br>
+			Version 2.1, 06 June 2024<br>
 			NL2 Scenery Custom Object (SCO) Package<br>
 		</h4></i>
 		<p>
@@ -56,10 +56,38 @@
 		<ul><li>As a final note, it might be good to not delete your original "master" panels until you are completed with your build, just in case you need another copy or you want to modify it. Modifying already moved / rotated panels is a <em>pain</em>!!!</li></ul>
 		<hr>
 		<h3>
+			<u>"Play Sound" Button Function - Speaker Compatibility:</u>
+		</h3>
+		<h4><a href="https://github.com/lilkingjr1/Reds-Speakers">Red's Speakers</a> Pack:</h4>
+		<ul>
+			<li>This pack of speakers is recommended for use with this button function.</li>
+			<li>The location of the sound will be correct and aligned with the speaker.</li>
+			<li>You can edit various parameters of the speaker to adjust the sound, including:</li>
+			<ul>
+				<li>Gain (Volume)</li>
+				<li>Range</li>
+				<li>Falloff</li>
+				<li>and Pitch</li>
+			</ul>
+		</ul>
+		<h4>Any SCO:</h4>
+		<ul>
+			<li>Any SCO can technically be used as a "speaker".</li>
+			<li>The sound will play from the SCO's origin (wherever that is).</li>
+			<li>Default parameters will be used for sound properties (like Gain, etc.), and they cannot be changed.</li>
+		</ul>
+		<h4>Custom Tailored SCOs:</h4>
+		<ul>
+			<li>If you would like to create a custom speaker, you can do so easily.</li>
+			<li>The SCO's 3D object should have an element named "speaker". The sound will play from the origin of this element.</li>
+			<li>The SCO should have 4 float script parameters, named: "gain", "range", "falloff", and "pitch". These respective properties will be honored if present.</li>
+		</ul>
+		<hr>
+		<h3>
 			<u>Known Issues:</u>
 		</h3>
 		<ul style="line-height: 1.5;">
-			<li>"Auto-alignment" via coordinates doesn't work for Main Panels, because they are at an angle. The best practice, in my opinion, is to align one operator by hand, and then copy it's coordinates to other operators you want to add, and adjust from there. This makes aligning any additional operators much easier.</li>
+			<li>"Auto-alignment" via coordinates doesn't work for Main Panels, because they are at an angle. The best practice is to align one operator by hand and then copy it's coordinates to other operators you want to add, and adjust from there. This makes aligning any additional operators much easier.</li>
 			<li>"Trains in Service" Mode for Key Switch operators will display the key animation when it shouldn't the first time the ride is put into "Manual Block" Mode. I'm not really sure how to fix this, because it seems like NL2 is miscalculating the number of lashed trains upon entering "Manual Block" Mode for the first time.</li>
 			<li>A LOT of stuff was copy and pasted from object to object. PLEASE let me know if there are any typos or if settings/options are mislabeled.</li>
 		</ul>
@@ -68,6 +96,11 @@
 			<u>Change Log:</u>
 		</h3>
 		<ul>
+			<li>[v2.1] Add Play Sound Button Function
+				<ul>
+					<li><a href="https://github.com/lilkingjr1/Reds-Panels-and-Operators/releases/tag/v2.1">Change List</a></li>
+				</ul>
+			</li>
 			<li>[v2.0] Operator Interactions, Lights, & Sounds Update
 				<ul>
 					<li><a href="https://github.com/lilkingjr1/Reds-Panels-and-Operators/releases/tag/v2.0">Change List</a></li>

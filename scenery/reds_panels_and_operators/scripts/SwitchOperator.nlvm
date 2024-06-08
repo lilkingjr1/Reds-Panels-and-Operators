@@ -1,7 +1,7 @@
 /**
 	Switch NL2 Script
 	David Wolfe (Red-Thirten)
-	03/18/2024
+	06/06/2024
 	Animates the switch during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -58,7 +58,6 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 	protected SpecialTrack specialTrack;
 	private InteractionObject iObj;
 	
-	private Logger log;
 	protected OperatorSwitch operatorSwitch;
 	private SpecialTrackModule specialTrackModule;
 	
@@ -76,7 +75,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 		);
 
 		// Setup Logger
-		log = new Logger(SCRIPT_NAME, sco.getName());
+		Logger log = new Logger(SCRIPT_NAME, sco.getName());
 
 		// Hide placard if configured
 		if ( sco.getBooleanParameter("hide_placard").boolValue() ){
@@ -159,8 +158,8 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 				break;
 		}
 
-		// Setup InteractionObject (if interactible function)
-		if (isInteractibleFunc(func)){
+		// Setup InteractionObject (if interactable function)
+		if (isInteractableFunc(func)){
 			iObj = InteractionObject.createSimpleButton();
 			iObj.setPosition(operatorSwitch.getAbsoluteTranslation());
 			iObj.setRadius(SWITCH_INTERACTION_RADIUS);
@@ -218,7 +217,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 		return sco.getIntegerParameter("function").intValue();
 	}
 
-	private bool isInteractibleFunc(int func){
+	private bool isInteractableFunc(int func){
 		if (func == F_STATIC && operatorSwitch.isStatic()) // None function w/o rotation
 			return false;
 		for (int i = 0; i < NON_INTERACT_MODES.length; i++){
@@ -228,7 +227,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 		return true;
 	}
 
-	// Interactible Functions //
+	// Interactable Functions //
 
 	private void handleStaticFunc(bool action){
 		if (action){

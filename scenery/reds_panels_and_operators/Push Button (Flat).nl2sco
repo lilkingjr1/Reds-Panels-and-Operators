@@ -42,7 +42,7 @@
     <scriptparameter>
       <type>int</type>
       <defaultvalue>0</defaultvalue>
-      <enums>None,Block Advance,Block Reverse,Station Dispatch,Restraints Open,Restraints Lock,Platform Raise,Platform Lower,Platform Toggle,Flyer Seats Unlock,Flyer Seats Lock,Flyer Seats Toggle,Special Track Left,Special Track Right,Auto Dispatch,Manual Dispatch,Automatic Operation,Manual Block Operation,Full Manual Operation,E-Stop Reset,Lift Jog (No Interaction),Brake Release (No Interaction)</enums>
+      <enums>None,Block Advance,Block Reverse,Station Dispatch,Restraints Open,Restraints Lock,Platform Raise,Platform Lower,Platform Toggle,Flyer Seats Unlock,Flyer Seats Lock,Flyer Seats Toggle,Special Track Left,Special Track Right,Auto Dispatch,Manual Dispatch,Automatic Operation,Manual Block Operation,Full Manual Operation,E-Stop Reset,Lift Jog (No Interaction),Brake Release (No Interaction),Play Sound from Speaker(s)</enums>
       <id>function</id>
       <description>How this button will behave during Play Mode.</description>
       <label>Function:</label>
@@ -58,6 +58,20 @@
       <id>special_track</id>
       <description>This is the Special Track that this operator will control. Required for the Special Track Functions.</description>
       <label>Special Track (for Special Track Functions):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type>string</type>
+      <defaultvalue></defaultvalue>
+      <id>speakers_sco_name</id>
+      <description>Name that matches the name of one or more SCO instances that will act as a speaker to play the sound. Any SCO can be used, but Red&apos;s Speakers are preferred (see README for details).</description>
+      <label>Speaker(s) SCO Name (for Play Sound Function):</label>
+    </scriptparameter>
+    <scriptparameter>
+      <type filetype="audio">resourcepath</type>
+      <defaultvalue></defaultvalue>
+      <id>play_sound</id>
+      <description>Sound file to play on all configured speakers when the button is pushed.</description>
+      <label>Speaker Sound (for Play Sound Function):</label>
     </scriptparameter>
     <scriptparameter>
       <type>specialtrack</type>
