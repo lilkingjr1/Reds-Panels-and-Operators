@@ -37,6 +37,8 @@ These include...
     [*]Telephone
 [/list]
 
+A README.html (that you can open in your browser) with details on how to use the pack is also included with the pack.
+
 [hr][/hr]
 [h1]How to Use:[/h1]
 [list]

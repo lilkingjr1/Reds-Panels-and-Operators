@@ -1,7 +1,7 @@
 /**
 	Operator Switch Object NL2 Script
 	David Wolfe (Red-Thirten)
-	03/14/2024
+	06/10/2024
 	A Java object representing a switch, with optional key component, that can animate to any given state position.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -12,8 +12,9 @@
 				Note: Set keyDefaultOutPos to negative number to have key pulled out for all positions.
 
 	Methods:
-		Vector3f getAbsoluteTranslation() - Returns the absolute translation of the button element.
+		Vector3f getAbsoluteTranslation() - Returns the absolute translation of the switch element.
 		int getCurrentState() - Returns the current state/position the switch is set to (not necessarily current position).
+		bool isStatic() - Returns true if the start and end angles are equal.
 		void toggleSwitch() - If the switch only has 2 states, this toggles between them.
 		void setSwitchState(int newState) - Primes the switch to animate to a new state position (newState values start from 0; not 1)
 		void setKeyVisible() - Makes the key element visible.
@@ -48,7 +49,7 @@ public class OperatorSwitch{
 		START_ANGLE = (float) Math.toRadians(startAngleDeg); // Assign static start and end angles
 		END_ANGLE = (float) Math.toRadians(endAngleDeg);
 		SLOPE = (END_ANGLE - START_ANGLE) / (TOTAL_STATES - 1); // "Slope" that represents the solution space of possible angles the switch can be at for any given state
-		DELTA_T = travelTime;
+		DELTA_T = (travelTime > 0) ? travelTime : 0.0001f;
 		DELTA_Ta = DELTA_T/2.f; // (De)Acceleration window is the first and last half of the animation (whole animation)
 		theta = START_ANGLE;
 		thetaCurrent = START_ANGLE;
