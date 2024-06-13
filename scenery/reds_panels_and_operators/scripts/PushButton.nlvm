@@ -1,7 +1,7 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	06/06/2024
+	06/13/2024
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -65,9 +65,10 @@ public class PushButton extends Script implements InteractionActionListener{
 	protected static final int F_LIFT_JOG_NO_INT = 22;
 	protected static final int F_BRAKE_RELEASE_NO_INT = 23;
 	protected static final int F_PLAY_SOUND = 24;
+	protected static final int F_RESET_COASTER = 25;
 	// E-Stop Specific Functions at End
-	protected static final int F_ESTOP_SIMPLE = 25;
-	protected static final int F_ESTOP_ADVANCED = 26;
+	protected static final int F_ESTOP_SIMPLE = 26;
+	protected static final int F_ESTOP_ADVANCED = 27;
 	private static final int[] NON_INTERACT_MODES = {
 		F_LIFT_JOG_NO_INT,
 		F_BRAKE_RELEASE_NO_INT
@@ -636,6 +637,23 @@ public class PushButton extends Script implements InteractionActionListener{
 		}
 		speakers.updateTranslation();
 	}
+
+	private void handleResetCoasterFunc(bool action){
+		if (action){
+			coaster.requestReset();
+			button.buttonPush();
+			return;
+		}
+
+		if (button.isAnimating()){
+			disableAction();
+			button.lightOn();
+		}
+		else{
+			enableAction();
+			button.lightBlink();
+		}
+	}
 	
 	// E-Stop Functions //
 	
@@ -793,6 +811,9 @@ public class PushButton extends Script implements InteractionActionListener{
 				break;
 			case F_PLAY_SOUND:
 				handlePlaySoundFunc(action);
+				break;
+			case F_RESET_COASTER:
+				handleResetCoasterFunc(action);
 				break;
 			default:
 				handleStaticFunc(action);

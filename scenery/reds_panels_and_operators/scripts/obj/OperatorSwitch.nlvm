@@ -1,7 +1,7 @@
 /**
 	Operator Switch Object NL2 Script
 	David Wolfe (Red-Thirten)
-	06/10/2024
+	06/13/2024
 	A Java object representing a switch, with optional key component, that can animate to any given state position.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -9,13 +9,15 @@
 		OperatorSwitch(SceneObjectElement switchElement, ResourcePath[] soundPaths, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime)
 		OperatorSwitch(SceneObjectElement switchElement, ResourcePath[] soundPaths, int totalStates, float startAngleDeg, float endAngleDeg, float travelTime,
 			SceneObjectElement keyElement, float keyTravelDistance, int keyDefaultOutPos)
-				Note: Set keyDefaultOutPos to negative number to have key pulled out for all positions.
+				Notes:	Set keyDefaultOutPos to negative number to have key pulled out for all positions.
+						Set keyDefaultOutPos equal to totalStates to have key in for all positions.
 
 	Methods:
 		Vector3f getAbsoluteTranslation() - Returns the absolute translation of the switch element.
 		int getCurrentState() - Returns the current state/position the switch is set to (not necessarily current position).
 		bool isStatic() - Returns true if the start and end angles are equal.
 		void toggleSwitch() - If the switch only has 2 states, this toggles between them.
+		void cycleSwitch() - Twists switch to its end angle, and then back to its start angle.
 		void setSwitchState(int newState) - Primes the switch to animate to a new state position (newState values start from 0; not 1)
 		void setKeyVisible() - Makes the key element visible.
 		void onNextFrame(float tick) - Should be called every frame to animate switch.
@@ -33,7 +35,7 @@ public class OperatorSwitch{
 	private SceneObjectElement switchElement, keyElement;
 	private StaticSound soundOn, soundOff, soundKeyIn, soundKeyOut;
 	
-	private bool animate, turningRight, hasKey, keyIn = false;
+	private bool animate, turningRight, cycle, hasKey, keyIn = false;
 	private int keyOutState;
 	private int currentState = 0;
 	private int TOTAL_STATES = 2; // Semi-static (set only once during init)
@@ -63,11 +65,12 @@ public class OperatorSwitch{
 			SceneObjectElement keyElement, float keyTravelDistance, int keyDefaultOutPos){
 		this(switchElement, soundPaths, totalStates, startAngleDeg, endAngleDeg, travelTime);
 		hasKey = true;
+		keyIn = (totalStates == keyDefaultOutPos); // Key always in special case
 		this.keyElement = keyElement;
 		keyOutState = keyDefaultOutPos;
 		KEY_DIST = keyTravelDistance;
 		this.keyElement.setRotation(0.f, 0.f, -START_ANGLE);
-		this.keyElement.setVisible(false);
+		this.keyElement.setVisible(totalStates == keyDefaultOutPos);
 		soundKeyIn = getInitSoundForPath(soundPaths[2]);
 		soundKeyOut = getInitSoundForPath(soundPaths[3]);
 	}
@@ -102,7 +105,7 @@ public class OperatorSwitch{
 	}
 
 	public bool isStatic(){
-		return (START_ANGLE == END_ANGLE) ? true : false;
+		return (START_ANGLE == END_ANGLE);
 	}
 
 	public void toggleSwitch(){
@@ -110,13 +113,18 @@ public class OperatorSwitch{
 			setSwitchState((currentState == 0) ? 1 : 0);
 		}
 	}
+
+	public void cycleSwitch(){
+		cycle = true;
+		setSwitchState(TOTAL_STATES - 1);
+	}
 	
 	public void setSwitchState(int newState){
 		if (newState != currentState && newState >= 0 && newState < TOTAL_STATES){ // Sanitize passed state
 			t = 0.f;
 			thetaTarget = SLOPE * newState + START_ANGLE - theta; // Equation to calculate the angle target, based on the pre-calculated slope and current angle position
 			thetaCurrent = theta;
-			turningRight = (newState > currentState) ? true : false;
+			turningRight = (newState > currentState);
 			currentState = newState;
 			animate = true;
 		}
@@ -180,6 +188,10 @@ public class OperatorSwitch{
 				t = 0;
 			}
 			else t += tick;
+		}
+		else if (cycle){
+			cycle = false;
+			setSwitchState(0);
 		}
 	}
 }

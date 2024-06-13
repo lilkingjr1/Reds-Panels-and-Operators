@@ -1,7 +1,7 @@
 /**
 	Pilot Light NL2 Script
 	David Wolfe (Red-Thirten)
-	03/17/2024
+	06/13/2024
 	Animates the pilot light during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -35,10 +35,13 @@ public class PilotLight extends Script{
 	protected static final int F_DISPATCH = 4;
 	private static final int F_PLATFORM = 5;
 	protected static final int F_SPECIAL_TRACK = 6;
-	private static final int F_ESTOP = 7;
+	private static final int F_ESTOP_OFF_TO_BLINK = 7;
 	private static final int F_AUTOMATIC_OP = 8;
 	private static final int F_SEMI_MAN_OP = 9;
 	private static final int F_FULL_MAN_OP = 10;
+	private static final int F_ESTOP_BLINK_TO_OFF = 11;
+	private static final int F_ESTOP_OFF_TO_ON = 12;
+	private static final int F_ESTOP_ON_TO_OFF = 13;
 	
 	protected SceneObject sco;
 	protected Coaster coaster;
@@ -78,7 +81,7 @@ public class PilotLight extends Script{
 		func = getFuncFromScoParams(sco);
 		if (func > F_STATIC_BLINK){ // If not static function
 			block = sco.getBlockParameter("block");
-			if (block == null){ // Check for unconfigured block
+			if (block == null){ // Check for un-configured block
 				log.err("Block parameter required for any non-static functions.");
 				return false;
 			}
@@ -249,10 +252,28 @@ public class PilotLight extends Script{
 	
 	private void handleEStopFunc(){
 		if (coaster.isEmergencyStop()){
-			light.lightBlink();
+			switch(func){
+				case F_ESTOP_OFF_TO_BLINK:
+					light.lightBlink();
+					break;
+				case F_ESTOP_OFF_TO_ON:
+					light.lightOn();
+					break;
+				default:
+					light.lightOff();
+			}
 		}
 		else{
-			light.lightOff();
+			switch(func){
+				case F_ESTOP_BLINK_TO_OFF:
+					light.lightBlink();
+					break;
+				case F_ESTOP_ON_TO_OFF:
+					light.lightOn();
+					break;
+				default:
+					light.lightOff();
+			}
 		}
 	}
 	
@@ -292,7 +313,10 @@ public class PilotLight extends Script{
 			case F_SPECIAL_TRACK:
 				handleSpecialTrackFunc();
 				break;
-			case F_ESTOP:
+			case F_ESTOP_OFF_TO_BLINK:
+			case F_ESTOP_BLINK_TO_OFF:
+			case F_ESTOP_OFF_TO_ON:
+			case F_ESTOP_ON_TO_OFF:
 				handleEStopFunc();
 				break;
 			case F_AUTOMATIC_OP:

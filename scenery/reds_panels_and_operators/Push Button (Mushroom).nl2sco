@@ -43,7 +43,7 @@
     <scriptparameter>
       <type>int</type>
       <defaultvalue>0</defaultvalue>
-      <enums>None (Light Off),None (Light On),None (Light Blinking),Block Advance,Block Reverse,Station Dispatch,Restraints Open,Restraints Lock,Platform Raise,Platform Lower,Platform Toggle,Flyer Seats Unlock,Flyer Seats Lock,Flyer Seats Toggle,Special Track Left,Special Track Right,Auto Dispatch,Manual Dispatch,Automatic Operation,Manual Block Operation,Full Manual Operation,E-Stop Reset,Lift Jog (No Interaction),Brake Release (No Interaction),Play Sound from Speaker(s)</enums>
+      <enums>None (Light Off),None (Light On),None (Light Blinking),Block Advance,Block Reverse,Station Dispatch,Restraints Open,Restraints Lock,Platform Raise,Platform Lower,Platform Toggle,Flyer Seats Unlock,Flyer Seats Lock,Flyer Seats Toggle,Special Track Left,Special Track Right,Auto Dispatch,Manual Dispatch,Automatic Operation,Manual Block Operation,Full Manual Operation,E-Stop Reset,Lift Jog (No Interaction),Brake Release (No Interaction),Play Sound from Speaker(s),Reset Coaster</enums>
       <id>function</id>
       <description>How this button will behave during Play Mode.</description>
       <label>Function:</label>
