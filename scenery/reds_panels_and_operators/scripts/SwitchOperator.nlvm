@@ -1,7 +1,7 @@
 /**
 	Switch NL2 Script
 	David Wolfe (Red-Thirten)
-	06/06/2024
+	06/13/2024
 	Animates the switch during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -44,6 +44,7 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 	protected static final int F_TRANSPORTS_NO_INT = 9;
 	protected static final int F_SPECIAL_TRACK_NO_INT = 10;
 	protected static final int F_COASTER_LIGHTS_NO_INT = 11;
+	protected static final int F_RESET_COASTER = 12;
 	private static final int[] NON_INTERACT_MODES = {
 		F_NUM_TRAINS_NO_INT,
 		F_LIFT_JOG_NO_INT,
@@ -393,6 +394,18 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 				&& coaster.canSetBlockSystemMode(Coaster.E_BLOCK_SYSTEM_MODE_SEMI_MANUAL) )
 		);
 	}
+
+	private void handleResetCoasterFunc(bool action){
+		if (action){
+			coaster.requestReset();
+			operatorSwitch.cycleSwitch();
+			return;
+		}
+
+		// Nothing to do every frame
+	}
+	
+	// Non-Interactable Functions //
 	
 	private void handleNumTrainsFunc(){
 		trainsLashedToTrack = 1; // Set to 1 to offset the result by one, because setSwitchState() starts from 0
@@ -411,6 +424,9 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 			else if (liftSpeed > 0.f && liftSpeed >= binaryState) operatorSwitch.setSwitchState(2);
 			else operatorSwitch.setSwitchState(1);
 			binaryState = liftSpeed;
+		}
+		else{
+			operatorSwitch.setSwitchState(1);
 		}
 	}
 	
@@ -474,6 +490,9 @@ public class SwitchOperator extends Script implements InteractionActionListener{
 				break;
 			case F_COASTER_LIGHTS_NO_INT:
 				handleCoasterLightsFunc();
+				break;
+			case F_RESET_COASTER:
+				handleResetCoasterFunc(action);
 				break;
 			default:
 				handleStaticFunc(action);

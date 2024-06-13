@@ -1,7 +1,7 @@
 /**
 	Operator Button Object NL2 Script
 	David Wolfe (Red-Thirten)
-	03/11/2024
+	06/13/2024
 	A Java object representing a button that can be animated to be pushed, or even lit differently if it has a pilot light.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 
@@ -209,7 +209,7 @@ public class OperatorButton{
 	}
 
 	public bool isPushedIn(){
-		return (buttonState == 1) ? true : false;
+		return (buttonState == 1);
 	}
 	
 	public void onNextFrame(float tick){

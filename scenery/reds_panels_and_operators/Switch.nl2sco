@@ -42,7 +42,7 @@
     <scriptparameter>
       <type>int</type>
       <defaultvalue>0</defaultvalue>
-      <enums>None,Restraints,Gates,Platform,Special Track (Toggle Only),Dispatch Mode,Operation Mode,Trains In Service (No Interaction),Lift Jog (No Interaction),Transports (No Interaction),Special Track (No Interaction),Coaster Lights (No Interaction)</enums>
+      <enums>None,Restraints,Gates,Platform,Special Track (Toggle Only),Dispatch Mode,Operation Mode,Trains In Service (No Interaction),Lift Jog (No Interaction),Transports (No Interaction),Special Track (No Interaction),Coaster Lights (No Interaction),Reset Coaster</enums>
       <id>function</id>
       <description>How this switch will behave during Play Mode.</description>
       <label>Function:</label>

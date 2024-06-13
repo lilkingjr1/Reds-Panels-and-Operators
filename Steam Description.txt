@@ -23,7 +23,7 @@ These include...
     [*]Pilot Light
     [*]and MORE!
 [/list]
-    [*][b]26 different operation functions[/b], including advanced ones (like E-Stop Reset, Play Sound, etc.) that are not included with NL2's vanilla operators.
+    [*][b]27 different operation functions[/b], including advanced ones (like E-Stop Reset, Play Sound, Reset Coaster, etc.) that are not included with NL2's vanilla AB Switches.
     [*]Authentic operator sound effects recorded from real Allen-Bradley™ operators!
     [*]PanelView Plus 1000 Block Display
     [*]3 Electrical Boxes, with customizable colors, textures, and mounts
