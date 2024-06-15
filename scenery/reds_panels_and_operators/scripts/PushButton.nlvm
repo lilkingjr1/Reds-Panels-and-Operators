@@ -1,7 +1,7 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	06/13/2024
+	06/15/2024
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -429,7 +429,7 @@ public class PushButton extends Script implements InteractionActionListener{
 		}
 		else{
 			disableAction();
-			button.lightOn();
+			button.lightOff();
 		}
 	}
 	
@@ -452,9 +452,9 @@ public class PushButton extends Script implements InteractionActionListener{
 			button.lightOn();
 			return;
 		}
+		// Platform ready to move
 		bool canDisengage = section.canStationManualDisengagePlatform();
 		bool canEngage = section.canStationManualEngagePlatform();
-		// Platform ready to move
 		if ( (func == F_PLATFORM_RAISE && canEngage)
 				|| (func == F_PLATFORM_LOWER && canDisengage)
 				|| (func == F_PLATFORM_TOGGLE && (canEngage || canDisengage)) ){
@@ -492,9 +492,9 @@ public class PushButton extends Script implements InteractionActionListener{
 			button.lightOn();
 			return;
 		}
+		// Seats ready to move
 		bool canUnlock = section.canStationManualUnlockSeats();
 		bool canLock = section.canStationManualLockSeats();
-		// Seats ready to move
 		if ( (func == F_SEATS_UNLOCK && canUnlock)
 				|| (func == F_SEATS_LOCK && canLock)
 				|| (func == F_SEATS_TOGGLE && (canUnlock || canLock)) ){
