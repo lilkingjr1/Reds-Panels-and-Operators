@@ -1,7 +1,7 @@
 /**
 	Push Button NL2 Script
 	David Wolfe (Red-Thirten)
-	06/15/2024
+	06/20/2024
 	Animates the pilot light and button during run time, based on user settings.
 	Licensed under GNU GPLv3 - See LICENSE for more details.
 */
@@ -536,8 +536,8 @@ public class PushButton extends Script implements InteractionActionListener{
 		}
 		// Track ready to move to new position
 		else if ( specialTrack.canChangeManualSwitchDirection() 
-				&& ( (func == F_SPECIAL_LEFT && specialTrack.getSetSwitchDirection() - 1 > 0) 
-					|| (func == F_SPECIAL_RIGHT && specialTrack.getSetSwitchDirection() + 1 < specialTrack.getNumberOfSwitchDirections()) ) ){
+				&& ( (func == F_SPECIAL_LEFT && specialTrack.getSetSwitchDirection() > 0) 
+					|| (func == F_SPECIAL_RIGHT && specialTrack.getSetSwitchDirection() < specialTrack.getNumberOfSwitchDirections()-1) ) ){
 			enableAction();
 			button.lightBlink();
 		}
